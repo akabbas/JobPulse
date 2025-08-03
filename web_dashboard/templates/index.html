@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Market Analytics Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <style>
+        .job-card {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+        .skill-badge {
+            background-color: #007bff;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            margin: 2px;
+            display: inline-block;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mt-4 mb-4">Job Market Analytics Dashboard</h1>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Search Jobs</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="searchForm">
+                            <div class="mb-3">
+                                <label for="keyword" class="form-label">Job Keyword</label>
+                                <input type="text" class="form-control" id="keyword" value="software engineer" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="location" class="form-label">Location</label>
+                                <input type="text" class="form-control" id="location" value="United States">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Sources</label>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="api_sources" id="api_sources" checked>
+                                    <label class="form-check-label" for="api_sources">API Sources (GitHub Jobs, Remotive) - Most Reliable</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="reddit" id="reddit" checked>
+                                    <label class="form-check-label" for="reddit">Reddit (r/remotejobs, r/forhire) - Real Jobs</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="indeed" id="indeed">
+                                    <label class="form-check-label" for="indeed">Indeed (May have 403 errors)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="linkedin" id="linkedin">
+                                    <label class="form-check-label" for="linkedin">LinkedIn (May have 403 errors)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="stackoverflow" id="stackoverflow">
+                                    <label class="form-check-label" for="stackoverflow">Stack Overflow (May have 403 errors)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="dice" id="dice">
+                                    <label class="form-check-label" for="dice">Dice (May have 403 errors)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="remoteok" id="remoteok">
+                                    <label class="form-check-label" for="remoteok">Remote OK (May have 403 errors)</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="weworkremotely" id="weworkremotely">
+                                    <label class="form-check-label" for="weworkremotely">We Work Remotely (May have 403 errors)</label>
+                                </div>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Search Jobs</button>
+                        </form>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Advanced Filter</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="requiredSkills" class="form-label">Required Skills</label>
+                            <input type="text" class="form-control" id="requiredSkills" placeholder="python,react,aws">
+                        </div>
+                        <div class="mb-3">
+                            <label for="salaryMin" class="form-label">Min Salary</label>
+                            <input type="number" class="form-control" id="salaryMin" placeholder="80000">
+                        </div>
+                        <button type="button" class="btn btn-secondary" onclick="applyFilter()">Apply Filter</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Job Results</h5>
+                        <span id="jobCount" class="badge bg-primary"></span>
+                    </div>
+                    <div class="card-body">
+                        <div id="jobResults">
+                            <p class="text-muted">Search for jobs to see results here.</p>
+                        </div>
+                        
+                        <!-- Pagination -->
+                        <div id="pagination" class="mt-3" style="display: none;">
+                            <nav aria-label="Job pagination">
+                                <ul class="pagination justify-content-center">
+                                    <li class="page-item">
+                                        <button class="page-link" id="loadMoreBtn">Load More Jobs</button>
+                                    </li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h5>Skills Analysis</h5>
+                    </div>
+                    <div class="card-body">
+                        <canvas id="skillsChart"></canvas>
+                        
+                        <!-- Skills Analysis Table -->
+                        <div class="mt-4">
+                            <h6>Skills Breakdown</h6>
+                            <div id="skillsTable">
+                                <p class="text-muted">Search for jobs to see skills analysis.</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Debug Info -->
+                        <div class="mt-3">
+                            <h6>Debug Info</h6>
+                            <div id="debugInfo">
+                                <p class="text-muted">No data yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentJobs = [];
+        let skillsChart = null;
+        let currentPage = 1;
+        let currentSearchParams = {};
+
+        // Check if Chart.js is loaded
+        if (typeof Chart === 'undefined') {
+            console.error('Chart.js not loaded!');
+            document.addEventListener('DOMContentLoaded', function() {
+                if (typeof Chart === 'undefined') {
+                    document.getElementById('debugInfo').innerHTML = `
+                        <p class="text-danger"><strong>Error:</strong> Chart.js library not loaded</p>
+                        <p>Please check your internet connection and refresh the page.</p>
+                    `;
+                }
+            });
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const keyword = document.getElementById('keyword').value;
+            const location = document.getElementById('location').value;
+            const sources = Array.from(document.querySelectorAll('input[type="checkbox"]:checked'))
+                                .map(cb => cb.value);
+            
+            // Store current search parameters for pagination
+            currentSearchParams = { keyword, location, sources };
+            currentPage = 1;
+            
+            // Show loading
+            document.getElementById('jobResults').innerHTML = '<div class="loading">Searching for jobs...</div>';
+            document.getElementById('pagination').style.display = 'none';
+            
+            try {
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        keyword, 
+                        location, 
+                        limit: 50,
+                        sources 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentJobs = data.jobs;
+                    displayJobs(data.jobs);
+                    document.getElementById('jobCount').textContent = `${data.total_jobs} jobs found from ${data.successful_sources} sources`;
+                    analyzeSkills(data.jobs);
+                    
+                    // Show pagination if we have jobs
+                    if (data.total_jobs > 0) {
+                        document.getElementById('pagination').style.display = 'block';
+                    }
+                } else {
+                    document.getElementById('jobResults').innerHTML = 
+                        `<div class="alert alert-danger">Error: ${data.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('jobResults').innerHTML = 
+                    `<div class="alert alert-danger">Network error: ${error.message}</div>`;
+            }
+        });
+
+        // Load more jobs functionality
+        document.getElementById('loadMoreBtn').addEventListener('click', async function() {
+            currentPage++;
+            const btn = this;
+            btn.textContent = 'Loading...';
+            btn.disabled = true;
+            
+            try {
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        ...currentSearchParams,
+                        limit: 50 * currentPage,
+                        page: currentPage
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentJobs = data.jobs;
+                    displayJobs(data.jobs);
+                    document.getElementById('jobCount').textContent = `${data.total_jobs} jobs found`;
+                    analyzeSkills(data.jobs);
+                } else {
+                    alert(`Error loading more jobs: ${data.error}`);
+                }
+            } catch (error) {
+                alert(`Network error: ${error.message}`);
+            } finally {
+                btn.textContent = 'Load More Jobs';
+                btn.disabled = false;
+            }
+        });
+
+        function displayJobs(jobs) {
+            if (jobs.length === 0) {
+                document.getElementById('jobResults').innerHTML = 
+                    '<div class="alert alert-info">No jobs found matching your criteria.</div>';
+                return;
+            }
+            
+            let html = '';
+            jobs.forEach(job => {
+                const skillsHtml = job.skills ? job.skills.map(skill => 
+                    `<span class="skill-badge">${skill}</span>`
+                ).join('') : '';
+                
+                html += `
+                    <div class="job-card">
+                        <h6><a href="${job.job_url}" target="_blank">${job.title}</a></h6>
+                        <p><strong>${job.company}</strong> - ${job.location}</p>
+                        <p class="text-muted">${job.snippet}</p>
+                        <div>${skillsHtml}</div>
+                        <small class="text-muted">Source: ${job.source}</small>
+                    </div>
+                `;
+            });
+            
+            document.getElementById('jobResults').innerHTML = html;
+        }
+
+        async function analyzeSkills(jobs) {
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ jobs })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    renderSkillsChart(data.skill_analysis);
+                }
+            } catch (error) {
+                console.error('Error analyzing skills:', error);
+            }
+        }
+
+        function renderSkillsChart(skillAnalysis) {
+            try {
+                const canvas = document.getElementById('skillsChart');
+                if (!canvas) {
+                    console.error('Canvas element not found');
+                    return;
+                }
+                
+                const ctx = canvas.getContext('2d');
+                if (!ctx) {
+                    console.error('Could not get canvas context');
+                    return;
+                }
+                
+                // Destroy existing chart
+                if (skillsChart) {
+                    skillsChart.destroy();
+                }
+                
+                // Debug info
+                console.log('Skill analysis data:', skillAnalysis);
+                document.getElementById('debugInfo').innerHTML = `
+                    <p><strong>Categories found:</strong> ${Object.keys(skillAnalysis).length}</p>
+                    <p><strong>Total skills:</strong> ${Object.values(skillAnalysis).flat().length}</p>
+                    <pre>${JSON.stringify(skillAnalysis, null, 2)}</pre>
+                `;
+                
+                if (!skillAnalysis || Object.keys(skillAnalysis).length === 0) {
+                    canvas.style.display = 'none';
+                    document.getElementById('skillsTable').innerHTML = '<p class="text-muted">No skills data available.</p>';
+                    return;
+                }
+                
+                canvas.style.display = 'block';
+                
+                // Get top skills across all categories, filter out unusual ones
+                const allSkills = [];
+                Object.entries(skillAnalysis).forEach(([category, skills]) => {
+                    skills.forEach(([skill, percentage]) => {
+                        // Filter out unusual skills and very low percentages
+                        if (percentage > 1 && skill.length > 1 && !skill.includes(' ')) {
+                            allSkills.push({
+                                skill: skill,
+                                percentage: percentage,
+                                category: category
+                            });
+                        }
+                    });
+                });
+                
+                // Sort by percentage and take top 15
+                allSkills.sort((a, b) => b.percentage - a.percentage);
+                const topSkills = allSkills.slice(0, 15);
+                
+                if (topSkills.length === 0) {
+                    document.getElementById('skillsTable').innerHTML = '<p class="text-muted">No valid skills found.</p>';
+                    return;
+                }
+                
+                // Create bar chart
+                const labels = topSkills.map(item => item.skill);
+                const data = topSkills.map(item => item.percentage);
+                const colors = topSkills.map(item => {
+                    const colorMap = {
+                        'programming_languages': '#FF6384',
+                        'frameworks': '#36A2EB',
+                        'databases': '#FFCE56',
+                        'cloud_platforms': '#4BC0C0',
+                        'data_tools': '#9966FF',
+                        'testing_tools': '#FF9F40',
+                        'monitoring_tools': '#FF6384',
+                        'version_control': '#36A2EB',
+                        'ides_editors': '#FFCE56',
+                        'mobile_development': '#4BC0C0',
+                        'game_development': '#9966FF',
+                        'blockchain': '#FF9F40',
+                        'ai_ml_tools': '#FF6384'
+                    };
+                    return colorMap[item.category] || '#999999';
+                });
+                
+                skillsChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Percentage of Jobs',
+                            data: data,
+                            backgroundColor: colors,
+                            borderColor: colors,
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { 
+                                display: false 
+                            },
+                            title: { 
+                                display: true, 
+                                text: 'Top Skills by Job Percentage',
+                                font: { size: 16 }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Percentage of Jobs'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Skills'
+                                }
+                            }
+                        }
+                    }
+                });
+                
+                // Populate skills table
+                renderSkillsTable(skillAnalysis);
+                
+            } catch (error) {
+                console.error('Error rendering skills chart:', error);
+                document.getElementById('debugInfo').innerHTML = `
+                    <p class="text-danger"><strong>Error:</strong> ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                `;
+            }
+        }
+        
+        function renderSkillsTable(skillAnalysis) {
+            const tableDiv = document.getElementById('skillsTable');
+            
+            if (!skillAnalysis || Object.keys(skillAnalysis).length === 0) {
+                tableDiv.innerHTML = '<p class="text-muted">No skills data available.</p>';
+                return;
+            }
+            
+            let html = '<div class="row">';
+            
+            Object.entries(skillAnalysis).forEach(([category, skills]) => {
+                // Filter skills to only show valid ones
+                const validSkills = skills.filter(([skill, percentage]) => 
+                    percentage > 1 && skill.length > 1 && !skill.includes(' ')
+                );
+                
+                if (validSkills.length > 0) {
+                    html += `
+                        <div class="col-md-6 mb-3">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h6 class="mb-0">${category.replace('_', ' ').toUpperCase()}</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-sm">
+                                            <thead>
+                                                <tr>
+                                                    <th>Skill</th>
+                                                    <th>% of Jobs</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                    `;
+                    
+                    validSkills.slice(0, 10).forEach(([skill, percentage]) => {
+                        html += `
+                            <tr>
+                                <td>${skill}</td>
+                                <td><span class="badge bg-primary">${percentage.toFixed(1)}%</span></td>
+                            </tr>
+                        `;
+                    });
+                    
+                    html += `
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            
+            html += '</div>';
+            
+            if (html === '<div class="row"></div>') {
+                tableDiv.innerHTML = '<p class="text-muted">No valid skills found in the data.</p>';
+            } else {
+                tableDiv.innerHTML = html;
+            }
+        }
+
+        async function applyFilter() {
+            if (currentJobs.length === 0) {
+                alert('Please search for jobs first before applying filters.');
+                return;
+            }
+            
+            const requiredSkills = document.getElementById('requiredSkills').value
+                .split(',').map(s => s.trim()).filter(s => s);
+            const salaryMin = document.getElementById('salaryMin').value ? 
+                parseInt(document.getElementById('salaryMin').value) : null;
+            
+            try {
+                const response = await fetch('/filter', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jobs: currentJobs,
+                        criteria: {
+                            skills_required: requiredSkills,
+                            salary_min: salaryMin
+                        }
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    displayJobs(data.filtered_jobs);
+                    document.getElementById('jobCount').textContent = 
+                        `${data.total_filtered} jobs (filtered from ${currentJobs.length})`;
+                } else {
+                    alert(`Error: ${data.error}`);
+                }
+            } catch (error) {
+                alert(`Network error: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html> 
