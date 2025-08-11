@@ -56,6 +56,10 @@
                             <div class="mb-3">
                                 <label class="form-label">Sources</label>
                                 <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" value="enhanced" id="enhanced" checked>
+                                    <label class="form-check-label" for="enhanced">🚀 Enhanced Scraper (Playwright) - Bypasses 403 Errors</label>
+                                </div>
+                                <div class="form-check">
                                     <input class="form-check-input" type="checkbox" value="api_sources" id="api_sources" checked>
                                     <label class="form-check-label" for="api_sources">API Sources (GitHub Jobs, Remotive) - Most Reliable</label>
                                 </div>
@@ -89,6 +93,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-primary">Search Jobs</button>
+                            <button type="button" class="btn btn-success ms-2" onclick="enhancedSearch()">🚀 Enhanced Search (Playwright)</button>
                         </form>
                     </div>
                 </div>
@@ -232,6 +237,59 @@
                     `<div class="alert alert-danger">Network error: ${error.message}</div>`;
             }
         });
+
+        // Enhanced search function using Playwright scraper
+        async function enhancedSearch() {
+            const keyword = document.getElementById('keyword').value;
+            const limit = 20; // Default limit for enhanced search
+            
+            // Show loading
+            document.getElementById('jobResults').innerHTML = '<div class="loading">🚀 Enhanced search in progress (this may take a moment)...</div>';
+            document.getElementById('pagination').style.display = 'none';
+            
+            try {
+                const response = await fetch('/enhanced_search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        keyword, 
+                        limit,
+                        headless: true
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    currentJobs = data.jobs;
+                    displayJobs(data.jobs);
+                    
+                    // Show enhanced search results with source breakdown
+                    let sourceInfo = '';
+                    if (data.source_breakdown) {
+                        sourceInfo = Object.entries(data.source_breakdown)
+                            .map(([source, count]) => `${source}: ${count}`)
+                            .join(', ');
+                    }
+                    
+                    document.getElementById('jobCount').textContent = 
+                        `🚀 ${data.total_jobs} jobs found via Enhanced Scraper (${data.scraping_method}) - Sources: ${sourceInfo}`;
+                    
+                    analyzeSkills(data.jobs);
+                    
+                    // Show pagination if we have jobs
+                    if (data.total_jobs > 0) {
+                        document.getElementById('pagination').style.display = 'block';
+                    }
+                } else {
+                    document.getElementById('jobResults').innerHTML = 
+                        `<div class="alert alert-danger">Enhanced search error: ${data.error}</div>`;
+                }
+            } catch (error) {
+                document.getElementById('jobResults').innerHTML = 
+                    `<div class="alert alert-danger">Network error during enhanced search: ${error.message}</div>`;
+            }
+        }
 
         // Load more jobs functionality
         document.getElementById('loadMoreBtn').addEventListener('click', async function() {

@@ -12,6 +12,7 @@ from scrapers.weworkremotely_scraper import WeWorkRemotelyScraper
 from scrapers.simple_jobs_scraper import SimpleJobsScraper
 from scrapers.api_sources_scraper import APISourcesScraper
 from scrapers.reddit_scraper import RedditScraper
+from scrapers.enhanced_playwright_scraper import EnhancedPlaywrightScraper
 from data_processing.data_cleaner import DataCleaner
 from analysis.skill_trends import SkillTrendsAnalyzer
 import logging
@@ -37,6 +38,7 @@ weworkremotely_scraper = WeWorkRemotelyScraper()
 simple_scraper = SimpleJobsScraper()  # Fallback scraper
 api_scraper = APISourcesScraper()  # API sources
 reddit_scraper = RedditScraper()  # Reddit scraper
+enhanced_scraper = EnhancedPlaywrightScraper(headless=True)  # Enhanced Playwright scraper
 
 # Initialize data processors
 data_cleaner = DataCleaner()
@@ -61,13 +63,24 @@ def search_jobs():
         data = request.get_json()
         keyword = data.get('keyword', 'software engineer')
         location = data.get('location', 'United States')
-        sources = data.get('sources', ['api_sources', 'reddit'])  # Default to reliable sources
+        sources = data.get('sources', ['enhanced', 'api_sources', 'reddit'])  # Default to enhanced scraper + reliable sources
         limit = data.get('limit', 50)  # Increased from 25 to 50
         
         all_jobs = []
         successful_sources = 0
         
-        # PRIORITY 1: API sources (most reliable, no 403 errors)
+        # PRIORITY 1: Enhanced Playwright scraper (bypasses 403 errors, most reliable)
+        if 'enhanced' in sources:
+            try:
+                enhanced_results = enhanced_scraper.scrape_all_sources(keyword, limit)
+                enhanced_jobs = enhanced_results.get('all_sources', [])
+                all_jobs.extend(enhanced_jobs)
+                logger.info(f"Found {len(enhanced_jobs)} jobs from enhanced scraper")
+                successful_sources += 1
+            except Exception as e:
+                logger.error(f"Error with enhanced scraper: {e}")
+        
+        # PRIORITY 2: API sources (most reliable, no 403 errors)
         if 'api_sources' in sources:
             try:
                 api_jobs = api_scraper.search_jobs(keyword, location, limit)
@@ -227,6 +240,48 @@ def analyze_skills():
         return jsonify({
             'success': False,
             'error': str(e)
+        })
+
+@app.route('/enhanced_search', methods=['POST'])
+def enhanced_search():
+    """Enhanced search using Playwright scraper (bypasses 403 errors)"""
+    try:
+        data = request.get_json()
+        keyword = data.get('keyword', 'software engineer')
+        limit = data.get('limit', 20)  # Default to 20 for enhanced scraping
+        headless = data.get('headless', True)
+        
+        logger.info(f"Starting enhanced search for '{keyword}' with limit {limit}")
+        
+        # Use the enhanced scraper
+        results = enhanced_scraper.scrape_all_sources(keyword, limit)
+        
+        # Get all unique jobs
+        all_jobs = results.get('all_sources', [])
+        
+        # Add source breakdown for transparency
+        source_breakdown = {}
+        for source, jobs in results.items():
+            if source != 'all_sources':
+                source_breakdown[source] = len(jobs)
+        
+        logger.info(f"Enhanced search completed: {len(all_jobs)} unique jobs found")
+        
+        return jsonify({
+            'success': True,
+            'jobs': all_jobs,
+            'total_jobs': len(all_jobs),
+            'source_breakdown': source_breakdown,
+            'scraping_method': 'enhanced_playwright',
+            'timestamp': datetime.now().isoformat()
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in enhanced_search: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e),
+            'scraping_method': 'enhanced_playwright'
         })
 
 @app.route('/filter', methods=['POST'])

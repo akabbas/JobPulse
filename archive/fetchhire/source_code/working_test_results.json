@@ -1,0 +1,50 @@
+[
+  {
+    "title": "Senior Python Developer",
+    "company": "TechCorp",
+    "location": "Remote",
+    "source": "Sample",
+    "source_url": "https://example.com",
+    "posted_date": "2025-08-02",
+    "description": "We need a Python developer with Django and AWS experience",
+    "salary": "$120,000 - $150,000",
+    "tags": [
+      "Python",
+      "Django",
+      "AWS",
+      "JavaScript"
+    ]
+  },
+  {
+    "title": "Salesforce Developer",
+    "company": "CloudTech",
+    "location": "San Francisco, CA",
+    "source": "Sample",
+    "source_url": "https://example.com",
+    "posted_date": "2025-08-02",
+    "description": "Looking for a Salesforce developer with Apex and Lightning experience",
+    "salary": "$100,000 - $130,000",
+    "tags": [
+      "Salesforce",
+      "Apex",
+      "Lightning",
+      "JavaScript"
+    ]
+  },
+  {
+    "title": "Data Scientist",
+    "company": "DataFlow Inc",
+    "location": "Remote",
+    "source": "Sample",
+    "source_url": "https://example.com",
+    "posted_date": "2025-08-02",
+    "description": "Join our data science team working with Python, TensorFlow, and SQL",
+    "salary": "$130,000 - $180,000",
+    "tags": [
+      "Python",
+      "TensorFlow",
+      "SQL",
+      "Machine Learning"
+    ]
+  }
+]

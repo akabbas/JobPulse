@@ -1,0 +1,54 @@
+# FetchHire Archive - Exclude large files and virtual environments
+# This archive contains the source code and documentation, not the full environment
+
+# Virtual environments
+venv/
+env/
+.venv/
+.env/
+
+# Python packages and dependencies
+lib/
+site-packages/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Large binary files
+*.so
+*.dll
+*.dylib
+*.exe
+
+# Jupyter and data files
+share/
+.ipynb_checkpoints/
+*.ipynb
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Keep only source code and documentation
+!*.py
+!*.md
+!*.txt
+!*.sh
+!*.yml
+!*.yaml
+!*.json
+!*.html
+!*.css
+!*.js

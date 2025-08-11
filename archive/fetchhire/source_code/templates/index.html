@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FetchHire - Job Market Analytics Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --warning-color: #f39c12;
+            --light-bg: #ecf0f1;
+            --dark-bg: #34495e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--dark-bg) 100%);
+            color: white;
+            padding: 80px 0;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            margin-bottom: 20px;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, var(--secondary-color) 0%, var(--primary-color) 100%);
+            color: white;
+            border-radius: 15px 15px 0 0 !important;
+            padding: 20px;
+        }
+
+        .btn {
+            border-radius: 25px;
+            padding: 10px 25px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .job-card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid var(--secondary-color);
+            transition: all 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .source-badge {
+            background: var(--success-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+
+        .tag-badge {
+            background: var(--light-bg);
+            color: var(--primary-color);
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.75em;
+            margin: 2px;
+            display: inline-block;
+        }
+
+        .stats-card {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .stats-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .stats-label {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .skills-category {
+            margin-bottom: 30px;
+        }
+
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background: var(--light-bg);
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .skill-name {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .skill-count {
+            background: var(--secondary-color);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .search-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        }
+
+        .form-control {
+            border-radius: 25px;
+            border: 2px solid var(--light-bg);
+            padding: 12px 20px;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 0.2rem rgba(52, 152, 219, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner-border text-primary mb-3" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <h5 id="loadingText">Loading...</h5>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h1 class="display-4 fw-bold mb-3">
+                        Job Market Analytics Dashboard
+                    </h1>
+                    <p class="lead mb-4">
+                        Real-time insights into job market trends from LinkedIn, Indeed, Stack Overflow, and Remote OK.
+                    </p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <button class="btn btn-light btn-lg" onclick="loadJobs()">
+                            <i class="fas fa-briefcase me-2"></i>
+                            View Jobs
+                        </button>
+                        <button class="btn btn-outline-light btn-lg" onclick="loadAnalytics()">
+                            <i class="fas fa-chart-bar me-2"></i>
+                            Analytics
+                        </button>
+                        <button class="btn btn-success btn-lg" onclick="scrapeJobs()">
+                            <i class="fas fa-download me-2"></i>
+                            Scrape Jobs
+                        </button>
+                    </div>
+                </div>
+                <div class="col-lg-4 text-center">
+                    <i class="fas fa-database fa-5x text-white-50"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <h4 class="mb-4"><i class="fas fa-search me-2"></i>Search Jobs</h4>
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <input type="text" class="form-control" id="searchKeyword" placeholder="Search by keyword...">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <input type="text" class="form-control" id="searchLocation" placeholder="Location...">
+                </div>
+                <div class="col-md-3 mb-3">
+                    <select class="form-control" id="searchSource">
+                        <option value="">All Sources</option>
+                    </select>
+                </div>
+                <div class="col-md-2 mb-3">
+                    <button class="btn btn-primary w-100" onclick="searchJobs()">
+                        <i class="fas fa-search me-1"></i>Search
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Jobs Section -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-briefcase me-2"></i>Job Listings</h5>
+                    </div>
+                    <div class="card-body">
+                        <div id="jobsContainer">
+                            <p class="text-center text-muted">Click "View Jobs" to load job listings</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Analytics Section -->
+        <div class="row" id="analyticsSection" style="display: none;">
+            <!-- Stats Cards -->
+            <div class="col-md-3 mb-4">
+                <div class="card stats-card">
+                    <div class="stats-number" id="totalJobs">0</div>
+                    <div class="stats-label">Total Jobs</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card stats-card">
+                    <div class="stats-number" id="totalSources">0</div>
+                    <div class="stats-label">Job Sources</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card stats-card">
+                    <div class="stats-number" id="totalSkills">0</div>
+                    <div class="stats-label">Unique Skills</div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-4">
+                <div class="card stats-card">
+                    <div class="stats-number" id="avgSalary">$0</div>
+                    <div class="stats-label">Avg Salary</div>
+                </div>
+            </div>
+
+            <!-- Jobs by Source -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-chart-pie me-2"></i>Jobs by Source</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="jobsBySource"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Jobs by Location -->
+            <div class="col-md-6 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>Jobs by Location</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="jobsByLocation"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Skills Analytics -->
+            <div class="col-12 mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-code me-2"></i>Skills Analytics</h6>
+                    </div>
+                    <div class="card-body">
+                        <div id="skillsAnalytics"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Global variables
+        let currentJobs = [];
+        let currentAnalytics = {};
+
+        // Load sources on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSources();
+        });
+
+        function showLoading(message = 'Loading...') {
+            document.getElementById('loadingText').textContent = message;
+            document.getElementById('loadingOverlay').style.display = 'flex';
+        }
+
+        function hideLoading() {
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+
+        function loadJobs() {
+            showLoading('Loading jobs...');
+            fetch('/api/jobs')
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    if (data.jobs) {
+                        currentJobs = data.jobs;
+                        displayJobs(data.jobs);
+                    } else {
+                        displayJobs([]);
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error loading jobs:', error);
+                    alert('Error loading jobs. Please try again.');
+                });
+        }
+
+        function loadAnalytics() {
+            showLoading('Loading analytics...');
+            fetch('/api/analytics')
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    currentAnalytics = data;
+                    displayAnalytics(data);
+                    document.getElementById('analyticsSection').style.display = 'block';
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error loading analytics:', error);
+                    alert('Error loading analytics. Please try again.');
+                });
+        }
+
+        function loadSources() {
+            fetch('/api/sources')
+                .then(response => response.json())
+                .then(data => {
+                    const sourceSelect = document.getElementById('searchSource');
+                    sourceSelect.innerHTML = '<option value="">All Sources</option>';
+                    
+                    if (data.sources) {
+                        data.sources.forEach(source => {
+                            const option = document.createElement('option');
+                            option.value = source;
+                            option.textContent = source;
+                            sourceSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading sources:', error);
+                });
+        }
+
+        function scrapeJobs() {
+            showLoading('Scraping jobs from LinkedIn, Indeed, Stack Overflow, and Remote OK...');
+
+            fetch('/api/scrape-jobs')
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+
+                    if (data.status === 'success') {
+                        alert(`✅ ${data.message}\n\nJobs scraped: ${data.jobs_scraped}\nJobs stored: ${data.jobs_stored}\nSources: ${data.sources.join(', ')}`);
+                        // Reload jobs after scraping
+                        loadJobs();
+                    } else {
+                        alert(`❌ Error: ${data.message}`);
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error scraping jobs:', error);
+                    alert('❌ Error scraping jobs. Please try again.');
+                });
+        }
+
+        function searchJobs() {
+            const keyword = document.getElementById('searchKeyword').value;
+            const location = document.getElementById('searchLocation').value;
+            const source = document.getElementById('searchSource').value;
+
+            if (!keyword && !location && !source) {
+                alert('Please enter at least one search criteria.');
+                return;
+            }
+
+            showLoading('Searching jobs...');
+
+            const params = new URLSearchParams();
+            if (keyword) params.append('q', keyword);
+            if (location) params.append('location', location);
+            if (source) params.append('source', source);
+
+            fetch(`/api/search?${params.toString()}`)
+                .then(response => response.json())
+                .then(data => {
+                    hideLoading();
+                    if (data.jobs) {
+                        currentJobs = data.jobs;
+                        displayJobs(data.jobs);
+                    } else {
+                        displayJobs([]);
+                    }
+                })
+                .catch(error => {
+                    hideLoading();
+                    console.error('Error searching jobs:', error);
+                    alert('Error searching jobs. Please try again.');
+                });
+        }
+
+        function displayJobs(jobs) {
+            const container = document.getElementById('jobsContainer');
+            
+            if (!jobs || jobs.length === 0) {
+                container.innerHTML = '<p class="text-center text-muted">No jobs found. Try scraping jobs first!</p>';
+                return;
+            }
+
+            let html = `<div class="row"><div class="col-12"><h6 class="mb-3">Found ${jobs.length} jobs</h6></div></div>`;
+            
+            jobs.forEach(job => {
+                const tags = job.tags ? job.tags.map(tag => `<span class="tag-badge">${tag}</span>`).join('') : '';
+                const salary = job.salary ? `<div class="text-success fw-bold">${job.salary}</div>` : '';
+                
+                html += `
+                    <div class="job-card">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <h6 class="mb-1">${job.title}</h6>
+                            <span class="source-badge">${job.source}</span>
+                        </div>
+                        <div class="text-muted mb-2">${job.company} • ${job.location}</div>
+                        ${salary}
+                        <div class="mt-2">
+                            ${tags}
+                        </div>
+                        <div class="mt-2">
+                            <small class="text-muted">Posted: ${job.posted_date}</small>
+                            ${job.source_url ? `<a href="${job.source_url}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">View Job</a>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function displayAnalytics(data) {
+            // Update stats
+            document.getElementById('totalJobs').textContent = data.total_jobs || 0;
+            document.getElementById('totalSources').textContent = Object.keys(data.jobs_by_source || {}).length;
+            document.getElementById('totalSkills').textContent = data.skills_analytics?.unique_skills || 0;
+            document.getElementById('avgSalary').textContent = '$120K'; // Placeholder
+
+            // Display jobs by source
+            const sourceContainer = document.getElementById('jobsBySource');
+            if (data.jobs_by_source) {
+                let sourceHtml = '';
+                Object.entries(data.jobs_by_source).forEach(([source, count]) => {
+                    sourceHtml += `
+                        <div class="skill-item">
+                            <span class="skill-name">${source}</span>
+                            <span class="skill-count">${count}</span>
+                        </div>
+                    `;
+                });
+                sourceContainer.innerHTML = sourceHtml;
+            }
+
+            // Display jobs by location
+            const locationContainer = document.getElementById('jobsByLocation');
+            if (data.jobs_by_location) {
+                let locationHtml = '';
+                Object.entries(data.jobs_by_location).forEach(([location, count]) => {
+                    locationHtml += `
+                        <div class="skill-item">
+                            <span class="skill-name">${location}</span>
+                            <span class="skill-count">${count}</span>
+                        </div>
+                    `;
+                });
+                locationContainer.innerHTML = locationHtml;
+            }
+
+            // Display skills analytics
+            const skillsContainer = document.getElementById('skillsAnalytics');
+            if (data.skills_analytics) {
+                let skillsHtml = '<div class="row">';
+                
+                // Top skills
+                if (data.skills_analytics.top_skills) {
+                    skillsHtml += `
+                        <div class="col-md-6 mb-4">
+                            <h6 class="mb-3">Top Skills</h6>
+                    `;
+                    data.skills_analytics.top_skills.slice(0, 10).forEach(([skill, count]) => {
+                        skillsHtml += `
+                            <div class="skill-item">
+                                <span class="skill-name">${skill}</span>
+                                <span class="skill-count">${count}</span>
+                            </div>
+                        `;
+                    });
+                    skillsHtml += '</div>';
+                }
+
+                // Skills by category
+                if (data.skills_analytics.categorized_skills) {
+                    skillsHtml += '<div class="col-md-6 mb-4">';
+                    Object.entries(data.skills_analytics.categorized_skills).forEach(([category, skills]) => {
+                        if (skills.length > 0) {
+                            skillsHtml += `
+                                <div class="skills-category">
+                                    <h6 class="mb-2">${category}</h6>
+                            `;
+                            skills.forEach(([skill, count]) => {
+                                skillsHtml += `
+                                    <div class="skill-item">
+                                        <span class="skill-name">${skill}</span>
+                                        <span class="skill-count">${count}</span>
+                                    </div>
+                                `;
+                            });
+                            skillsHtml += '</div>';
+                        }
+                    });
+                    skillsHtml += '</div>';
+                }
+
+                skillsHtml += '</div>';
+                skillsContainer.innerHTML = skillsHtml;
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -1,0 +1,27 @@
+# FetchHire - Core Dependencies
+# Advanced job scraping solution with 403 error bypass
+
+# Web Framework
+Flask>=3.0.0
+
+# Web Scraping
+playwright>=1.40.0
+beautifulsoup4>=4.12.0
+requests>=2.31.0
+aiohttp>=3.9.0
+
+# Database
+snowflake-connector-python>=3.0.0
+
+# Data Processing
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Async Support
+asyncio
+
+# HTML Parsing
+lxml>=4.9.0
+
+# Utilities
+python-dotenv>=1.0.0 

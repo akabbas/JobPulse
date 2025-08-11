@@ -1,0 +1,20 @@
+# Proxy Configuration File
+# Add your proxy servers here, one per line
+# Format: http://username:password@proxy_host:port
+# Example:
+# http://user:pass@proxy1.example.com:8080
+# http://user:pass@proxy2.example.com:8080
+# https://user:pass@proxy3.example.com:3128
+
+# Free proxy examples (replace with your own paid proxies for better reliability)
+# http://proxy1.example.com:8080
+# http://proxy2.example.com:8080
+# http://proxy3.example.com:3128
+
+# Note: Free proxies are often unreliable and may be blocked by job sites
+# For production use, consider using paid proxy services like:
+# - Bright Data (formerly Luminati)
+# - SmartProxy
+# - Oxylabs
+# - ProxyMesh
+# - Rotating proxies from cloud providers 
