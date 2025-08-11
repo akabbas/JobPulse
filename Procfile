@@ -1,1 +1,1 @@
-web: gunicorn web_dashboard.app_heroku_full:app
+web: gunicorn web_dashboard.app_heroku_working:app
