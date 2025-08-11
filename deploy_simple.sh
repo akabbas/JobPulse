@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Simple Job Market Analytics Deployment Script
+# Simple JobPulse Deployment Script
 # This script deploys the application directly on the server without Docker
 
 set -e
 
-echo "🚀 Starting Simple Job Market Analytics Deployment..."
+echo "🚀 Starting Simple JobPulse Deployment..."
 
 # Check if Python 3 is installed
 if ! command -v python3 &> /dev/null; then
@@ -76,9 +76,9 @@ sudo systemctl enable nginx
 
 # Create systemd service for the application
 echo "🔧 Creating systemd service..."
-sudo tee /etc/systemd/system/job-analytics.service > /dev/null <<EOF
+sudo tee /etc/systemd/system/jobpulse.service > /dev/null <<EOF
 [Unit]
-Description=Job Market Analytics
+Description=JobPulse
 After=network.target postgresql.service redis.service
 
 [Service]
@@ -100,8 +100,8 @@ EOF
 # Reload systemd and start service
 echo "🔄 Starting application service..."
 sudo systemctl daemon-reload
-sudo systemctl enable job-analytics
-sudo systemctl start job-analytics
+sudo systemctl enable jobpulse
+sudo systemctl start jobpulse
 
 # Wait for application to start
 echo "⏳ Waiting for application to start..."
@@ -131,10 +131,10 @@ echo "   • Redis: localhost:6379"
 echo "   • Nginx: http://localhost:80"
 echo ""
 echo "🔧 Useful Commands:"
-echo "   • View logs: sudo journalctl -u job-analytics -f"
-echo "   • Stop service: sudo systemctl stop job-analytics"
-echo "   • Restart service: sudo systemctl restart job-analytics"
-echo "   • Check status: sudo systemctl status job-analytics"
+echo "   • View logs: sudo journalctl -u jobpulse -f"
+echo "   • Stop service: sudo systemctl stop jobpulse"
+echo "   • Restart service: sudo systemctl restart jobpulse"
+echo "   • Check status: sudo systemctl status jobpulse"
 echo ""
 echo "📝 Notes:"
 echo "   • The application uses reliable API sources to avoid 403 errors"

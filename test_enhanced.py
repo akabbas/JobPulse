@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Comprehensive Test Script for Enhanced Job Market Analytics
+Comprehensive Test Script for Enhanced JobPulse
 Tests all new functionality: multiple scrapers, search engine, Flask app, and database integration
 """
 
@@ -203,7 +203,7 @@ def test_enhanced_main():
 def main():
     """Run all tests"""
     print("=" * 60)
-    print("ENHANCED JOB MARKET ANALYTICS - COMPREHENSIVE TEST")
+    print("ENHANCED JOBPULSE - COMPREHENSIVE TEST")
     print("=" * 60)
     
     tests = [
@@ -232,7 +232,7 @@ def main():
     
     if passed == total:
         print("🎉 ALL TESTS PASSED!")
-        print("\nYour enhanced job market analytics project is ready!")
+        print("\nYour enhanced JobPulse project is ready!")
         print("\nTo run the enhanced application:")
         print("   python main_enhanced.py")
         print("\nTo run the Flask dashboard:")

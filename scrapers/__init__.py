@@ -1,1 +1,1 @@
-# Scrapers module for job market analytics
+# Scrapers module for JobPulse

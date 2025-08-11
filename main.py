@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Job Market Analytics - Main Application
+JobPulse - Main Application
 Analyzes software engineering job market trends using web scraping
 """
 
@@ -43,7 +43,7 @@ def main():
     logger = setup_logging()
     setup_directories()
     
-    logger.info("Starting Job Market Analytics Application")
+    logger.info("Starting JobPulse Application")
     
     # Initialize components
     indeed_scraper = IndeedScraper()
@@ -122,7 +122,7 @@ def main():
         for combo, count in skill_combinations:
             print(f"  {', '.join(combo)}: {count} jobs")
     
-    logger.info("Job Market Analytics completed successfully!")
+    logger.info("JobPulse completed successfully!")
     print(f"\nResults saved to: output/ and data/ directories")
 
 if __name__ == "__main__":

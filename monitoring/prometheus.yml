@@ -12,8 +12,8 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  # Job Market Analytics Flask App
-  - job_name: 'job-analytics-app'
+  # JobPulse Flask App
+- job_name: 'jobpulse-app'
     static_configs:
       - targets: ['app:5000']
     metrics_path: '/metrics'

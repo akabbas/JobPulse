@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Test script to verify the job market analytics project setup
+Test script to verify the JobPulse project setup
 """
 
 import sys
@@ -156,7 +156,7 @@ def test_sample_data():
 def main():
     """Run all tests"""
     print("=" * 50)
-    print("JOB MARKET ANALYTICS - SETUP TEST")
+    print("JOBPULSE - SETUP TEST")
     print("=" * 50)
     
     # Test imports

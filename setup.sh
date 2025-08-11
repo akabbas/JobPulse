@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# Job Market Analytics Setup Script
-echo "🚀 Setting up Job Market Analytics Project..."
+# JobPulse Setup Script
+echo "🚀 Setting up JobPulse Project..."
 
 # Check if we're in the right directory
 if [ ! -f "main.py" ]; then
-    echo "❌ Error: Please run this script from the job_market_analytics directory"
-    echo "   cd ~/Documents/job_market_analytics"
+    echo "❌ Error: Please run this script from the JobPulse directory"
+    echo "   cd ~/Documents/JobPulse"
     exit 1
 fi
 

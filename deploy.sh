@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Job Market Analytics Deployment Script
+# JobPulse Deployment Script
 # This script deploys the application to avoid 403 errors and test real job searches
 
 set -e
 
-echo "🚀 Starting Job Market Analytics Deployment..."
+echo "🚀 Starting JobPulse Deployment..."
 
 # Check if Docker is installed
 if ! command -v docker &> /dev/null; then

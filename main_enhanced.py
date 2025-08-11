@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Enhanced Job Market Analytics - Main Application
+Enhanced JobPulse - Main Application
 Integrates multiple scrapers and advanced search functionality
 """
 

@@ -1,5 +1,5 @@
 """
-Production configuration for Job Market Analytics
+Production configuration for JobPulse
 Optimized for server deployment and avoiding 403 errors
 """
 
@@ -64,7 +64,7 @@ class ProductionConfig:
         'github_api_key': os.environ.get('GITHUB_API_KEY', ''),
         'reddit_client_id': os.environ.get('REDDIT_CLIENT_ID', ''),
         'reddit_client_secret': os.environ.get('REDDIT_CLIENT_SECRET', ''),
-        'reddit_user_agent': 'JobMarketAnalytics/1.0'
+        'reddit_user_agent': 'JobPulse/1.0'
     }
     
     # Logging Configuration
@@ -80,7 +80,7 @@ class ProductionConfig:
     CACHE_CONFIG = {
         'type': 'redis',
         'default_timeout': 3600,  # 1 hour
-        'key_prefix': 'job_analytics'
+        'key_prefix': 'jobpulse'
     }
     
     # Security Configuration
