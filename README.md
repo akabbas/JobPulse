@@ -1,4 +1,4 @@
-# Job Market Analytics Platform
+# 🚀 JobPulse - Job Market Analytics Platform
 
 A job market analytics platform I built to solve real problems with job searching and data collection. This project tackles the common issues of 403 errors and limited job data by using a multi-source approach with proper error handling.
 
@@ -13,8 +13,8 @@ I was tired of job scrapers that break after a few requests or only scrape one s
 
 ## Quick Start
 ```bash
-git clone https://github.com/akabbas/job-market-analytics.git
-cd job-market-analytics
+git clone https://github.com/akabbas/JobPulse.git
+cd JobPulse
 chmod +x deploy.sh
 ./deploy.sh
 ```
