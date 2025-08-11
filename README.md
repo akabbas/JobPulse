@@ -2,7 +2,7 @@
 
 A **production-ready** job market analytics platform that combines **real-time job data** with **AI-powered insights**. Built to solve real problems with job searching, data collection, and market analysis using advanced scraping techniques and multiple data sources.
 
-## 🎯 **Why I Built This**
+## �� **Why I Built This**
 
 I was tired of job scrapers that break after a few requests or only scrape one source. I wanted something that:
 - ✅ **Actually works** without getting blocked (403 errors)
@@ -38,7 +38,7 @@ I was tired of job scrapers that break after a few requests or only scrape one s
 - **Market Trends**: Intelligent insights and recommendations
 - **Resume Matching**: Smart job-resume compatibility scoring
 
-## 🔥 **Key Features**
+## �� **Key Features**
 
 ### **Multi-Source Job Collection**
 - **APIs**: GitHub Jobs, Remotive, Stack Overflow Jobs
@@ -82,6 +82,16 @@ chmod +x deploy.sh
 # Already deployed and live at:
 # https://secure-oasis-31159-eb4700fd3846.herokuapp.com/
 ```
+
+## 🌍 **Environment Comparison**
+
+For detailed information about the differences between local development and production environments, see our comprehensive **[Environment Comparison Guide](ENVIRONMENT_COMPARISON.md)**.
+
+**Quick Overview:**
+- **�� Local Version** (`web_dashboard/app.py`): Full-featured development with all scrapers and AI services
+- **☁️ Production Version** (`web_dashboard/app_heroku_working.py`): Optimized Heroku deployment with reliable APIs
+- **📊 Performance**: Production is 4-6x faster startup with 85% smaller dependencies
+- **�� Use Cases**: Local for development/testing, Production for end users
 
 ## 🛠 **Tech Stack**
 
@@ -162,7 +172,7 @@ Successfully migrated all advanced features from FetchHire project:
 - [ ] Company insights and analytics
 - [ ] API rate limiting and quotas
 
-## 🤝 **Contributing**
+## �� **Contributing**
 
 This is a personal project built to solve real job market problems. Feel free to:
 - **Fork** and adapt for your needs
@@ -176,7 +186,7 @@ MIT License - Feel free to use, modify, and distribute.
 
 ---
 
-## 🎉 **Try It Live!**
+## �� **Try It Live!**
 
 **Production Version**: https://secure-oasis-31159-eb4700fd3846.herokuapp.com/
 
@@ -184,4 +194,4 @@ MIT License - Feel free to use, modify, and distribute.
 
 ---
 
-Built with ❤️, lots of debugging, and a mission to make job searching actually work! 🚀✨
+Built with ❤️, lots of debugging, and a mission to make job searching actually work! ��✨
