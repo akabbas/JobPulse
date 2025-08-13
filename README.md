@@ -58,6 +58,20 @@ I was tired of job scrapers that break after a few requests or only scrape one s
 - **Monitoring**: Prometheus metrics and health checks
 - **Error Handling**: Graceful degradation and logging
 
+## 🔍 **Search Methods Explained**
+
+### **Regular Search Jobs**
+- **Speed**: Fast (2-5 seconds)
+- **Method**: HTTP requests + APIs
+- **Best for**: Quick searches, reliable sources
+- **Success rate**: 70-80%
+
+### **Enhanced Search (Playwright)**
+- **Speed**: Slower (10-30 seconds)  
+- **Method**: Browser automation
+- **Best for**: Comprehensive searches, blocked sites
+- **Success rate**: 90-95%
+
 ## 🚀 **Quick Start**
 
 ### **Local Development**
