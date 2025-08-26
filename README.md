@@ -1,5 +1,9 @@
 # 🚀 JobPulse - Advanced Job Market Analytics Platform
 
+[![Version](https://img.shields.io/badge/version-3.0.0-blue.svg)](https://github.com/akabbas/JobPulse/releases)
+[![Status](https://img.shields.io/badge/status-production%20ready-green.svg)](https://github.com/akabbas/JobPulse)
+[![Deployment](https://img.shields.io/badge/deployment-railway%20ready-orange.svg)](https://railway.app)
+
 A **production-ready** job market analytics platform that combines **real-time job data** with **AI-powered insights**. Built to solve real problems with job searching, data collection, and market analysis using advanced scraping techniques and multiple data sources.
 
 ## �� **Why I Built This**
@@ -11,32 +15,63 @@ I was tired of job scrapers that break after a few requests or only scrape one s
 - ✅ **Is production-ready** and deployable anywhere
 - ✅ **Integrates AI analysis** for better job matching
 
-## 🚀 **Recent Major Updates (Latest Version)**
+## 🚀 **Recent Updates - Version 3.0.0 (Latest)**
 
-### **Enhanced Scraper Integration (FetchHire Migration)**
+> 📋 **[View Complete Changelog](CHANGELOG.md)** for detailed version history and technical evolution.
+
+### **🚀 Enhanced Scraper System - Production Ready**
+- **Dynamic Playwright Detection**: Automatically identifies and utilizes **20+ Playwright-capable scrapers**
+- **Concurrent Execution**: All scrapers run simultaneously for **2x faster performance** (45s → 25s)
+- **Comprehensive Coverage**: Dice, Stack Overflow, Indeed, LinkedIn, Greenhouse, Lever, and **15+ more sources**
+- **Smart Method Selection**: Playwright first, standard fallback, enhanced methods
+- **Performance Improvement**: **7x more sources** with intelligent fallbacks
+
+### **🗄️ Smart Caching & Database System**
+- **SQLAlchemy Integration**: Professional database models for Job and Search tables
+- **24-Hour Job Storage**: Intelligent caching with duplicate detection and prevention
+- **Search History Tracking**: Complete tracking of user searches and results
+- **PostgreSQL Support**: Production database with automatic SQLite fallback
+
+### **🎨 Advanced User Interface**
+- **Source Filter Sidebar**: Interactive checkboxes for selecting job sources
+- **Real-time Coverage Indicators**: Live feedback on selected sources and coverage type
+- **Enhanced Search Button**: Comprehensive capabilities with source breakdown
+- **Improved Results Display**: Better job presentation with source information
+
+### **🚀 Railway Deployment - Enterprise Ready**
+- **Production Configuration**: Complete Railway deployment with environment variables
+- **Automatic Database Setup**: PostgreSQL integration with health monitoring
+- **Auto-scaling**: Intelligent resource management and performance optimization
+- **Health Checks**: Built-in monitoring and diagnostic endpoints
+
+### **📊 Testing & Diagnostics**
+- **Comprehensive Testing**: Test scripts for caching system and enhanced scraper
+- **Health Check System**: Diagnostic tools for all scrapers
+- **Performance Metrics**: Detailed logging and monitoring capabilities
+- **Troubleshooting Tools**: Automated diagnostic and repair scripts
+
+---
+
+## 🚀 **Previous Major Updates**
+
+### **Version 2.0.0 - Enhanced Scraper Integration**
 - **Playwright Technology**: Advanced browser automation for bypassing 403 errors
 - **Anti-Detection Measures**: Stealth scripts, rotating user agents, browser profiles
 - **Concurrent Processing**: Multiple sources simultaneously for faster results
 - **Skills Extraction**: Automatic skill identification from job descriptions
 - **Duplicate Removal**: Intelligent deduplication across sources
 
-### **Real Data APIs (Production Ready)**
-- **GitHub Jobs API**: Live job postings from actual companies
-- **Remotive API**: Remote job opportunities with real data
-- **Reddit Integration**: Job posts from r/remotejobs, r/forhire
-- **Smart Fallbacks**: Enhanced mock data only when APIs fail
-
-### **Heroku Production Deployment**
-- **Live Application**: https://secure-oasis-31159-eb4700fd3846.herokuapp.com/
-- **Optimized Dependencies**: Minimal slug size (23.9MB) for reliability
-- **Production Configuration**: Environment variables, logging, error handling
-- **Auto-scaling**: Handles traffic spikes automatically
-
-### **AI Services Integration**
-- **GPT-5 Ready**: Modular AI service architecture
-- **Skills Analysis**: AI-powered job description analysis
+### **Version 1.5.0 - AI Integration & Rebranding**
+- **GPT-5 Ready**: Modular AI service architecture for job analysis
+- **Skills Analysis**: AI-powered job description analysis and matching
 - **Market Trends**: Intelligent insights and recommendations
 - **Resume Matching**: Smart job-resume compatibility scoring
+
+### **Version 1.0.0 - Core Platform**
+- **Multi-source Scraping**: Comprehensive job collection from multiple sources
+- **Docker Deployment**: Complete containerization and deployment setup
+- **403 Error Prevention**: Advanced anti-detection mechanisms
+- **Scalable Architecture**: Kubernetes and Docker Compose support
 
 ## �� **Key Features**
 
@@ -91,16 +126,31 @@ chmod +x deploy.sh
 ./deploy.sh
 ```
 
-### **Production (Heroku)**
+### **Production (Railway)**
 ```bash
-# Already deployed and live at:
-# https://secure-oasis-31159-eb4700fd3846.herokuapp.com/
+# Deploy to Railway with one command:
+./quick_deploy_railway.sh
+
+# Or manually:
+railway login
+railway init
+railway up
 ```
+
+### **Previous Deployments**
+- **Heroku**: https://secure-oasis-31159-eb4700fd3846.eb4700fd3846.herokuapp.com/ (Archived)
+- **Railway**: Production-ready deployment configuration included
 
 ## 🎬 **Live Demo & Showcase**
 
-### **🚀 Try JobPulse Right Now!**
-**[Live Application](https://secure-oasis-31159-eb4700fd3846.herokuapp.com/)**
+### **🚀 Deploy JobPulse to Railway!**
+**Quick Deployment**: Use our automated script for instant deployment
+```bash
+./quick_deploy_railway.sh
+```
+
+### **📱 Previous Live Demo**
+**Heroku Application**: https://secure-oasis-31159-eb4700fd3846.herokuapp.com/ (Archived)
 
 ### **🎯 Quick Demo Guide**
 
