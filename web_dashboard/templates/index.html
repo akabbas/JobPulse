@@ -66,11 +66,11 @@
                 
                 <form id="searchForm" class="search-form">
                     <div class="form-grid">
-                        <div class="form-group">
-                            <label for="keyword">Job Title or Keywords</label>
-                            <input type="text" id="keyword" name="keyword" class="form-control" 
-                                   placeholder="e.g., Python Developer, Data Scientist" required>
-                        </div>
+                                                        <div class="form-group">
+                                    <label for="keyword">Job Title or Keywords</label>
+                                    <input type="text" id="keyword" name="keyword" class="form-control" 
+                                           placeholder="e.g., Python Developer, Data Scientist" value="data analyst" required>
+                                </div>
                         <div class="form-group">
                             <label for="location">Location</label>
                             <input type="text" id="location" name="location" class="form-control" 
@@ -274,7 +274,7 @@
                 </div>
                 <div class="footer-links">
                     <a href="https://github.com/akabbas/JobPulse" target="_blank" class="glass-button secondary">GitHub</a>
-                    <a href="#" class="glass-button secondary">Documentation</a>
+                    <a href="https://github.com/akabbas/JobPulse/blob/main/README.md" target="_blank" class="glass-button secondary">Documentation</a>
                 </div>
             </div>
         </div>
@@ -554,6 +554,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Force CSS refresh and clear cache
             forceCSSRefresh();
+            
+            // Set default search term to "data analyst"
+            document.getElementById('keyword').value = 'data analyst';
             
             updateSelectedSources();
             
