@@ -13,9 +13,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/glassmorphism.css', v='1.0') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/skillsNetwork.css', v='1.0') }}">
+    <!-- CSS Files - Glassmorphism First, Skills Network Second -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/glassmorphism.css', v='2.0') }}" type="text/css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/skillsNetwork.css', v='2.0') }}" type="text/css">
     
     <!-- Chart.js for Skills Network -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -552,6 +552,9 @@
 
         // 🎭 Initialize floating elements
         document.addEventListener('DOMContentLoaded', function() {
+            // Force CSS refresh and clear cache
+            forceCSSRefresh();
+            
             updateSelectedSources();
             
             // Add event listeners to source checkboxes
@@ -559,21 +562,66 @@
                 cb.addEventListener('change', updateSelectedSources);
             });
         });
+        
+        // 🔄 Force CSS Refresh Function
+        function forceCSSRefresh() {
+            console.log('🔄 Forcing CSS refresh...');
+            
+            // Force reload of CSS files
+            const links = document.querySelectorAll('link[rel="stylesheet"]');
+            links.forEach(link => {
+                const href = link.href;
+                link.href = href.split('?')[0] + '?v=' + Date.now();
+            });
+            
+            // Add visual indicator that new styles are loaded
+            document.body.style.setProperty('--force-refresh', Date.now());
+            
+            // Force repaint
+            document.body.offsetHeight;
+            
+            console.log('✅ CSS refresh completed');
+        }
     </script>
 
     <style>
-        /* 🎨 Critical Inline Styles - Force New Design */
-        body {
+        /* 🎨 CRITICAL INLINE STYLES - FORCE NEW DESIGN */
+        html, body {
             background: linear-gradient(135deg, #0a0a0a 0%, #111111 50%, #1a1a1a 100%) !important;
             color: #ffffff !important;
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
             margin: 0 !important;
             padding: 0 !important;
+            min-height: 100vh !important;
         }
         
-        /* Override any existing styles */
+        /* AGGRESSIVE OVERRIDES - Force new design */
         * {
             box-sizing: border-box !important;
+        }
+        
+        /* Override any light theme styles */
+        .container, .container-fluid, .row, .col, .col-md-6, .col-lg-4 {
+            background: transparent !important;
+            color: #ffffff !important;
+        }
+        
+        /* Force dark backgrounds */
+        .card, .form-control, .btn, .navbar, .footer {
+            background: rgba(255, 255, 255, 0.05) !important;
+            backdrop-filter: blur(20px) !important;
+            -webkit-backdrop-filter: blur(20px) !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            color: #ffffff !important;
+        }
+        
+        /* Override any existing color schemes */
+        .text-dark, .text-muted, .text-secondary {
+            color: #ffffff !important;
+        }
+        
+        .bg-light, .bg-white, .bg-secondary {
+            background: rgba(255, 255, 255, 0.05) !important;
         }
         
         /* 🎨 Additional Custom Styles */
