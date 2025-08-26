@@ -154,7 +154,7 @@
         </div>
     </section>
 
-    <!-- 📊 Results Section -->
+    <!-- 📊 Results Section with Tab System -->
     <section class="results-section" id="resultsSection" style="display: none;">
         <div class="container-fluid">
             <div class="results-header glass-card animate-slide-right">
@@ -175,49 +175,100 @@
                 </div>
             </div>
             
-            <div class="results-container" id="jobResults">
-                <!-- Results will be populated here -->
+            <!-- 🎯 Tab Navigation -->
+            <div class="tab-navigation glass-card animate-fade-in">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="jobs" onclick="switchTab('jobs')">
+                        📋 Job Results <span id="jobCountBadge" class="tab-badge">0</span>
+                    </button>
+                    <button class="tab-button" data-tab="skills-analysis" onclick="switchTab('skills-analysis')">
+                        📊 Skills Analysis
+                    </button>
+                    <button class="tab-button" data-tab="skills-network" onclick="switchTab('skills-network')">
+                        🌐 Skills Network
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 🎯 Tab Content -->
+            <div class="tab-content">
+                <!-- Jobs Tab -->
+                <div class="tab-pane active" id="jobs-tab">
+                    <div class="results-container glass-card" id="jobResults">
+                        <div class="empty-state">
+                            <p class="text-muted">Search for jobs to see results here.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination -->
+                    <div id="pagination" class="pagination-container glass-card" style="display: none;">
+                        <button class="glass-button primary" id="loadMoreBtn">
+                            <span class="btn-icon">📄</span>
+                            Load More Jobs
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Skills Analysis Tab -->
+                <div class="tab-pane" id="skills-analysis-tab">
+                    <div class="skills-analysis-container glass-card">
+                        <div class="skills-chart-section">
+                            <h3>Skills Distribution</h3>
+                            <canvas id="skillsChart"></canvas>
+                        </div>
+                        
+                        <div class="skills-table-section">
+                            <h3>Skills Breakdown</h3>
+                            <div id="skillsTable">
+                                <p class="text-muted">Search for jobs to see skills analysis.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="debug-section">
+                            <h3>Debug Info</h3>
+                            <div id="debugInfo">
+                                <p class="text-muted">No data yet</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Skills Network Tab -->
+                <div class="tab-pane" id="skills-network-tab">
+                    <div class="skills-network-container glass-card">
+                        <div class="network-controls">
+                            <div class="control-group">
+                                <label for="min-frequency">Min Skill Frequency</label>
+                                <input type="number" class="form-control glass" id="min-frequency" value="2" min="1" max="100">
+                            </div>
+                            <div class="control-group">
+                                <label for="co-occurrence-threshold">Min Co-occurrence</label>
+                                <input type="number" class="form-control glass" id="co-occurrence-threshold" value="1" min="1" max="20">
+                            </div>
+                            <div class="control-group">
+                                <label for="network-keyword">Keyword Filter</label>
+                                <input type="text" class="form-control glass" id="network-keyword" placeholder="Optional">
+                            </div>
+                            <div class="control-actions">
+                                <button class="glass-button primary" onclick="updateSkillsNetwork()">
+                                    🔄 Update Network
+                                </button>
+                                <button class="glass-button secondary" onclick="resetSkillsNetwork()">
+                                    🔄 Reset
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="network-visualization">
+                            <canvas id="skillsNetworkChart"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- 🧠 Skills Network Section -->
-    <section class="skills-section" id="skillsSection" style="display: none;">
-        <div class="container-fluid">
-            <div class="skills-header glass-card animate-fade-in">
-                <h2>Skills Network Analysis</h2>
-                <p>AI-powered insights into required skills and market trends</p>
-                <button class="glass-button primary" onclick="analyzeSkills()">
-                    <span class="btn-icon">🧠</span>
-                    Analyze Skills
-                </button>
-            </div>
-            
-            <div class="skills-container">
-                <div class="skills-chart-container glass-card">
-                    <canvas id="skillsNetworkChart"></canvas>
-                </div>
-                
-                <div class="skills-insights glass-card">
-                    <h3>Market Insights</h3>
-                    <div class="insight-item">
-                        <span class="insight-icon">📈</span>
-                        <div class="insight-content">
-                            <h4>Top Skills</h4>
-                            <p id="topSkills">Analyze jobs to see trending skills</p>
-                        </div>
-                    </div>
-                    <div class="insight-item">
-                        <span class="insight-icon">🎯</span>
-                        <div class="insight-content">
-                            <h4>Skill Demand</h4>
-                            <p id="skillDemand">Understand what employers are looking for</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+
 
     <!-- 🚀 Features Section -->
     <section class="features-section">
@@ -324,7 +375,14 @@
             
             console.log('Selected sources for search:', sources);
             
+            // Show results section and switch to jobs tab
             document.getElementById('resultsSection').style.display = 'block';
+            switchTab('jobs');
+            
+            // Update job count badge
+            document.getElementById('jobCountBadge').textContent = '0';
+            
+            // Show loading state
             document.getElementById('jobResults').innerHTML = '<div class="loading-container"><div class="loading"></div><p>Searching for jobs...</p></div>';
             
             try {
@@ -399,6 +457,7 @@
         function displayResults(data) {
             const resultsContainer = document.getElementById('jobResults');
             const jobCount = document.getElementById('jobCount');
+            const jobCountBadge = document.getElementById('jobCountBadge');
             const sourceCount = document.getElementById('sourceCount');
             const cacheStatus = document.getElementById('cacheStatus');
             
@@ -418,7 +477,9 @@
                 }
             });
             
+            // Update job count in both places
             jobCount.textContent = allJobs.length;
+            jobCountBadge.textContent = allJobs.length;
             sourceCount.textContent = sourceCountValue;
             cacheStatus.textContent = data.cached ? 'From Cache' : 'Fresh Results';
             cacheStatus.className = data.cached ? 'status success' : 'status info';
@@ -450,8 +511,10 @@
                 </div>
             `;
             
-            // Show skills section
-            document.getElementById('skillsSection').style.display = 'block';
+            // Show pagination if there are many results
+            if (allJobs.length >= 10) {
+                document.getElementById('pagination').style.display = 'block';
+            }
         }
 
         // 🧠 Analyze Skills
@@ -564,7 +627,86 @@
             document.querySelectorAll('.source-checkbox input').forEach(cb => {
                 cb.addEventListener('change', updateSelectedSources);
             });
+            
+            // Initialize tab system
+            initializeTabs();
         });
+        
+        // 🎯 Tab System Management
+        function initializeTabs() {
+            // Set default active tab
+            switchTab('jobs');
+        }
+        
+        function switchTab(tabName) {
+            // Remove active class from all tabs and panes
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+            
+            // Add active class to selected tab and pane
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Handle tab-specific logic
+            if (tabName === 'skills-network') {
+                // Initialize skills network when tab is shown
+                setTimeout(() => {
+                    if (typeof initializeSkillsNetwork === 'function') {
+                        initializeSkillsNetwork();
+                    }
+                }, 100);
+            }
+        }
+        
+        // 🌐 Skills Network Management Functions
+        function updateSkillsNetwork() {
+            const minFrequency = document.getElementById('min-frequency').value;
+            const coOccurrenceThreshold = document.getElementById('co-occurrence-threshold').value;
+            const keywordFilter = document.getElementById('network-keyword').value;
+            
+            console.log('Updating skills network with:', { minFrequency, coOccurrenceThreshold, keywordFilter });
+            
+            // Call the skills network API with filters
+            fetch('/api/skills-network', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    min_frequency: parseInt(minFrequency),
+                    co_occurrence_threshold: parseInt(coOccurrenceThreshold),
+                    keyword_filter: keywordFilter
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    createSkillsNetwork(data);
+                    console.log('Skills network updated successfully');
+                } else {
+                    console.error('Error updating skills network:', data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error updating skills network:', error);
+            });
+        }
+        
+        function resetSkillsNetwork() {
+            // Reset form values
+            document.getElementById('min-frequency').value = '2';
+            document.getElementById('co-occurrence-threshold').value = '1';
+            document.getElementById('network-keyword').value = '';
+            
+            // Refresh the network
+            updateSkillsNetwork();
+        }
+        
+        function initializeSkillsNetwork() {
+            console.log('Initializing skills network...');
+            // This function will be called when the skills network tab is shown
+            // The actual initialization is handled by the skillsNetwork.js file
+        }
         
         // 🔄 Force CSS Refresh Function
         function forceCSSRefresh() {
