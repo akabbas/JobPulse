@@ -1,0 +1,135 @@
+<!-- Data Sources Information Partial -->
+<div class="data-sources-info mb-4">
+    <div class="card border-0 shadow-sm">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-shield-alt me-2"></i>
+                ✅ Reliable Data Sources Status
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h6 class="text-muted mb-3">Current Data Source Status</h6>
+                    <div class="data-sources-grid">
+                        {% for source in data_sources %}
+                        <div class="data-source-item d-flex align-items-center mb-2">
+                            <span class="status-badge me-2">
+                                {% if source.status == 'live' %}
+                                    <span class="badge bg-success">✅ Live Data</span>
+                                {% elif source.status == 'sample' %}
+                                    <span class="badge bg-warning text-dark">⚠️ Sample Data</span>
+                                {% else %}
+                                    <span class="badge bg-secondary">❌ Unavailable</span>
+                                {% endif %}
+                            </span>
+                            <span class="source-name fw-medium">{{ source.name }}</span>
+                            {% if source.job_count %}
+                                <span class="job-count text-muted ms-auto">({{ source.job_count }} jobs)</span>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="info-box bg-light p-3 rounded">
+                        <h6 class="text-success mb-2">
+                            <i class="fas fa-check-circle me-1"></i>
+                            Enhanced Reliability
+                        </h6>
+                        <p class="small text-muted mb-2">
+                            <strong>Greenhouse Integration:</strong> 100% success rate with real job data from major tech companies. We've removed unreliable sources to ensure quality.
+                        </p>
+                        <div class="stats-summary">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small">Live Sources:</span>
+                                <span class="badge bg-success">{{ data_sources|selectattr('status', 'equalto', 'live')|list|length }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small">Sample Sources:</span>
+                                <span class="badge bg-warning text-dark">{{ data_sources|selectattr('status', 'equalto', 'sample')|list|length }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="small">Total Sources:</span>
+                                <span class="badge bg-primary">{{ data_sources|length }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-3 pt-3 border-top">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h6 class="text-success mb-2">
+                            <i class="fas fa-check-circle me-1"></i>
+                            Premium Sources (Live Data)
+                        </h6>
+                        <p class="small text-muted">
+                            <strong>Greenhouse:</strong> 100% success rate with real job data from Airbnb, Lyft, Pinterest, Stripe, Coinbase, and other major tech companies.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h6 class="text-info mb-2">
+                            <i class="fas fa-rocket me-1"></i>
+                            Enhanced Coverage
+                        </h6>
+                        <p class="small text-muted">
+                            <strong>Playwright Integration:</strong> Browser automation for comprehensive job coverage from RemoteOK, WeWorkRemotely, and Remotive.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.data-sources-info .data-sources-grid {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.data-source-item {
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+}
+
+.data-source-item:hover {
+    background-color: #f8f9fa;
+}
+
+.status-badge .badge {
+    font-size: 0.75rem;
+    padding: 4px 8px;
+}
+
+.source-name {
+    color: #495057;
+    min-width: 120px;
+}
+
+.job-count {
+    font-size: 0.8rem;
+}
+
+.info-box {
+    border-left: 4px solid #007bff;
+}
+
+.stats-summary .badge {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+}
+
+@media (max-width: 768px) {
+    .data-sources-info .row {
+        flex-direction: column;
+    }
+    
+    .data-sources-info .col-md-4 {
+        margin-top: 1rem;
+    }
+}
+</style>

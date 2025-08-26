@@ -1,0 +1,26 @@
+# Railway Production Requirements for JobPulse
+# Core web framework
+flask>=2.3.3
+flask-sqlalchemy>=3.0.0
+gunicorn>=20.1.0
+
+# HTTP requests for APIs
+requests>=2.31.0
+
+# Web scraping and parsing
+beautifulsoup4>=4.12.0
+lxml>=4.9.0
+playwright>=1.40.0
+
+# Basic data processing
+python-dateutil>=2.8.0
+pandas>=2.0.0
+numpy>=1.24.0
+matplotlib>=3.7.0
+seaborn>=0.12.0
+
+# Environment and config
+python-dotenv>=1.0.0
+
+# Railway-specific optimizations
+psycopg2-binary>=2.9.0  # PostgreSQL support for Railway

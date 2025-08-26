@@ -1,41 +1,27 @@
 FROM python:3.11-slim
 
-# Set working directory
-WORKDIR /app
+ENV PYTHONUNBUFFERED=1
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
     g++ \
-    libpq-dev \
-    curl \
-    wget \
-    unzip \
+    libffi-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy requirements first for better caching
-COPY requirements.txt .
+WORKDIR /app
 
-# Install Python dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
+# Install Playwright browsers only (skip system deps)
+RUN playwright install chromium
+
 COPY . .
-
-# Create necessary directories
-RUN mkdir -p logs data output
-
-# Set environment variables
-ENV PYTHONPATH=/app
-ENV FLASK_APP=web_dashboard/app.py
-ENV FLASK_ENV=production
-
-# Expose port
 EXPOSE 5000
 
-# Health check
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:5000/health || exit 1
-
-# Run the application
-CMD ["python", "web_dashboard/app.py"] 
+CMD ["python", "web_dashboard/app.py"]

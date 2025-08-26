@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skills Network Integration Test</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Vis Network Library -->
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    
+    <!-- Custom Skills Network Styles and Scripts -->
+    <link rel="stylesheet" href="web_dashboard/static/css/skillsNetwork.css">
+    <script src="web_dashboard/static/js/skillsNetwork.js"></script>
+    
+    <style>
+        /* Tab Styling */
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+        }
+        
+        .nav-tabs .nav-link {
+            border: none;
+            border-bottom: 3px solid transparent;
+            color: #6c757d;
+            font-weight: 500;
+            padding: 12px 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-tabs .nav-link:hover {
+            border-color: transparent;
+            color: #495057;
+            background-color: #f8f9fa;
+        }
+        
+        .nav-tabs .nav-link.active {
+            color: #007bff;
+            background-color: transparent;
+            border-bottom-color: #007bff;
+            font-weight: 600;
+        }
+        
+        /* Skills Network Container */
+        #skills-network-container {
+            background: #ffffff;
+            border: 1px solid #dee2e6 !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Network Statistics Cards */
+        .card.bg-light {
+            transition: transform 0.2s ease;
+        }
+        
+        .card.bg-light:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid mt-4">
+        <h1 class="text-center mb-4">Skills Network Integration Test</h1>
+        
+        <!-- Navigation Tabs -->
+        <ul class="nav nav-tabs" id="resultsTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="jobs-tab" data-bs-toggle="tab" data-bs-target="#jobs-content" type="button" role="tab" aria-controls="jobs-content" aria-selected="true">
+                    📋 Job Results
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="skills-analysis-tab" data-bs-toggle="tab" data-bs-target="#skills-analysis-content" type="button" role="tab" aria-controls="skills-analysis-content" aria-selected="false">
+                    📊 Skills Analysis
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="skills-network-tab" data-bs-toggle="tab" data-bs-target="#skills-network-content" type="button" role="tab" aria-controls="skills-network-content" aria-selected="false">
+                    🌐 Skills Network
+                </button>
+            </li>
+        </ul>
+        
+        <!-- Tab Content -->
+        <div class="tab-content" id="resultsTabContent">
+            <!-- Jobs Tab -->
+            <div class="tab-pane fade show active" id="jobs-content" role="tabpanel" aria-labelledby="jobs-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Job Results Content</h5>
+                        <p>This tab would contain the job search results.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Skills Analysis Tab -->
+            <div class="tab-pane fade" id="skills-analysis-content" role="tabpanel" aria-labelledby="skills-analysis-tab">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Skills Analysis Content</h5>
+                        <p>This tab would contain the skills analysis charts and tables.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Skills Network Tab -->
+            <div class="tab-pane fade" id="skills-network-content" role="tabpanel" aria-labelledby="skills-network-tab">
+                <div class="card">
+                    <div class="card-header">
+                        <h5>Skills Network Visualization</h5>
+                        <p class="text-muted mb-0">Interactive visualization showing relationships between skills in job postings</p>
+                    </div>
+                    <div class="card-body">
+                        <!-- Network Controls -->
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <label for="min-frequency" class="form-label">Min Skill Frequency</label>
+                                <input type="number" class="form-control" id="min-frequency" value="2" min="1" max="100">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="co-occurrence-threshold" class="form-label">Min Co-occurrence</label>
+                                <input type="number" class="form-control" id="co-occurrence-threshold" value="1" min="1" max="20">
+                            </div>
+                            <div class="col-md-3">
+                                <label for="network-keyword" class="form-label">Keyword Filter</label>
+                                <input type="text" class="form-control" id="network-keyword" placeholder="Optional">
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label">&nbsp;</label>
+                                <div>
+                                    <button class="btn btn-primary btn-sm" onclick="updateSkillsNetwork()">
+                                        🔄 Update Network
+                                    </button>
+                                    <button class="btn btn-secondary btn-sm" onclick="resetSkillsNetwork()">
+                                        🔄 Reset
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Network Statistics -->
+                        <div class="row mb-3">
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Total Skills</h6>
+                                        <h4 id="network-total-skills" class="text-primary">-</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Connections</h6>
+                                        <h4 id="network-total-connections" class="text-success">-</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Avg Frequency</h6>
+                                        <h4 id="network-avg-frequency" class="text-info">-</h4>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="card bg-light">
+                                    <div class="card-body text-center">
+                                        <h6 class="card-title">Network Density</h6>
+                                        <h4 id="network-density" class="text-warning">-</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Skills Network Container -->
+                        <div id="skills-network-container" style="width: 100%; height: 500px; border: 1px solid #ccc; border-radius: 8px; background: #f8f9fa;">
+                            <div class="d-flex align-items-center justify-content-center h-100">
+                                <div class="text-center">
+                                    <div class="spinner-border text-primary mb-2" role="status">
+                                        <span class="visually-hidden">Loading...</span>
+                                    </div>
+                                    <p class="text-muted mb-0">Click the Skills Network tab to load the visualization</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Network Instructions -->
+                        <div class="mt-3">
+                            <div class="alert alert-info">
+                                <h6>💡 How to Use the Skills Network</h6>
+                                <ul class="mb-0">
+                                    <li><strong>Zoom:</strong> Use mouse wheel or pinch gestures</li>
+                                    <li><strong>Pan:</strong> Click and drag to move around</li>
+                                    <li><strong>Explore:</strong> Click on any skill node to see connections</li>
+                                    <li><strong>Filter:</strong> Use the controls above to adjust the network</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let skillsNetworkInstance = null;
+        
+        // Skills Network Functions
+        function initializeSkillsNetworkTab() {
+            // Initialize the skills network when the tab is shown
+            const skillsNetworkTab = document.getElementById('skills-network-tab');
+            
+            skillsNetworkTab.addEventListener('shown.bs.tab', function (event) {
+                if (!skillsNetworkInstance) {
+                    // Clear loading state
+                    const container = document.getElementById('skills-network-container');
+                    container.innerHTML = '';
+                    
+                    // Initialize the skills network
+                    skillsNetworkInstance = initializeSkillsNetwork('skills-network-container');
+                    
+                    // Load initial data
+                    setTimeout(() => {
+                        updateSkillsNetwork();
+                    }, 500);
+                }
+            });
+        }
+        
+        async function updateSkillsNetwork() {
+            if (!skillsNetworkInstance) {
+                console.log('Skills network not initialized yet');
+                return;
+            }
+            
+            try {
+                // Get filter values
+                const minFrequency = document.getElementById('min-frequency').value;
+                const minCoOccurrence = document.getElementById('co-occurrence-threshold').value;
+                const keyword = document.getElementById('network-keyword').value;
+                
+                // Build query parameters
+                const params = new URLSearchParams({
+                    min_frequency: minFrequency,
+                    min_co_occurrence: minCoOccurrence
+                });
+                
+                if (keyword.trim()) {
+                    params.append('keyword', keyword.trim());
+                }
+                
+                // For testing, use sample data instead of API call
+                const sampleData = {
+                    success: true,
+                    data: {
+                        skills: {
+                            'Python': 8,
+                            'React': 6,
+                            'AWS': 5,
+                            'Docker': 4,
+                            'JavaScript': 7,
+                            'Node.js': 5,
+                            'MongoDB': 3,
+                            'PostgreSQL': 4
+                        },
+                        co_occurrences: {
+                            'Python|React': 3,
+                            'Python|AWS': 2,
+                            'React|JavaScript': 4,
+                            'Node.js|MongoDB': 2,
+                            'AWS|Docker': 3,
+                            'JavaScript|React': 4,
+                            'Python|Docker': 2,
+                            'PostgreSQL|Python': 2
+                        }
+                    }
+                };
+                
+                // Update the network with new data
+                await skillsNetworkInstance.refreshData();
+                
+                // Update statistics
+                updateNetworkStatistics(sampleData.data);
+                
+                console.log('Skills network updated successfully');
+                
+            } catch (error) {
+                console.error('Error updating skills network:', error);
+                alert('Error updating skills network: ' + error.message);
+            }
+        }
+        
+        function resetSkillsNetwork() {
+            // Reset filter values
+            document.getElementById('min-frequency').value = 2;
+            document.getElementById('co-occurrence-threshold').value = 1;
+            document.getElementById('network-keyword').value = '';
+            
+            // Update the network with default values
+            updateSkillsNetwork();
+        }
+        
+        function updateNetworkStatistics(data) {
+            if (!data) return;
+            
+            const { skills, co_occurrences } = data;
+            
+            // Calculate statistics
+            const totalSkills = Object.keys(skills).length;
+            const totalConnections = Object.keys(co_occurrences).length;
+            const avgFrequency = totalSkills > 0 ? 
+                Math.round(Object.values(skills).reduce((a, b) => a + b, 0) / totalSkills) : 0;
+            const networkDensity = totalSkills > 1 ? 
+                Math.round((totalConnections / (totalSkills * (totalSkills - 1) / 2)) * 100) / 100 : 0;
+            
+            // Update display
+            document.getElementById('network-total-skills').textContent = totalSkills;
+            document.getElementById('network-total-connections').textContent = totalConnections;
+            document.getElementById('network-avg-frequency').textContent = avgFrequency;
+            document.getElementById('network-density').textContent = networkDensity;
+        }
+        
+        // Initialize skills network tab when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeSkillsNetworkTab();
+        });
+    </script>
+</body>
+</html>

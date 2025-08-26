@@ -1,0 +1,1 @@
+            search_url = f"{self.base_url}/from?site=news.ycombinator.com&q=who+hiring"

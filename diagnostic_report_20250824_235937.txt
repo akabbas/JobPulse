@@ -1,0 +1,24 @@
+JobPulse Scraper Diagnostic Report
+==================================================
+Generated: 2025-08-24 23:59:37
+
+Scraper: Dice
+Status: ❌ Broken
+Issue: Page structure has changed or site is blocking access
+Fix: Update HTML selectors and check for anti-bot measures
+------------------------------
+Scraper: Stack Overflow
+Status: ❌ Broken
+Issue: Page structure has changed or site is blocking access
+Fix: Update HTML selectors and check for anti-bot measures
+------------------------------
+Scraper: Greenhouse
+Status: ⚠️ Needs Fixing
+Issue: Moderate success rate (59.1%) - some companies broken
+Fix: Update company list to remove broken companies
+------------------------------
+Scraper: Lever
+Status: ❌ Broken
+Issue: Low success rate (0.0%) - most companies broken
+Fix: Research current working company identifiers and update list
+------------------------------

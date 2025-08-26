@@ -1,0 +1,18 @@
+# Updated Greenhouse Companies List
+# Copy this list to scrapers/greenhouse_scraper.py
+
+self.greenhouse_companies = [
+    'airbnb',
+    'lyft',
+    'pinterest',
+    'stripe',
+    'coinbase',
+    'asana',
+    'dropbox',
+    'figma',
+    'gusto',
+    'hubspot',
+    'instacart',
+    'robinhood',
+    'snowflake',
+]

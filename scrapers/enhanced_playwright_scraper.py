@@ -464,37 +464,198 @@ class EnhancedPlaywrightScraper:
             return None
     
     async def scrape_all_sources(self, keyword: str = None, limit: int = 50) -> Dict[str, List[Dict[str, Any]]]:
-        """Scrape all sources concurrently"""
-        self.logger.info(f"🚀 Starting concurrent scraping for keyword: {keyword}")
+        """Scrape all sources concurrently using dynamic Playwright detection"""
+        self.logger.info(f"🚀 Starting comprehensive Playwright scraping for keyword: {keyword}")
         
-        # Create scraping tasks
-        tasks = [
-            self.scrape_remote_ok(keyword, limit),
-            self.scrape_weworkremotely(keyword, limit),
-            self.scrape_remotive_api(keyword, limit)
-        ]
+        # Get all Playwright-capable scrapers
+        playwright_scrapers = self._get_playwright_scrapers()
+        self.logger.info(f"🔍 Found {len(playwright_scrapers)} Playwright-capable scrapers: {list(playwright_scrapers.keys())}")
         
-        # Execute tasks concurrently
+        # Log scraper capabilities
+        self._log_scraper_capabilities(playwright_scrapers)
+        
+        # Create scraping tasks for all available scrapers
+        tasks = []
+        scraper_names = []
+        
+        for scraper_name, scraper_instance in playwright_scrapers.items():
+            try:
+                # Create task for each scraper
+                if hasattr(scraper_instance, '_search_with_playwright'):
+                    # For scrapers with _search_with_playwright method (async)
+                    task = self._run_scraper_playwright(scraper_instance, scraper_name, keyword, limit)
+                    tasks.append(task)
+                    scraper_names.append(scraper_name)
+                elif hasattr(scraper_instance, 'scrape_jobs'):
+                    # For scrapers with standard scrape_jobs method (sync - run in thread)
+                    task = self._run_scraper_standard_async(scraper_instance, scraper_name, keyword, limit)
+                    tasks.append(task)
+                    scraper_names.append(scraper_name)
+                elif scraper_name.endswith('_enhanced'):
+                    # For our own enhanced methods
+                    task = self._run_enhanced_method_async(scraper_name, keyword, limit)
+                    tasks.append(task)
+                    scraper_names.append(scraper_name)
+                else:
+                    self.logger.warning(f"Skipping {scraper_name}: no compatible scraping method found")
+                    continue
+                
+            except Exception as e:
+                self.logger.error(f"Error setting up {scraper_name}: {e}")
+                continue
+        
+        if not tasks:
+            self.logger.error("No valid Playwright scrapers found!")
+            return {'all_sources': [], 'error': 'No valid scrapers available'}
+        
+        # Execute all tasks concurrently
+        self.logger.info(f"🚀 Executing {len(tasks)} scraping tasks concurrently...")
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         # Process results
         all_jobs = {}
-        sources = ['remote_ok', 'weworkremotely', 'remotive']
+        successful_sources = 0
         
         for i, result in enumerate(results):
-            source = sources[i]
+            source = scraper_names[i]
             if isinstance(result, Exception):
                 self.logger.error(f"Error scraping {source}: {result}")
                 all_jobs[source] = []
             else:
                 all_jobs[source] = result
-                self.logger.info(f"Successfully scraped {len(result)} jobs from {source}")
+                successful_sources += 1
+                self.logger.info(f"✅ Successfully scraped {len(result)} jobs from {source}")
         
         # Remove duplicates across sources
         all_jobs['all_sources'] = self._remove_duplicates(all_jobs)
         
-        self.logger.info(f"🎉 Scraping completed! Total unique jobs: {len(all_jobs['all_sources'])}")
+        self.logger.info(f"🎉 Comprehensive scraping completed! {successful_sources}/{len(tasks)} sources successful, {len(all_jobs['all_sources'])} total unique jobs")
         return all_jobs
+    
+    def _get_playwright_scrapers(self) -> Dict[str, Any]:
+        """Dynamically identify and instantiate all Playwright-capable scrapers"""
+        scrapers = {}
+        
+        try:
+            # Import all available scrapers
+            from scrapers.dice_scraper import DiceScraper
+            from scrapers.stackoverflow_scraper import StackOverflowScraper
+            from scrapers.indeed_scraper import IndeedScraper
+            from scrapers.linkedin_scraper import LinkedInScraper
+            from scrapers.remoteok_scraper import RemoteOKScraper
+            from scrapers.weworkremotely_scraper import WeWorkRemotelyScraper
+            from scrapers.greenhouse_scraper import GreenhouseScraper
+            from scrapers.lever_scraper import LeverScraper
+            from scrapers.google_jobs_scraper import GoogleJobsScraper
+            from scrapers.jobspresso_scraper import JobspressoScraper
+            from scrapers.himalayas_scraper import HimalayasScraper
+            from scrapers.yc_jobs_scraper import YCJobsScraper
+            from scrapers.authentic_jobs_scraper import AuthenticJobsScraper
+            from scrapers.otta_scraper import OttaScraper
+            from scrapers.hackernews_scraper import HackerNewsScraper
+            from scrapers.reddit_scraper import RedditScraper
+            
+            # Add scrapers with Playwright capabilities
+            scrapers['dice'] = DiceScraper()
+            scrapers['stackoverflow'] = StackOverflowScraper()
+            scrapers['indeed'] = IndeedScraper()
+            scrapers['linkedin'] = LinkedInScraper()
+            scrapers['remoteok'] = RemoteOKScraper()
+            scrapers['weworkremotely'] = WeWorkRemotelyScraper()
+            scrapers['greenhouse'] = GreenhouseScraper()
+            scrapers['lever'] = LeverScraper()
+            scrapers['google_jobs'] = GoogleJobsScraper()
+            scrapers['jobspresso'] = JobspressoScraper()
+            scrapers['himalayas'] = HimalayasScraper()
+            scrapers['yc_jobs'] = YCJobsScraper()
+            scrapers['authentic_jobs'] = AuthenticJobsScraper()
+            scrapers['otta'] = OttaScraper()
+            scrapers['hackernews'] = HackerNewsScraper()
+            scrapers['reddit'] = RedditScraper()
+            
+            # Add our own enhanced methods
+            scrapers['remote_ok_enhanced'] = self
+            scrapers['weworkremotely_enhanced'] = self
+            scrapers['remotive_api_enhanced'] = self
+            
+            # Filter to only include scrapers with actual Playwright capabilities
+            filtered_scrapers = {}
+            for name, scraper in scrapers.items():
+                if (hasattr(scraper, '_search_with_playwright') or 
+                    hasattr(scraper, 'scrape_jobs') or 
+                    name.endswith('_enhanced')):
+                    filtered_scrapers[name] = scraper
+                    self.logger.info(f"✅ Added {name} scraper")
+                else:
+                    self.logger.info(f"⏭️  Skipping {name}: no Playwright or scraping methods")
+            
+            return filtered_scrapers
+            
+        except ImportError as e:
+            self.logger.warning(f"Some scrapers could not be imported: {e}")
+        except Exception as e:
+            self.logger.error(f"Error setting up scrapers: {e}")
+        
+        return scrapers
+    
+    def _log_scraper_capabilities(self, scrapers: Dict[str, Any]):
+        """Log the capabilities of each scraper for debugging"""
+        self.logger.info("🔍 Scraper Capabilities Analysis:")
+        for name, scraper in scrapers.items():
+            capabilities = []
+            if hasattr(scraper, '_search_with_playwright'):
+                capabilities.append("Playwright")
+            if hasattr(scraper, 'scrape_jobs'):
+                capabilities.append("Standard")
+            if name.endswith('_enhanced'):
+                capabilities.append("Enhanced")
+            
+            self.logger.info(f"  📋 {name}: {', '.join(capabilities)}")
+    
+    async def _run_scraper_playwright(self, scraper_instance: Any, scraper_name: str, keyword: str, limit: int) -> List[Dict[str, Any]]:
+        """Run a scraper that has a _search_with_playwright method"""
+        try:
+            self.logger.info(f"🚀 Running {scraper_name} with Playwright...")
+            result = await scraper_instance._search_with_playwright(keyword, "United States", limit)
+            self.logger.info(f"✅ {scraper_name} completed: {len(result)} jobs")
+            return result
+        except Exception as e:
+            self.logger.error(f"❌ {scraper_name} failed: {e}")
+            return []
+    
+    async def _run_scraper_standard_async(self, scraper_instance: Any, scraper_name: str, keyword: str, limit: int) -> List[Dict[str, Any]]:
+        """Run a scraper that has a standard scrape_jobs method (sync) in async context"""
+        try:
+            self.logger.info(f"🚀 Running {scraper_name} with standard method...")
+            # Run sync method in thread pool
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(
+                None, 
+                scraper_instance.search_jobs, 
+                keyword, 
+                "United States", 
+                limit
+            )
+            self.logger.info(f"✅ {scraper_name} completed: {len(result)} jobs")
+            return result
+        except Exception as e:
+            self.logger.error(f"❌ {scraper_name} failed: {e}")
+            return []
+    
+    async def _run_enhanced_method_async(self, method_name: str, keyword: str, limit: int) -> List[Dict[str, Any]]:
+        """Run our own enhanced scraping methods"""
+        try:
+            if method_name == 'remote_ok_enhanced':
+                return await self.scrape_remote_ok(keyword, limit)
+            elif method_name == 'weworkremotely_enhanced':
+                return await self.scrape_weworkremotely(keyword, limit)
+            elif method_name == 'remotive_api_enhanced':
+                return await self.scrape_remotive_api(keyword, limit)
+            else:
+                return []
+        except Exception as e:
+            self.logger.error(f"❌ Enhanced method {method_name} failed: {e}")
+            return []
     
     def _remove_duplicates(self, jobs_dict: Dict[str, List[Dict]]) -> List[Dict]:
         """Remove duplicate jobs across all sources"""

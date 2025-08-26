@@ -1,0 +1,55 @@
+{
+  "repair_results": {
+    "uber": null,
+    "doordash": null,
+    "notion": null,
+    "linear": null,
+    "supabase": null,
+    "github": null,
+    "shopify": null,
+    "slack": null,
+    "zoom": null
+  },
+  "updated_company_list": [
+    "airbnb",
+    "lyft",
+    "pinterest",
+    "stripe",
+    "coinbase",
+    "asana",
+    "dropbox",
+    "figma",
+    "gusto",
+    "hubspot",
+    "instacart",
+    "robinhood",
+    "snowflake"
+  ],
+  "working_companies": [
+    "airbnb",
+    "lyft",
+    "pinterest",
+    "stripe",
+    "coinbase",
+    "asana",
+    "dropbox",
+    "figma",
+    "gusto",
+    "hubspot",
+    "instacart",
+    "robinhood",
+    "snowflake"
+  ],
+  "broken_companies": [
+    "uber",
+    "doordash",
+    "notion",
+    "linear",
+    "supabase",
+    "github",
+    "shopify",
+    "slack",
+    "zoom"
+  ],
+  "timestamp": "2025-08-25 13:42:05"
+}
