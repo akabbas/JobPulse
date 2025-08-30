@@ -5,6 +5,47 @@ All notable changes to the JobPulse project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.0] - 2025-08-30
+
+### 🔌 Plugin Architecture - Complete System Refactoring
+**Major Release**: Complete refactoring to modern, extensible plugin-based architecture for scraper management.
+
+#### ✨ Plugin Architecture Foundation
+- **BaseScraper Interface**: Abstract base class that all scrapers must implement
+- **ScraperManager**: Parallel execution with configurable worker pools and intelligent coordination
+- **PluginLoader**: Dynamic scraper loading and configuration management
+- **ScraperRegistry**: Centralized scraper management with status tracking
+- **Resource Management**: Automatic cleanup and resource management for better reliability
+
+#### 🚀 Performance & Scalability
+- **Parallel Execution**: Configurable worker pools for optimal performance
+- **Intelligent Error Handling**: Built-in retry logic and status tracking
+- **Resource Optimization**: Automatic cleanup and memory management
+- **Scalable Architecture**: Easy to add/remove scrapers without code changes
+
+#### 🔧 Developer Experience
+- **Consistent Interface**: All scrapers follow the same interface pattern
+- **Easy Extension**: Simple process for adding new scrapers
+- **Configuration Management**: Declarative scraper configuration
+- **Testing Framework**: Built-in testing and validation tools
+
+#### 📚 Documentation & Examples
+- **Plugin Architecture Guide**: Complete documentation in `scrapers/README_PLUGIN_ARCHITECTURE.md`
+- **Migration Examples**: Step-by-step migration guide with examples
+- **Refactored Scraper Example**: `indeed_scraper_refactored.py` showing the new interface
+- **Testing Scripts**: `test_plugin_architecture.py` for validation
+- **Migration Roadmap**: Clear path from old system to new architecture
+
+#### 🎯 Key Benefits
+- **Maintainability**: Centralized configuration and consistent interfaces
+- **Extensibility**: Plugin-based system for easy growth
+- **Reliability**: Built-in error handling and status tracking
+- **Performance**: Parallel execution and resource optimization
+
+**Commit**: `e32ab48` - 🚀 REFACTOR: Complete Plugin Architecture for Scraper Management System
+
+---
+
 ## [Unreleased]
 
 ### Added
