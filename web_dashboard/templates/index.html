@@ -66,15 +66,25 @@
                 
                 <form id="searchForm" class="search-form">
                     <div class="form-grid">
-                                                        <div class="form-group">
-                                    <label for="keyword">Job Title or Keywords</label>
-                                    <input type="text" id="keyword" name="keyword" class="form-control" 
-                                           placeholder="e.g., Python Developer, Data Scientist" value="data analyst" required>
-                                </div>
+                        <div class="form-group">
+                            <label for="keyword">Job Title or Keywords</label>
+                            <input type="text" id="keyword" name="keyword" class="form-control" 
+                                   placeholder="e.g., Python Developer, Data Scientist" value="data analyst" required>
+                        </div>
                         <div class="form-group">
                             <label for="location">Location</label>
                             <input type="text" id="location" name="location" class="form-control" 
                                    placeholder="e.g., Remote, New York, San Francisco">
+                        </div>
+                        <div class="form-group">
+                            <label for="experience_level">Experience Level</label>
+                            <select id="experience_level" name="experience_level" class="form-control">
+                                <option value="all">All Levels</option>
+                                <option value="entry">Entry Level</option>
+                                <option value="mid">Mid Level</option>
+                                <option value="senior">Senior Level</option>
+                                <option value="executive">Executive</option>
+                            </select>
                         </div>
                     </div>
                     
@@ -358,6 +368,7 @@
             
             const keyword = document.getElementById('keyword').value;
             const location = document.getElementById('location').value;
+            const experienceLevel = document.getElementById('experience_level').value;
             const selectedSourcesInput = document.getElementById('selectedSources');
             
             let sources = [];
@@ -374,6 +385,7 @@
             }
             
             console.log('Selected sources for search:', sources);
+            console.log('Experience level:', experienceLevel);
             
             // Show results section and switch to jobs tab
             document.getElementById('resultsSection').style.display = 'block';
@@ -394,6 +406,7 @@
                     body: JSON.stringify({
                         keyword: keyword,
                         location: location,
+                        experience_level: experienceLevel,
                         sources: sources
                     })
                 });
@@ -410,6 +423,7 @@
         async function enhancedSearch() {
             const keyword = document.getElementById('keyword').value;
             const location = document.getElementById('location').value;
+            const experienceLevel = document.getElementById('experience_level').value;
             const limit = 20;
             const selectedSourcesInput = document.getElementById('selectedSources');
             
@@ -427,6 +441,7 @@
             }
             
             console.log('Selected sources for enhanced search:', sources);
+            console.log('Experience level:', experienceLevel);
             
             document.getElementById('resultsSection').style.display = 'block';
             document.getElementById('jobResults').innerHTML = '<div class="loading-container"><div class="loading"></div><p>🚀 Enhanced search in progress (Playwright: Comprehensive coverage of ALL sources)...</div>';
@@ -440,6 +455,7 @@
                     body: JSON.stringify({
                         keyword: keyword,
                         location: location,
+                        experience_level: experienceLevel,
                         limit: limit,
                         sources: sources
                     })
@@ -874,7 +890,7 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: var(--spacing-lg);
             margin-bottom: var(--spacing-lg);
         }
@@ -1191,6 +1207,12 @@
                 flex-direction: column;
                 gap: var(--spacing-lg);
                 text-align: center;
+            }
+        }
+        
+        @media (max-width: 1024px) and (min-width: 769px) {
+            .form-grid {
+                grid-template-columns: 1fr 1fr;
             }
         }
     </style>

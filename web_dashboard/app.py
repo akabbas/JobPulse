@@ -596,12 +596,13 @@ def search_jobs():
         data = request.get_json()
         keyword = data.get('keyword', 'software engineer')
         location = data.get('location', 'United States')
+        experience_level = data.get('experience_level', 'all')
         sources = data.get('sources', ['enhanced', 'api_sources', 'reddit', 'greenhouse', 'lever', 'google_jobs', 'jobspresso', 'himalayas', 'yc_jobs', 'authentic_jobs', 'otta', 'hackernews'])  # Default to enhanced scraper + reliable sources
         limit = data.get('limit', 50)  # Increased from 25 to 50
         
         # STEP 1: Check Database First (Smart Caching)
-        logger.info(f"Checking database for recent jobs matching '{keyword}' in '{location}' with sources: {sources}")
-        cached_jobs = get_cached_jobs(keyword, location, hours=24, sources=sources)
+        logger.info(f"Checking database for recent jobs matching '{keyword}' in '{location}' with experience level '{experience_level}' and sources: {sources}")
+        cached_jobs = get_cached_jobs(keyword, location, hours=24, sources=sources, experience_level=experience_level)
         
         if cached_jobs and len(cached_jobs) >= limit * 0.5:  # If we have at least 50% of requested jobs cached
             logger.info(f"Found {len(cached_jobs)} cached jobs, returning from database")
@@ -620,9 +621,10 @@ def search_jobs():
                 'jobs': cached_jobs,
                 'total_jobs': len(cached_jobs),
                 'successful_sources': 1,
-                'search_id': f"{keyword}_{location}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+                'search_id': f"{keyword}_{location}_{experience_level}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
                 'source': 'database_cache',
-                'cached': True
+                'cached': True,
+                'experience_level': experience_level
             })
         
         # STEP 2: Scrape if Needed
@@ -830,13 +832,14 @@ def search_jobs():
         )
         db.session.add(search_record)
         db.session.commit()
-        logger.info(f"Logged search: '{keyword}' in '{location}' with {len(all_jobs)} results")
+        logger.info(f"Logged search: '{keyword}' in '{location}' with experience level '{experience_level}' and {len(all_jobs)} results")
         
         # Store the search results for later use in skills network
-        search_id = f"{keyword}_{location}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
+        search_id = f"{keyword}_{location}_{experience_level}_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
         store_job_search(search_id, {
             'keyword': keyword,
             'location': location,
+            'experience_level': experience_level,
             'jobs': all_jobs,
             'timestamp': datetime.now().isoformat(),
             'sources': sources
@@ -850,7 +853,8 @@ def search_jobs():
             'search_id': search_id,
             'source': 'scraped',
             'cached': False,
-            'saved_to_db': saved_count if 'saved_count' in locals() else 0
+            'saved_to_db': saved_count if 'saved_count' in locals() else 0,
+            'experience_level': experience_level
         })
         
     except Exception as e:
@@ -1073,11 +1077,12 @@ def enhanced_search():
         data = request.get_json()
         keyword = data.get('keyword', 'software engineer')
         location = data.get('location', 'United States')
+        experience_level = data.get('experience_level', 'all')
         limit = data.get('limit', 20)  # Default to 20 for enhanced scraping
         headless = data.get('headless', True)
         sources = data.get('sources', ['enhanced'])  # Default to enhanced scraper
         
-        logger.info(f"Starting enhanced search for '{keyword}' in '{location}' with limit {limit} and sources: {sources}")
+        logger.info(f"Starting enhanced search for '{keyword}' in '{location}' with experience level '{experience_level}' and limit {limit} and sources: {sources}")
         
         # Use the enhanced scraper (it's async, so we need to run it in a thread)
         import asyncio
@@ -1145,7 +1150,7 @@ def enhanced_search():
         )
         db.session.add(search_record)
         db.session.commit()
-        logger.info(f"Logged enhanced search: '{keyword}' in '{location}' with {len(all_jobs)} results")
+        logger.info(f"Logged enhanced search: '{keyword}' in '{location}' with experience level '{experience_level}' and {len(all_jobs)} results")
         
         logger.info(f"Enhanced search completed: {len(all_jobs)} unique jobs found")
         
@@ -1156,8 +1161,9 @@ def enhanced_search():
             'source_breakdown': source_breakdown,
             'scraping_method': 'enhanced_playwright',
             'timestamp': datetime.now().isoformat(),
-            'search_id': f"{keyword}_{location}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
-            'saved_to_db': saved_count if 'saved_count' in locals() else 0
+            'search_id': f"{keyword}_{location}_{experience_level}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+            'saved_to_db': saved_count if 'saved_count' in locals() else 0,
+            'experience_level': experience_level
         })
         
     except Exception as e:
@@ -1264,7 +1270,7 @@ def get_database_stats():
             'error': str(e)
         })
 
-def get_cached_jobs(keyword, location, hours=24, sources=None):
+def get_cached_jobs(keyword, location, hours=24, sources=None, experience_level='all'):
     """Get jobs from database that match the search criteria within the specified time window"""
     try:
         # Calculate the time threshold
@@ -1285,6 +1291,29 @@ def get_cached_jobs(keyword, location, hours=24, sources=None):
                 Job.location == ''
             )
         )
+        
+        # Filter by experience level if specified
+        if experience_level and experience_level != 'all':
+            # Define experience level patterns for filtering
+            experience_patterns = {
+                'entry': ['entry', 'entry-level', 'entry level', 'junior', 'jr', 'associate', 'assistant', 'trainee', 'intern', 'internship', 'graduate', 'new grad', 'new graduate'],
+                'mid': ['mid', 'mid-level', 'mid level', 'intermediate', 'experienced', 'professional'],
+                'senior': ['senior', 'sr', 'lead', 'principal', 'staff', 'expert', 'advanced'],
+                'executive': ['executive', 'director', 'vp', 'vice president', 'cto', 'ceo', 'chief', 'head of', 'manager', 'management']
+            }
+            
+            if experience_level in experience_patterns:
+                patterns = experience_patterns[experience_level]
+                # Create OR conditions for title and description matching
+                experience_conditions = []
+                for pattern in patterns:
+                    experience_conditions.extend([
+                        Job.title.ilike(f'%{pattern}%'),
+                        Job.description.ilike(f'%{pattern}%')
+                    ])
+                
+                if experience_conditions:
+                    query = query.filter(db.or_(*experience_conditions))
         
         # Filter by sources if provided
         if sources and len(sources) > 0:
@@ -1338,7 +1367,7 @@ def get_cached_jobs(keyword, location, hours=24, sources=None):
                 'cached': True
             })
         
-        logger.info(f"Retrieved {len(jobs_list)} cached jobs from database")
+        logger.info(f"Retrieved {len(jobs_list)} cached jobs from database for experience level '{experience_level}'")
         return jobs_list
         
     except Exception as e:
