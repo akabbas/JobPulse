@@ -7,8 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.1.0] - 2025-08-30
 
-### 🔌 Plugin Architecture - Complete System Refactoring
-**Major Release**: Complete refactoring to modern, extensible plugin-based architecture for scraper management.
+### 🔌 Plugin Architecture - Foundation Complete
+**Major Release**: Foundation complete for modern, extensible plugin-based architecture for scraper management.
 
 #### ✨ Plugin Architecture Foundation
 - **BaseScraper Interface**: Abstract base class that all scrapers must implement
@@ -37,12 +37,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Migration Roadmap**: Clear path from old system to new architecture
 
 #### 🎯 Key Benefits
-- **Maintainability**: Centralized configuration and consistent interfaces
-- **Extensibility**: Plugin-based system for easy growth
-- **Reliability**: Built-in error handling and status tracking
-- **Performance**: Parallel execution and resource optimization
+- **Maintainability**: Foundation for centralized configuration and consistent interfaces
+- **Extensibility**: Plugin-based system foundation for future growth
+- **Reliability**: Framework for built-in error handling and status tracking
+- **Performance**: Parallel execution framework ready for integration
 
 **Commit**: `e32ab48` - 🚀 REFACTOR: Complete Plugin Architecture for Scraper Management System
+
+---
+
+## [3.1.1] - 2025-08-30
+
+### 📚 Documentation Accuracy Update
+**Minor Release**: Updated documentation to accurately reflect current application functionality and status.
+
+#### ✨ Documentation Corrections
+- **Plugin Architecture Status**: Corrected from "complete" to "foundation complete, migration in progress"
+- **Enhanced Scraper Reality**: Clarified that enhanced scraper focuses on specific sources, not all sources
+- **Data Source Accuracy**: Updated success rates and source status to match actual application behavior
+- **Current Application State**: Added accurate assessment of what actually works vs. what has limitations
+
+#### 🎯 Key Clarifications
+- **Plugin System**: Foundation complete but not yet integrated into main application
+- **Data Sources**: Mix of live APIs (95%+), enhanced scraping (90%+), and web scraping (70-80%)
+- **Source Status**: Many sources marked as "sample" due to access limitations
+- **Migration Status**: Architecture ready, existing scrapers still use legacy system
+
+**Commit**: `223cb2d` - 📚 DOCS: Comprehensive Documentation Update for Plugin Architecture
 
 ---
 
