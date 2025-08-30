@@ -20,6 +20,9 @@
     <!-- Chart.js for Skills Network -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
+    
+    <!-- Vis Network for Skills Network Visualization -->
+    <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
 </head>
 <body>
     <!-- 🎨 Hero Section -->
@@ -259,6 +262,16 @@
                                 <label for="network-keyword">Keyword Filter</label>
                                 <input type="text" class="form-control glass" id="network-keyword" placeholder="Optional">
                             </div>
+                            <div class="control-group">
+                                <label for="experience-level-filter">Experience Level</label>
+                                <select class="form-control glass" id="experience-level-filter">
+                                    <option value="all">All Levels</option>
+                                    <option value="entry">Entry Level</option>
+                                    <option value="mid">Mid Level</option>
+                                    <option value="senior">Senior Level</option>
+                                    <option value="executive">Executive</option>
+                                </select>
+                            </div>
                             <div class="control-actions">
                                 <button class="glass-button primary" onclick="updateSkillsNetwork()">
                                     🔄 Update Network
@@ -266,10 +279,16 @@
                                 <button class="glass-button secondary" onclick="resetSkillsNetwork()">
                                     🔄 Reset
                                 </button>
+                                <button class="glass-button secondary" onclick="showExperienceLevelDistribution()">
+                                    📊 Show Experience Distribution
+                                </button>
                             </div>
                         </div>
                         
                         <div class="network-visualization">
+                            <div class="experience-level-title" style="text-align: center; margin-bottom: 20px; font-size: 1.5rem; color: var(--accent-primary);">
+                                Skills Network - All Levels
+                            </div>
                             <canvas id="skillsNetworkChart"></canvas>
                         </div>
                     </div>
@@ -644,6 +663,14 @@
                 cb.addEventListener('change', updateSelectedSources);
             });
             
+            // Add event listener to experience level filter
+            const experienceLevelFilter = document.getElementById('experience-level-filter');
+            if (experienceLevelFilter) {
+                experienceLevelFilter.addEventListener('change', function() {
+                    filterByExperienceLevel(this.value);
+                });
+            }
+            
             // Initialize tab system
             initializeTabs();
         });
@@ -675,37 +702,195 @@
         }
         
         // 🌐 Skills Network Management Functions
-        function updateSkillsNetwork() {
-            const minFrequency = document.getElementById('min-frequency').value;
-            const coOccurrenceThreshold = document.getElementById('co-occurrence-threshold').value;
-            const keywordFilter = document.getElementById('network-keyword').value;
+        async function updateSkillsNetwork() {
+            if (!skillsNetworkInstance) {
+                console.log('Skills network not initialized yet');
+                return;
+            }
             
-            console.log('Updating skills network with:', { minFrequency, coOccurrenceThreshold, keywordFilter });
-            
-            // Call the skills network API with filters
-            fetch('/api/skills-network', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    min_frequency: parseInt(minFrequency),
-                    co_occurrence_threshold: parseInt(coOccurrenceThreshold),
-                    keyword_filter: keywordFilter
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    createSkillsNetwork(data);
-                    console.log('Skills network updated successfully');
-                } else {
-                    console.error('Error updating skills network:', data.error);
+            try {
+                // Get filter values
+                const minFrequency = parseInt(document.getElementById('min-frequency').value);
+                const minCoOccurrence = parseInt(document.getElementById('co-occurrence-threshold').value);
+                const keyword = document.getElementById('network-keyword').value;
+                const experienceLevel = document.getElementById('experience-level-filter').value;
+                
+                console.log('Updating skills network with:', { minFrequency, minCoOccurrence, keyword, experienceLevel });
+                
+                // Update the network instance with new filters
+                if (skillsNetworkInstance.updateFilters) {
+                    skillsNetworkInstance.updateFilters(minFrequency, minCoOccurrence);
                 }
-            })
-            .catch(error => {
+                
+                // Update search context if needed
+                if (currentSearchId !== skillsNetworkInstance.searchId) {
+                    if (skillsNetworkInstance.updateSearchContext) {
+                        await skillsNetworkInstance.updateSearchContext(true, currentSearchId);
+                    }
+                } else {
+                    // Just refresh with current context
+                    if (skillsNetworkInstance.refreshData) {
+                        await skillsNetworkInstance.refreshData();
+                    }
+                }
+                
+                // Update statistics from the network instance data
+                if (skillsNetworkInstance.skillsData && skillsNetworkInstance.skillsData.data) {
+                    updateNetworkStatistics(skillsNetworkInstance.skillsData.data);
+                    
+                    // Show data source info
+                    if (skillsNetworkInstance.skillsData.data.data_source === 'real_jobs') {
+                        console.log('Skills network updated with real job data');
+                    } else {
+                        console.log('Skills network updated with sample data');
+                    }
+                }
+                
+            } catch (error) {
                 console.error('Error updating skills network:', error);
-            });
+                
+                // Show fallback data if API fails
+                showFallbackSkillsNetwork();
+            }
+        }
+        
+        // Show fallback skills network with sample data
+        function showFallbackSkillsNetwork() {
+            console.log('Showing fallback skills network with sample data...');
+            
+            const container = document.getElementById('skills-network-container');
+            if (!container) return;
+            
+            try {
+                // Sample skills data
+                const sampleSkills = {
+                    'Python': 25,
+                    'JavaScript': 22,
+                    'React': 18,
+                    'Node.js': 15,
+                    'SQL': 20,
+                    'AWS': 12,
+                    'Docker': 10,
+                    'Git': 28
+                };
+                
+                // Create nodes from skills
+                const nodes = new vis.DataSet();
+                Object.entries(sampleSkills).forEach(([skill, frequency]) => {
+                    const nodeSize = Math.max(15, Math.min(50, 15 + (frequency / 28) * 35));
+                    nodes.add({
+                        id: skill,
+                        label: skill,
+                        size: nodeSize,
+                        color: getNodeColor(frequency, 28),
+                        title: `${skill}<br>Frequency: ${frequency} jobs<br>Sample Data`
+                    });
+                });
+                
+                // Create some sample co-occurrences
+                const edges = new vis.DataSet([
+                    { from: 'Python', to: 'SQL', width: 3 },
+                    { from: 'JavaScript', to: 'React', width: 4 },
+                    { from: 'React', to: 'Node.js', width: 2 },
+                    { from: 'Python', to: 'AWS', width: 2 },
+                    { from: 'JavaScript', to: 'Git', width: 3 },
+                    { from: 'Python', to: 'Docker', width: 1 }
+                ]);
+                
+                const data = { nodes, edges };
+                const options = {
+                    nodes: {
+                        shape: 'circle',
+                        font: { size: 14, color: '#333' },
+                        borderWidth: 2,
+                        shadow: true
+                    },
+                    edges: {
+                        width: 2,
+                        color: { color: '#848484' },
+                        smooth: { type: 'continuous' }
+                    },
+                    physics: {
+                        enabled: true,
+                        solver: 'forceAtlas2Based',
+                        forceAtlas2Based: {
+                            gravitationalConstant: -50,
+                            centralGravity: 0.01,
+                            springLength: 100,
+                            springConstant: 0.08
+                        }
+                    }
+                };
+                
+                const network = new vis.Network(container, data, options);
+                
+                // Add a note about sample data
+                const noteDiv = document.createElement('div');
+                noteDiv.style.cssText = 'text-align: center; padding: 10px; background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; border-radius: 5px; margin: 10px 0;';
+                noteDiv.innerHTML = '📊 <strong>Sample Data:</strong> This is sample skills data. The API connection may be unavailable or there may be no recent job data.';
+                container.parentNode.insertBefore(noteDiv, container);
+                
+                console.log('✅ Fallback skills network displayed successfully');
+                
+            } catch (error) {
+                console.error('❌ Error showing fallback skills network:', error);
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 50px; color: #666;">
+                        <p>Error displaying skills network: ${error.message}</p>
+                        <p>Please check the console for more details.</p>
+                    </div>
+                `;
+            }
+        }
+        
+        // Helper function for node colors
+        function getNodeColor(frequency, maxFreq) {
+            const normalized = frequency / maxFreq;
+            if (normalized > 0.7) return '#e74c3c';      // High demand - Red
+            if (normalized > 0.4) return '#f39c12';      // Medium demand - Orange
+            if (normalized > 0.2) return '#f1c40f';      // Moderate demand - Yellow
+            return '#2ecc71';                            // Lower demand - Green
+        }
+        
+        // Experience level filtering
+        function filterByExperienceLevel(level) {
+            if (skillsNetworkInstance) {
+                if (level === 'all') {
+                    // Reset to full network view
+                    if (skillsNetworkInstance.createNetwork) {
+                        skillsNetworkInstance.createNetwork();
+                    }
+                } else {
+                    // Show experience level specific view
+                    if (skillsNetworkInstance.createExperienceLevelView) {
+                        skillsNetworkInstance.createExperienceLevelView(level);
+                    }
+                }
+            }
+        }
+        
+        // Show experience level distribution chart
+        function showExperienceLevelDistribution() {
+            if (skillsNetworkInstance && skillsNetworkInstance.showExperienceLevelDistribution) {
+                skillsNetworkInstance.showExperienceLevelDistribution();
+            }
+        }
+        
+        // Update network statistics
+        function updateNetworkStatistics(data) {
+            if (!data) return;
+            
+            const { skills, co_occurrences } = data;
+            
+            // Calculate statistics
+            const totalSkills = Object.keys(skills).length;
+            const totalConnections = Object.keys(co_occurrences).length;
+            const avgFrequency = totalSkills > 0 ? 
+                Math.round(Object.values(skills).reduce((a, b) => a + b, 0) / totalSkills) : 0;
+            const networkDensity = totalSkills > 1 ? 
+                Math.round((totalConnections / (totalSkills * (totalSkills - 1) / 2)) * 100) / 100 : 0;
+            
+            console.log(`Network Statistics: ${totalSkills} skills, ${totalConnections} connections, avg frequency: ${avgFrequency}, density: ${networkDensity}`);
         }
         
         function resetSkillsNetwork() {
@@ -718,10 +903,56 @@
             updateSkillsNetwork();
         }
         
+        // Global variables for skills network
+        let skillsNetworkInstance = null;
+        let currentSearchId = null;
+        
         function initializeSkillsNetwork() {
             console.log('Initializing skills network...');
-            // This function will be called when the skills network tab is shown
-            // The actual initialization is handled by the skillsNetwork.js file
+            
+            if (!skillsNetworkInstance) {
+                // Clear loading state
+                const container = document.getElementById('skills-network-container');
+                if (container) {
+                    container.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">Initializing skills network...</div>';
+                }
+                
+                try {
+                    // Initialize the skills network with current search context
+                    skillsNetworkInstance = new SkillsNetworkVisualizer(
+                        'skills-network-container', 
+                        '/api/skills-network',
+                        true,  // useCurrentSearch = true
+                        currentSearchId  // Use current search ID if available
+                    );
+                    
+                    console.log('Skills network instance created successfully');
+                    
+                    // Load initial data
+                    setTimeout(() => {
+                        updateSkillsNetwork();
+                    }, 500);
+                    
+                } catch (error) {
+                    console.error('Error creating skills network instance:', error);
+                    if (container) {
+                        container.innerHTML = `
+                            <div style="text-align: center; padding: 50px; color: #666;">
+                                <p>Error initializing skills network: ${error.message}</p>
+                                <p>Please check the console for more details.</p>
+                                <button onclick="retrySkillsNetwork()" style="margin-top: 20px; padding: 10px 20px; background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer;">Retry</button>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        }
+        
+        // Retry function for skills network
+        function retrySkillsNetwork() {
+            console.log('Retrying skills network initialization...');
+            skillsNetworkInstance = null;
+            initializeSkillsNetwork();
         }
         
         // 🔄 Force CSS Refresh Function

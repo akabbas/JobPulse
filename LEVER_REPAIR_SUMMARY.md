@@ -96,3 +96,4 @@ self.lever_companies = []
 The Lever scraper has been **disabled due to 0% success rate**. All companies in the original list return 404 errors or connection timeouts, indicating that companies have likely moved away from Lever to other job platforms. Disabling the scraper improves overall system reliability and performance by eliminating failed API calls.
 
 **Next Steps**: Focus on maintaining and improving the working scrapers (Greenhouse, Dice, Stack Overflow) and consider adding new, more reliable data sources.
+

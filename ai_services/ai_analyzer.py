@@ -182,10 +182,22 @@ class AIJobAnalyzer:
                 "soft_skills": ["skill1", "skill2"],
                 "certifications": ["cert1", "cert2"]
             }},
-            "experience_level": "junior|mid|senior|lead",
+            "experience_level": "entry|mid|senior|executive",
+            "experience_indicators": {{
+                "level_confidence": 0.95,
+                "supporting_evidence": ["evidence1", "evidence2"],
+                "years_experience": "0-2|3-5|6-8|8+",
+                "seniority_indicators": ["indicator1", "indicator2"]
+            }},
+            "skills_by_experience": {{
+                "entry_level_skills": ["skill1", "skill2"],
+                "mid_level_skills": ["skill1", "skill2"],
+                "senior_level_skills": ["skill1", "skill2"],
+                "executive_level_skills": ["skill1", "skill2"]
+            }},
             "salary_indicators": {{
                 "min_experience_years": 0,
-                "seniority_level": "entry|mid|senior|lead",
+                "seniority_level": "entry|mid|senior|executive",
                 "salary_range": "low|medium|high|very_high"
             }},
             "company_culture_insights": ["insight1", "insight2"],
@@ -237,6 +249,131 @@ class AIJobAnalyzer:
         }}
         """
     
+    def analyze_experience_levels_and_skills(self, job_data: List[Dict]) -> Dict[str, Any]:
+        """
+        Analyze job data to extract experience levels and skills by experience level
+        
+        Args:
+            job_data: List of job postings with metadata
+        
+        Returns:
+            Dictionary containing experience level analysis and skills mapping
+        """
+        try:
+            prompt = self._create_experience_analysis_prompt(job_data)
+            
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[{"role": "user", "content": prompt}],
+                temperature=0.3,
+                max_tokens=4000
+            )
+            
+            analysis = self._parse_experience_analysis(response.choices[0].message.content)
+            self.logger.info(f"Successfully analyzed experience levels and skills for {len(job_data)} jobs")
+            
+            return {
+                'success': True,
+                'analysis': analysis,
+                'timestamp': datetime.now().isoformat(),
+                'model_used': self.model
+            }
+            
+        except Exception as e:
+            self.logger.error(f"Error analyzing experience levels and skills: {e}")
+            return {
+                'success': False,
+                'error': str(e),
+                'timestamp': datetime.now().isoformat()
+            }
+    
+    def _create_experience_analysis_prompt(self, job_data: List[Dict]) -> str:
+        """Create prompt for experience level and skills analysis"""
+        # Sample the job data to avoid token limits
+        sample_data = job_data[:30] if len(job_data) > 30 else job_data
+        
+        return f"""
+        Analyze this job data to extract experience levels and map skills to different career stages:
+
+        Sample Job Data: {json.dumps(sample_data, indent=2)}
+
+        Please provide a JSON response with the following structure:
+        {{
+            "experience_level_distribution": {{
+                "entry": {{
+                    "count": 0,
+                    "percentage": 0.0,
+                    "common_indicators": ["indicator1", "indicator2"]
+                }},
+                "mid": {{
+                    "count": 0,
+                    "percentage": 0.0,
+                    "common_indicators": ["indicator1", "indicator2"]
+                }},
+                "senior": {{
+                    "count": 0,
+                    "percentage": 0.0,
+                    "common_indicators": ["indicator1", "indicator2"]
+                }},
+                "executive": {{
+                    "count": 0,
+                    "percentage": 0.0,
+                    "common_indicators": ["indicator1", "indicator2"]
+                }}
+            }},
+            "skills_by_experience_level": {{
+                "entry_level": {{
+                    "core_skills": ["skill1", "skill2"],
+                    "nice_to_have": ["skill1", "skill2"],
+                    "frequency": {{"skill1": 10, "skill2": 8}}
+                }},
+                "mid_level": {{
+                    "core_skills": ["skill1", "skill2"],
+                    "nice_to_have": ["skill1", "skill2"],
+                    "frequency": {{"skill1": 15, "skill2": 12}}
+                }},
+                "senior_level": {{
+                    "core_skills": ["skill1", "skill2"],
+                    "nice_to_have": ["skill1", "skill2"],
+                    "frequency": {{"skill1": 20, "skill2": 18}}
+                }},
+                "executive_level": {{
+                    "core_skills": ["skill1", "skill2"],
+                    "nice_to_have": ["skill1", "skill2"],
+                    "frequency": {{"skill1": 5, "skill2": 3}}
+                }}
+            }},
+            "experience_level_insights": {{
+                "most_common_level": "mid",
+                "level_trends": ["trend1", "trend2"],
+                "skill_evolution": {{
+                    "entry_to_mid": ["skill1", "skill2"],
+                    "mid_to_senior": ["skill1", "skill2"],
+                    "senior_to_executive": ["skill1", "skill2"]
+                }}
+            }},
+            "market_analysis": {{
+                "demand_by_level": {{"entry": "high", "mid": "very_high", "senior": "high", "executive": "medium"}},
+                "salary_trends_by_level": {{"entry": "stable", "mid": "increasing", "senior": "increasing", "executive": "stable"}},
+                "emerging_requirements": ["req1", "req2"]
+            }}
+        }}
+        """
+    
+    def _parse_experience_analysis(self, response_text: str) -> Dict[str, Any]:
+        """Parse AI response for experience level analysis"""
+        try:
+            if '{' in response_text and '}' in response_text:
+                start = response_text.find('{')
+                end = response_text.rfind('}') + 1
+                json_str = response_text[start:end]
+                return json.loads(json_str)
+            else:
+                return self._fallback_parsing(response_text)
+        except json.JSONDecodeError:
+            self.logger.warning("Failed to parse JSON response for experience analysis, using fallback parsing")
+            return self._fallback_parsing(response_text)
+    
     def _create_market_analysis_prompt(self, job_data: List[Dict], time_period: str) -> str:
         """Create prompt for market trend analysis"""
         # Sample the job data to avoid token limits
@@ -256,7 +393,6 @@ class AIJobAnalyzer:
             }},
             "salary_trends": {{
                 "by_location": {{"location": "trend"}},
-                "by_role": {{"role": "trend"}},
                 "by_experience": {{"level": "trend"}}
             }},
             "industry_shifts": ["shift1", "shift2"],

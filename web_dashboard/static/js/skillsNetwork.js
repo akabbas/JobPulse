@@ -224,12 +224,16 @@ class SkillsNetworkVisualizer {
     }
     
     /**
-     * Create nodes for each skill
+     * Create nodes for each skill with experience level information
      */
     createNodes(skills) {
         // Find the maximum frequency for scaling
         const maxFreq = Math.max(...Object.values(skills));
         const minFreq = Math.min(...Object.values(skills));
+        
+        // Get experience level data if available
+        const experienceData = this.skillsData?.data?.skills_by_experience || {};
+        const experienceDistribution = this.skillsData?.data?.experience_level_distribution || {};
         
         // Create color scale based on frequency
         const getNodeColor = (frequency) => {
@@ -244,13 +248,40 @@ class SkillsNetworkVisualizer {
         Object.entries(skills).forEach(([skill, frequency]) => {
             const nodeSize = Math.max(15, Math.min(50, 15 + (frequency / maxFreq) * 35));
             
+            // Get experience level breakdown for this skill
+            let experienceBreakdown = '';
+            let experienceLevels = [];
+            
+            if (experienceData) {
+                experienceLevels = Object.entries(experienceData)
+                    .filter(([level, skills]) => skills[skill])
+                    .map(([level, skills]) => ({
+                        level: level,
+                        count: skills[skill] || 0
+                    }))
+                    .sort((a, b) => b.count - a.count);
+                
+                if (experienceLevels.length > 0) {
+                    experienceBreakdown = experienceLevels
+                        .map(exp => `${exp.level}: ${exp.count}`)
+                        .join(', ');
+                }
+            }
+            
+            // Create enhanced tooltip with experience level information
+            let tooltip = `${skill}<br>Frequency: ${frequency} jobs`;
+            if (experienceBreakdown) {
+                tooltip += `<br>By Experience: ${experienceBreakdown}`;
+            }
+            
             this.nodes.add({
                 id: skill,
                 label: skill,
                 size: nodeSize,
                 color: getNodeColor(frequency),
-                title: `${skill}<br>Frequency: ${frequency} jobs`,
+                title: tooltip,
                 frequency: frequency,
+                experienceLevels: experienceLevels,
                 font: {
                     size: Math.max(10, Math.min(16, 10 + (frequency / maxFreq) * 6))
                 }
@@ -281,6 +312,126 @@ class SkillsNetworkVisualizer {
                 });
             }
         });
+    }
+    
+    /**
+     * Create experience level-specific network view
+     */
+    createExperienceLevelView(experienceLevel) {
+        if (!this.skillsData?.data?.skills_by_experience?.[experienceLevel]) {
+            console.warn(`No data available for experience level: ${experienceLevel}`);
+            return;
+        }
+        
+        // Clear existing network
+        this.nodes.clear();
+        this.edges.clear();
+        
+        const levelSkills = this.skillsData.data.skills_by_experience[experienceLevel];
+        const levelCoOccurrences = this.skillsData.data.co_occurrences_by_experience?.[experienceLevel] || {};
+        
+        // Create nodes for this experience level
+        this.createNodes(levelSkills);
+        
+        // Create edges for this experience level
+        this.createEdges(levelCoOccurrences);
+        
+        // Update network
+        const data = {
+            nodes: this.nodes,
+            edges: this.edges
+        };
+        
+        this.network.setData(data);
+        
+        // Update title to show experience level
+        if (this.container) {
+            const titleElement = this.container.querySelector('.experience-level-title');
+            if (titleElement) {
+                titleElement.textContent = `Skills Network - ${experienceLevel.charAt(0).toUpperCase() + experienceLevel.slice(1)} Level`;
+            }
+        }
+        
+        console.log(`Switched to ${experienceLevel} level view`);
+    }
+    
+    /**
+     * Show experience level distribution chart
+     */
+    showExperienceLevelDistribution() {
+        const experienceData = this.skillsData?.data?.experience_level_distribution;
+        if (!experienceData) {
+            console.warn('No experience level distribution data available');
+            return;
+        }
+        
+        // Create a simple chart showing experience level distribution
+        const ctx = document.createElement('canvas');
+        ctx.id = 'experienceLevelChart';
+        ctx.style.width = '100%';
+        ctx.style.height = '300px';
+        
+        // Find or create container for the chart
+        let chartContainer = this.container.querySelector('.experience-level-chart');
+        if (!chartContainer) {
+            chartContainer = document.createElement('div');
+            chartContainer.className = 'experience-level-chart';
+            chartContainer.style.marginTop = '20px';
+            chartContainer.style.padding = '20px';
+            chartContainer.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
+            chartContainer.style.borderRadius = '10px';
+            this.container.appendChild(chartContainer);
+        }
+        
+        chartContainer.innerHTML = '';
+        chartContainer.appendChild(ctx);
+        
+        // Create Chart.js chart
+        if (window.Chart) {
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(experienceData).map(level => 
+                        level.charAt(0).toUpperCase() + level.slice(1)
+                    ),
+                    datasets: [{
+                        data: Object.values(experienceData),
+                        backgroundColor: [
+                            '#2ecc71', // Entry - Green
+                            '#f1c40f', // Mid - Yellow
+                            '#f39c12', // Senior - Orange
+                            '#e74c3c'  // Executive - Red
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                color: '#ffffff',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: 'Experience Level Distribution',
+                            color: '#ffffff',
+                            font: {
+                                size: 18,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                }
+            });
+        }
     }
     
     /**

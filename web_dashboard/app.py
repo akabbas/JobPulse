@@ -290,28 +290,60 @@ def get_skills_network():
             
             jobs_data.append(job_dict)
         
-        # Extract skills from job descriptions using AI
+        # Extract skills and experience levels from job descriptions using AI
         all_jobs_with_skills = []
+        experience_level_analysis = None
+        
+        # First, perform bulk experience level analysis if AI is available
+        if ai_analyzer and len(jobs_data) > 0:
+            try:
+                logger.info("Performing bulk experience level analysis with AI")
+                experience_level_analysis = ai_analyzer.analyze_experience_levels_and_skills(jobs_data)
+                if experience_level_analysis.get('success'):
+                    logger.info("Successfully analyzed experience levels and skills by career stage")
+                else:
+                    logger.warning("AI experience level analysis failed, falling back to individual analysis")
+            except Exception as e:
+                logger.warning(f"Bulk AI experience level analysis failed: {e}")
         
         for job in jobs_data:
             job_skills = []
+            job_experience_level = None
             
-            # Try to extract skills using AI if available
+            # Try to extract skills and experience level using AI if available
             if ai_analyzer and job.get('description'):
                 try:
-                    # Use AI to extract skills from job description
+                    # Use AI to extract skills and experience level from job description
                     ai_analysis = ai_analyzer.analyze_job_description(
                         job['description'], 
                         {'title': job.get('title', '')}
                     )
                     
-                    if ai_analysis.get('success') and 'skills' in ai_analysis.get('analysis', {}):
-                        # Use AI-extracted skills
-                        extracted_skills = ai_analysis['analysis']['skills']
-                        if isinstance(extracted_skills, list):
-                            job_skills = [skill.strip() for skill in extracted_skills if skill.strip()]
-                        elif isinstance(extracted_skills, str):
-                            job_skills = [skill.strip() for skill in extracted_skills.split(',') if skill.strip()]
+                    if ai_analysis.get('success'):
+                        analysis = ai_analysis.get('analysis', {})
+                        
+                        # Extract skills
+                        if 'required_skills' in analysis:
+                            required_skills = analysis['required_skills']
+                            if isinstance(required_skills, dict):
+                                # Extract technical skills
+                                tech_skills = required_skills.get('technical_skills', [])
+                                if isinstance(tech_skills, list):
+                                    job_skills.extend([skill.strip() for skill in tech_skills if skill.strip()])
+                        
+                        # Extract experience level
+                        if 'experience_level' in analysis:
+                            job_experience_level = analysis['experience_level']
+                        
+                        # If no skills from required_skills, try skills_by_experience
+                        if not job_skills and 'skills_by_experience' in analysis:
+                            skills_by_exp = analysis['skills_by_experience']
+                            if job_experience_level and job_experience_level in skills_by_exp:
+                                level_skills = skills_by_exp[job_experience_level]
+                                if isinstance(level_skills, dict):
+                                    core_skills = level_skills.get('core_skills', [])
+                                    if isinstance(core_skills, list):
+                                        job_skills.extend([skill.strip() for skill in core_skills if skill.strip()])
                     
                 except Exception as e:
                     logger.warning(f"AI skill extraction failed for job {job.get('title', 'Unknown')}: {e}")
@@ -341,23 +373,46 @@ def get_skills_network():
                         cleaned_skills.append(normalized_skill)
             
             job['extracted_skills'] = cleaned_skills
+            job['experience_level'] = job_experience_level or 'unknown'
+            
             if cleaned_skills:  # Only include jobs with skills
                 all_jobs_with_skills.append(job)
         
-        # Count skill frequencies
+        # Count skill frequencies and experience level distribution
         skill_frequencies = Counter()
+        experience_level_distribution = Counter()
+        skills_by_experience = defaultdict(lambda: defaultdict(int))
+        
         for job in all_jobs_with_skills:
-            skill_frequencies.update(job['extracted_skills'])
+            skills = job['extracted_skills']
+            experience_level = job.get('experience_level', 'unknown')
+            
+            # Count overall skill frequencies
+            skill_frequencies.update(skills)
+            
+            # Count experience level distribution
+            experience_level_distribution[experience_level] += 1
+            
+            # Count skills by experience level
+            for skill in skills:
+                skills_by_experience[experience_level][skill] += 1
         
         # Calculate co-occurrences
         co_occurrences = defaultdict(int)
+        co_occurrences_by_experience = defaultdict(lambda: defaultdict(int))
+        
         for job in all_jobs_with_skills:
             skills = job['extracted_skills']
+            experience_level = job.get('experience_level', 'unknown')
+            
             for i in range(len(skills)):
                 for j in range(i + 1, len(skills)):
                     # Create sorted pair to avoid duplicates
                     skill_pair = tuple(sorted([skills[i], skills[j]]))
                     co_occurrences[skill_pair] += 1
+                    
+                    # Also track co-occurrences by experience level
+                    co_occurrences_by_experience[experience_level][skill_pair] += 1
         
         # Filter out low-frequency skills and weak co-occurrences
         filtered_skills = {skill: count for skill, count in skill_frequencies.items() 
@@ -369,14 +424,23 @@ def get_skills_network():
                                  pair[0] in filtered_skills and 
                                  pair[1] in filtered_skills}
         
-        # Format data for vis-network library
+        # Format data for vis-network library with experience level information
         network_data = {
             'success': True,
             'data': {
                 'skills': filtered_skills,
                 'co_occurrences': filtered_co_occurrences,
+                'experience_level_distribution': dict(experience_level_distribution),
+                'skills_by_experience': {
+                    level: dict(skills) for level, skills in skills_by_experience.items()
+                },
+                'co_occurrences_by_experience': {
+                    level: {f"{pair[0]}|{pair[1]}": count for pair, count in pairs.items()}
+                    for level, pairs in co_occurrences_by_experience.items()
+                },
                 'total_jobs_analyzed': len(all_jobs_with_skills),
                 'data_source': data_source,
+                'ai_experience_analysis': experience_level_analysis.get('analysis') if experience_level_analysis and experience_level_analysis.get('success') else None,
                 'search_info': {
                     'keyword': keyword,
                     'location': location,

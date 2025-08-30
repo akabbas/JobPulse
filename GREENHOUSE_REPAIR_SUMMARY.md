@@ -84,3 +84,4 @@ self.greenhouse_companies = [
 
 ## Conclusion
 The Greenhouse scraper is now fully functional with a 100% success rate. While we couldn't recover the broken companies, removing them significantly improved reliability and ensures users get real job data instead of sample data.
+

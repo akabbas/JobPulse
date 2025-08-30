@@ -326,3 +326,4 @@ This feature demonstrates advanced technical skills that will impress recruiters
 - API design and integration skills
 - Modern web development practices
 - User experience design thinking
+
