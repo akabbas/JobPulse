@@ -451,6 +451,39 @@ def get_skills_network():
             }
         }
         
+        # Add nodes and edges in the format expected by vis-network library
+        # This maintains backward compatibility while providing the structure the automated test expects
+        nodes = []
+        edges = []
+        
+        # Create nodes from skills data
+        for skill, frequency in filtered_skills.items():
+            nodes.append({
+                'id': skill,
+                'label': skill,
+                'value': frequency,
+                'title': f"{skill} ({frequency} jobs)",
+                'group': 'programming'  # Default group, could be enhanced with skill categorization
+            })
+        
+        # Create edges from co-occurrence data
+        for pair, count in filtered_co_occurrences.items():
+            skill1, skill2 = pair.split('|')
+            edges.append({
+                'from': skill1,
+                'to': skill2,
+                'value': count,
+                'title': f"Co-occurs in {count} jobs"
+            })
+        
+        # Add nodes and edges to the response for automated testing compatibility
+        network_data['nodes'] = nodes
+        network_data['edges'] = edges
+        
+        # Debug logging to verify nodes and edges are added
+        logger.info(f"Added {len(nodes)} nodes and {len(edges)} edges to response")
+        logger.info(f"Final network_data keys: {list(network_data.keys())}")
+        
         logger.info(f"Skills network data generated: {len(filtered_skills)} skills, {len(filtered_co_occurrences)} connections from {len(all_jobs_with_skills)} jobs (source: {data_source})")
         
         return jsonify(network_data)
@@ -871,24 +904,46 @@ def search_jobs():
             except Exception as e:
                 logger.error(f"Error with Hacker News scraper: {e}")
                 logger.error(f"Error with Authentic Jobs scraper: {e}")
-        # FALLBACK: If no jobs found from main sources, use fallback scraper
+        
+        # NOTE: Fallback to mock data has been removed to prioritize showing proper empty states
+        # The simple_scraper fallback was too aggressive and prevented users from seeing
+        # the beautiful empty state UI we designed. Mock data should only be used for
+        # technical errors, not for legitimate empty search results.
+        
+        # STEP 3: Evaluate Results and Handle Empty State
         if len(all_jobs) == 0:
-            logger.info("No jobs found from main sources, using fallback scraper...")
-            try:
-                fallback_jobs = simple_scraper.search_jobs(keyword, location, limit)
-                all_jobs.extend(fallback_jobs)
-                logger.info(f"Found {len(fallback_jobs)} jobs from fallback scraper")
-                successful_sources += 1
-            except Exception as e:
-                logger.error(f"Error with fallback scraper: {e}")
+            # No jobs found from any source - this is a legitimate empty result
+            logger.info(f"No jobs found for '{keyword}' in '{location}' from any source - legitimate empty result")
+            
+            # Log the empty search
+            search_record = Search(
+                keyword=keyword,
+                location=location,
+                result_count=0
+            )
+            db.session.add(search_record)
+            db.session.commit()
+            
+            # Return empty result with proper empty state indicator
+            return jsonify({
+                'success': True,
+                'jobs': [],
+                'total_jobs': 0,
+                'successful_sources': successful_sources,
+                'search_id': f"{keyword}_{location}_{experience_level}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
+                'source': 'no_results',
+                'cached': False,
+                'empty_result': True,
+                'message': f"No jobs found for '{keyword}' in '{location}'. Try broadening your search terms or checking different locations.",
+                'experience_level': experience_level
+            })
         
-        # STEP 3: Save to Database (Smart Caching)
-        if all_jobs:
-            logger.info(f"Saving {len(all_jobs)} jobs to database")
-            saved_count = save_jobs_to_database(all_jobs)
-            logger.info(f"Successfully saved {saved_count} new jobs to database")
+        # STEP 4: Save to Database (Smart Caching) - Only if we have real jobs
+        logger.info(f"Saving {len(all_jobs)} jobs to database")
+        saved_count = save_jobs_to_database(all_jobs)
+        logger.info(f"Successfully saved {saved_count} new jobs to database")
         
-        # STEP 4: Log the Search
+        # STEP 5: Log the Search
         search_record = Search(
             keyword=keyword,
             location=location,
@@ -917,7 +972,7 @@ def search_jobs():
             'search_id': search_id,
             'source': 'scraped',
             'cached': False,
-            'saved_to_db': saved_count if 'saved_count' in locals() else 0,
+            'saved_to_db': saved_count,
             'experience_level': experience_level
         })
         

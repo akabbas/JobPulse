@@ -1,0 +1,355 @@
+/* 🎨 Beautiful Empty State Components for JobPulse */
+
+/* ===== EMPTY STATE BASE STYLES ===== */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--spacing-xxl);
+  min-height: 400px;
+  background: var(--bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-xl);
+  position: relative;
+  overflow: hidden;
+}
+
+.empty-state::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary), var(--accent-secondary));
+  transform: scaleX(0);
+  transition: transform var(--transition-slow);
+}
+
+.empty-state:hover::before {
+  transform: scaleX(1);
+}
+
+/* ===== EMPTY STATE ICONS ===== */
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: var(--spacing-lg);
+  opacity: 0.8;
+  animation: float 3s ease-in-out infinite;
+}
+
+.empty-state-icon.search {
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-tertiary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.empty-state-icon.skills {
+  background: linear-gradient(135deg, var(--accent-secondary), var(--accent-warning));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.empty-state-icon.dashboard {
+  background: linear-gradient(135deg, var(--accent-tertiary), var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ===== EMPTY STATE TYPOGRAPHY ===== */
+.empty-state h3 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  background: linear-gradient(135deg, var(--text-primary), var(--accent-primary));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-lg);
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.empty-state .empty-state-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  margin-bottom: var(--spacing-xl);
+  font-style: italic;
+}
+
+/* ===== EMPTY STATE ACTIONS ===== */
+.empty-state-actions {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: var(--spacing-lg);
+}
+
+.empty-state-action {
+  background: var(--bg-glass);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: var(--glass-border);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-weight: 600;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  transition: all var(--transition-normal);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.empty-state-action:hover {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 212, 255, 0.3);
+}
+
+.empty-state-action.secondary {
+  background: transparent;
+  border: 2px solid var(--accent-primary);
+  color: var(--accent-primary);
+}
+
+.empty-state-action.secondary:hover {
+  background: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+/* ===== SPECIFIC EMPTY STATE VARIANTS ===== */
+
+/* Search No Results */
+.empty-state.search-no-results {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(255, 212, 59, 0.05));
+  border-color: rgba(255, 107, 107, 0.2);
+}
+
+.empty-state.search-no-results .empty-state-icon {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* Skills Network No Data */
+.empty-state.skills-no-data {
+  background: linear-gradient(135deg, rgba(0, 212, 255, 0.05), rgba(78, 205, 196, 0.05));
+  border-color: rgba(0, 212, 255, 0.2);
+}
+
+.empty-state.skills-no-data .empty-state-icon {
+  animation: float 4s ease-in-out infinite;
+}
+
+/* Dashboard Insufficient Data */
+.empty-state.dashboard-insufficient {
+  background: linear-gradient(135deg, rgba(255, 212, 59, 0.05), rgba(81, 207, 102, 0.05));
+  border-color: rgba(255, 212, 59, 0.2);
+}
+
+.empty-state.dashboard-insufficient .empty-state-icon {
+  animation: pulse 3s ease-in-out infinite;
+}
+
+/* ===== EMPTY STATE ANIMATIONS ===== */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+/* ===== EMPTY STATE LOADING SHIMMER ===== */
+.empty-state.loading {
+  background: linear-gradient(90deg, 
+    var(--bg-glass) 25%, 
+    var(--bg-glass-hover) 50%, 
+    var(--bg-glass) 75%
+  );
+  background-size: 200px 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* ===== EMPTY STATE RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .empty-state {
+    padding: var(--spacing-xl);
+    min-height: 300px;
+  }
+  
+  .empty-state-icon {
+    font-size: 3rem;
+  }
+  
+  .empty-state h3 {
+    font-size: 1.5rem;
+  }
+  
+  .empty-state p {
+    font-size: 1rem;
+  }
+  
+  .empty-state-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .empty-state-action {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===== EMPTY STATE ENHANCED EFFECTS ===== */
+.empty-state:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--glass-shadow-hover);
+}
+
+.empty-state .empty-state-icon {
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+}
+
+/* ===== EMPTY STATE PROGRESS INDICATORS ===== */
+.empty-state-progress {
+  width: 100%;
+  max-width: 300px;
+  margin: var(--spacing-lg) 0;
+}
+
+.empty-state-progress-bar {
+  width: 100%;
+  height: 4px;
+  background: var(--bg-glass);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  position: relative;
+}
+
+.empty-state-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary));
+  border-radius: var(--radius-sm);
+  transition: width var(--transition-slow);
+  position: relative;
+}
+
+.empty-state-progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+/* ===== EMPTY STATE SUGGESTIONS ===== */
+.empty-state-suggestions {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.empty-state-suggestions h4 {
+  font-size: 1rem;
+  color: var(--accent-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.empty-state-suggestions ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  text-align: left;
+}
+
+.empty-state-suggestions li {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+  margin-bottom: var(--spacing-xs);
+  padding-left: var(--spacing-sm);
+  position: relative;
+}
+
+.empty-state-suggestions li::before {
+  content: '💡';
+  position: absolute;
+  left: 0;
+  opacity: 0.7;
+}
+
+/* ===== EMPTY STATE ERROR VARIANTS ===== */
+.empty-state.error {
+  background: linear-gradient(135deg, rgba(255, 107, 107, 0.05), rgba(255, 107, 107, 0.1));
+  border-color: rgba(255, 107, 107, 0.3);
+}
+
+.empty-state.error .empty-state-icon {
+  color: var(--accent-danger);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.empty-state.error h3 {
+  color: var(--accent-danger);
+}
+
+/* ===== EMPTY STATE SUCCESS VARIANTS ===== */
+.empty-state.success {
+  background: linear-gradient(135deg, rgba(81, 207, 102, 0.05), rgba(81, 207, 102, 0.1));
+  border-color: rgba(81, 207, 102, 0.3);
+}
+
+.empty-state.success .empty-state-icon {
+  color: var(--accent-success);
+  animation: float 2s ease-in-out infinite;
+}
+
+/* ===== EMPTY STATE WARNING VARIANTS ===== */
+.empty-state.warning {
+  background: linear-gradient(135deg, rgba(255, 212, 59, 0.05), rgba(255, 212, 59, 0.1));
+  border-color: rgba(255, 212, 59, 0.3);
+}
+
+.empty-state.warning .empty-state-icon {
+  color: var(--accent-warning);
+  animation: pulse 2.5s ease-in-out infinite;
+}
