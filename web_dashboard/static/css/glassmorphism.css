@@ -525,6 +525,15 @@ p {
   transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 280px;
 }
 
 .job-card:hover {
@@ -546,6 +555,10 @@ p {
   color: var(--text-primary);
   margin: 0;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .job-title-link {
@@ -583,18 +596,30 @@ p {
   color: var(--text-secondary);
   line-height: 1.6;
   margin-bottom: var(--spacing-md);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  max-height: 4.8em;
+  flex: 1;
 }
 
 .job-actions {
   display: flex;
   gap: var(--spacing-sm);
   flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: var(--spacing-md);
 }
 
 .jobs-grid {
   display: grid;
   gap: var(--spacing-lg);
   grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  width: 100%;
+  overflow: hidden;
+  align-items: start;
+  grid-auto-rows: min-content;
 }
 
 .no-results {
@@ -627,6 +652,19 @@ p {
   margin-top: var(--spacing-lg);
 }
 
+/* ===== RESULTS CONTAINER FIXES ===== */
+.results-container {
+  width: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.results-container .jobs-grid {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
   .container-fluid {
@@ -636,6 +674,24 @@ p {
   .grid-2,
   .grid-3 {
     grid-template-columns: 1fr;
+  }
+  
+  .jobs-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .job-card {
+    padding: var(--spacing-md);
+  }
+  
+  .job-title {
+    font-size: 1.1rem;
+    white-space: normal;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
   
   h1 {

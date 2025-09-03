@@ -856,24 +856,35 @@
             }
             
             // Display jobs in a modern grid
-            const jobsHTML = allJobs.map(job => `
+            const jobsHTML = allJobs.map(job => {
+                const title = (job.title || 'No Title').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                const company = (job.company || 'Company not specified').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                const location = (job.location || 'Location not specified').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                const description = (job.description || job.snippet || 'No description available')
+                    .replace(/"/g, '&quot;').replace(/'/g, '&#39;')
+                    .substring(0, 150);
+                const source = (job.source || 'Unknown').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+                const url = job.url || job.job_url || '#';
+                
+                return `
                 <div class="job-card glass-card">
                     <div class="job-header">
                         <h3 class="job-title">
-                            <a href="${job.url || job.job_url || '#'}" target="_blank" class="job-title-link">
-                                ${job.title || 'No Title'}
+                            <a href="${url}" target="_blank" class="job-title-link" title="${title}">
+                                ${title}
                             </a>
                         </h3>
-                        <span class="job-source status info">${job.source || 'Unknown'}</span>
+                        <span class="job-source status info">${source}</span>
                     </div>
-                    <div class="job-company">${job.company || 'Company not specified'}</div>
-                    <div class="job-location">📍 ${job.location || 'Location not specified'}</div>
-                    <div class="job-description">${(job.description || job.snippet || 'No description available').substring(0, 150)}...</div>
+                    <div class="job-company" title="${company}">${company}</div>
+                    <div class="job-location" title="${location}">📍 ${location}</div>
+                    <div class="job-description" title="${description}">${description}...</div>
                     <div class="job-actions">
-                        <a href="${job.url || job.job_url || '#'}" target="_blank" class="glass-button secondary">View Job</a>
+                        <a href="${url}" target="_blank" class="glass-button secondary">View Job</a>
                     </div>
                 </div>
-            `).join('');
+            `;
+            }).join('');
             
             resultsContainer.innerHTML = `
                 <div class="jobs-grid grid-2">
