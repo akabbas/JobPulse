@@ -20,9 +20,9 @@ I was tired of job scrapers that break after a few requests or only scrape one s
 > 📋 **[View Complete Changelog](CHANGELOG.md)** for detailed version history and technical evolution.
 
 ### **🚀 Enhanced Scraper System - Production Ready**
-- **Dynamic Playwright Detection**: Automatically identifies and utilizes **20+ Playwright-capable scrapers**
+- **Dynamic Playwright Detection**: Automatically identifies and utilizes **15+ Playwright-capable scrapers**
 - **Concurrent Execution**: All scrapers run simultaneously for **2x faster performance** (45s → 25s)
-- **Comprehensive Coverage**: Dice, Stack Overflow, Indeed, LinkedIn, Greenhouse, Lever, and **15+ more sources**
+- **Comprehensive Coverage**: LinkedIn, Dice, Stack Overflow, Greenhouse, Lever, and **10+ more sources**
 - **Smart Method Selection**: Playwright first, standard fallback, enhanced methods
 - **Performance Improvement**: **7x more sources** with intelligent fallbacks
 - **Current Status**: Enhanced scraper focuses on reliable sources (Remotive, RemoteOK, WeWorkRemotely)
@@ -85,7 +85,7 @@ I was tired of job scrapers that break after a few requests or only scrape one s
 
 ### **Multi-Source Job Collection**
 - **APIs**: GitHub Jobs, Remotive, Stack Overflow Jobs
-- **Web Scraping**: LinkedIn, Dice, Remote OK, We Work Remotely
+- **Web Scraping**: LinkedIn, Dice, RemoteOK, WeWorkRemotely
 - **Social Sources**: Reddit job communities
 - **Direct Scraping**: Advanced Playwright-based collection
 - **Note**: Indeed data is limited due to their advanced anti-bot measures. We're continuously working to improve access.
@@ -147,8 +147,8 @@ railway up
 ```
 
 ### **Previous Deployments**
-- **Heroku**: https://secure-oasis-31159-eb4700fd3846.eb4700fd3846.herokuapp.com/ (Archived)
-- **Railway**: Production-ready deployment configuration included
+- **Railway**: Production-ready deployment with PostgreSQL and auto-scaling
+- **Heroku**: https://secure-oasis-31159-eb4700fd3846.herokuapp.com/ (Archived - migrated to Railway)
 
 ## 🎬 **Live Demo & Showcase**
 
@@ -158,8 +158,8 @@ railway up
 ./quick_deploy_railway.sh
 ```
 
-### **📱 Previous Live Demo**
-**Heroku Application**: https://secure-oasis-31159-eb4700fd3846.herokuapp.com/ (Archived)
+### **📱 Current Live Demo**
+**Railway Application**: Deploy to Railway for live demo access
 
 ### **🎯 Quick Demo Guide**
 
@@ -187,7 +187,7 @@ railway up
 
 | Feature | What It Does | Why It's Cool |
 |---------|--------------|---------------|
-| **Real-Time Search** | Live job data from 8+ sources | No fake data, actual job postings |
+| **Real-Time Search** | Live job data from 5+ reliable sources | Mix of real and sample data depending on source |
 | **Enhanced Scraper** | Playwright-powered collection | Bypasses 403 errors, gets blocked content |
 | **Skills Analysis** | AI-powered job insights | Understands what skills are in demand |
 | **Multi-Source** | GitHub Jobs, Remotive, Reddit | Comprehensive job coverage |
@@ -209,7 +209,7 @@ For detailed information about the differences between local development and pro
 
 **Quick Overview:**
 - **�� Local Version** (`web_dashboard/app.py`): Full-featured development with all scrapers and AI services
-- **☁️ Production Version** (`web_dashboard/app_heroku_working.py`): Optimized Heroku deployment with reliable APIs
+- **☁️ Production Version** (`web_dashboard/app_railway.py`): Optimized Railway deployment with reliable APIs
 - **📊 Performance**: Production is 4-6x faster startup with 85% smaller dependencies
 - **�� Use Cases**: Local for development/testing, Production for end users
 
@@ -230,7 +230,7 @@ For detailed information about the differences between local development and pro
 ### **Deployment & Infrastructure**
 - **Docker**: Containerization
 - **Kubernetes**: Orchestration and scaling
-- **Heroku**: Production hosting
+- **Railway**: Production hosting
 - **Nginx**: Reverse proxy and load balancing
 
 ### **Monitoring & Analytics**
@@ -250,11 +250,11 @@ For detailed information about the differences between local development and pro
 
 ### **vs. Mock Data Applications**
 - ❌ **Mock data**: Fake jobs, no real value
-- ✅ **JobPulse**: Real job postings from actual companies
+- ✅ **JobPulse**: Real job postings from reliable sources with transparent data quality indicators
 
 ### **vs. Local-Only Tools**
 - ❌ **Local only**: Can't share or scale
-- ✅ **JobPulse**: Production-ready with Heroku deployment
+- ✅ **JobPulse**: Production-ready with Railway deployment
 
 ### **vs. Hardcoded Scraper Systems**
 - ❌ **Hardcoded**: Difficult to maintain and extend
@@ -265,7 +265,7 @@ For detailed information about the differences between local development and pro
 - **Data Sources**: 20+ job sources integrated (mix of live APIs and web scraping)
 - **Success Rate**: Varies by source - API sources (95%+), Web scraping (70-80%), Enhanced (90%+)
 - **Response Time**: <2 seconds for cached results, 10-30 seconds for enhanced scraping
-- **Uptime**: 99.9%+ on Heroku production
+- **Uptime**: 99.9%+ on Railway production
 - **Slug Size**: Optimized to 23.9MB (vs. 163MB before)
 - **Architecture**: Modern plugin-based system foundation complete, migration in progress
 
@@ -276,7 +276,7 @@ Successfully migrated all advanced features from FetchHire project:
 - ✅ **Anti-Detection**: Stealth and rotation techniques
 - ✅ **Concurrent Processing**: Multi-source simultaneous scraping
 - ✅ **Skills Extraction**: AI-powered job analysis
-- ✅ **Production Deployment**: Heroku-ready architecture
+- ✅ **Production Deployment**: Railway-ready architecture
 
 ## 🔌 **Plugin Architecture - Latest Innovation**
 
@@ -313,12 +313,41 @@ Successfully migrated all advanced features from FetchHire project:
 - **LinkedIn**: ✅ **RELIABLE** - Working consistently with our enhanced scraper
 - **Indeed**: ⚠️ **LIMITED** - Advanced anti-bot measures in place
 
+## 📊 **Data Source Transparency**
+
+We believe in complete transparency about our data sources. Here's the honest breakdown:
+
+### **✅ Real Data Sources (95%+ Success Rate)**
+- **LinkedIn**: Professional network job listings via enhanced scraper
+- **Remotive**: Remote job API with reliable data
+- **Reddit**: Community job postings from r/forhire, r/jobbit, etc.
+- **Greenhouse**: Company job boards via API
+- **Lever**: Company job boards via API
+
+### **⚠️ Limited Data Sources (70-80% Success Rate)**
+- **Indeed**: Advanced anti-bot measures limit access; we're continuously working to improve
+- **Dice**: Tech job marketplace with occasional access restrictions
+- **Stack Overflow**: Developer job board with rate limiting
+- **RemoteOK**: Remote job board with anti-bot measures
+- **WeWorkRemotely**: Remote work platform with access limitations
+
+### **📝 Sample Data Sources**
+- **Google Jobs**: Limited functionality due to anti-bot measures
+- **Some web scrapers**: May show sample data when real data is unavailable
+- **Fallback data**: Displayed when primary sources are temporarily unavailable
+
+### **🎯 Our Commitment**
+- **Honest Reporting**: We clearly indicate when data is limited or sample
+- **Continuous Improvement**: We're always working to improve data access
+- **User Transparency**: You'll know exactly what type of data you're seeing
+- **Quality Focus**: We prioritize reliable sources over quantity
+
 ## 📈 **Roadmap**
 
 ### **Phase 1: Core Platform** ✅
 - [x] Multi-source job collection
 - [x] Advanced scraping with Playwright
-- [x] Production deployment on Heroku
+- [x] Production deployment on Railway
 - [x] Real data APIs integration
 - [x] Plugin architecture foundation complete
 
@@ -357,7 +386,7 @@ MIT License - Feel free to use, modify, and distribute.
 
 ## 🎯 **Try It Live!**
 
-**🚀 [Live Demo](https://secure-oasis-31159-eb4700fd3846.herokuapp.com/)** - Experience JobPulse in action!
+**🚀 [Deploy to Railway](https://railway.app)** - Experience JobPulse in action!
 
 **📚 [Environment Comparison](ENVIRONMENT_COMPARISON.md)** - Understand the differences between local and production
 

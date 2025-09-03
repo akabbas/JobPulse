@@ -210,7 +210,7 @@ def health_check():
     return jsonify({
         'status': 'healthy',
         'timestamp': datetime.now().isoformat(),
-        'version': '1.0.0'
+        'version': '3.1.1'
     })
 
 @app.route('/api/skills-network')
@@ -535,7 +535,7 @@ def get_skills_network_stats():
                     'sample_sources': len([s for s in active_data_sources if s['status'] == 'sample'])
                 },
                 'last_updated': datetime.now().isoformat(),
-                'version': '1.0.0'
+                'version': '3.1.1'
             }
         }
         return jsonify(stats)
