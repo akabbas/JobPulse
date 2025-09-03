@@ -97,3 +97,4 @@ The Lever scraper has been **disabled due to 0% success rate**. All companies in
 
 **Next Steps**: Focus on maintaining and improving the working scrapers (Greenhouse, Dice, Stack Overflow) and consider adding new, more reliable data sources.
 
+

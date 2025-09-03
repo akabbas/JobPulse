@@ -1,8 +1,34 @@
+# Python
 *.pyc
 __pycache__/
 *.log
+venv/
+
+# Environment
+.env
+.env.local
+
+# Data and Output
 data/*.csv
 output/*.png
-.env
-venv/
+*.html
+*.png
+
+# Test and Temporary Files
+test_*.py
+*_test.py
+*_diagnosis.html
+*_diagnosis.png
+scraperapi_*.html
+indeed_*.html
+indeed_*.png
+
+# OS
 .DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo

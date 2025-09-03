@@ -9,7 +9,7 @@ from typing import Dict, List, Any, Type
 from dataclasses import dataclass
 from enum import Enum
 
-from base_scraper import ScraperType, BaseScraper
+from .base_scraper import ScraperType, BaseScraper
 
 
 @dataclass

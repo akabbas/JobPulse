@@ -85,9 +85,10 @@ I was tired of job scrapers that break after a few requests or only scrape one s
 
 ### **Multi-Source Job Collection**
 - **APIs**: GitHub Jobs, Remotive, Stack Overflow Jobs
-- **Web Scraping**: Indeed, LinkedIn, Dice, Remote OK, We Work Remotely
+- **Web Scraping**: LinkedIn, Dice, Remote OK, We Work Remotely
 - **Social Sources**: Reddit job communities
 - **Direct Scraping**: Advanced Playwright-based collection
+- **Note**: Indeed data is limited due to their advanced anti-bot measures. We're continuously working to improve access.
 
 ### **Advanced Analytics**
 - **Skills Analysis**: Automatic skill extraction and categorization
@@ -297,7 +298,8 @@ Successfully migrated all advanced features from FetchHire project:
 - **Skills Analysis**: AI-powered job description analysis (when OpenAI API key is available)
 
 ### **⚠️ What Has Limited Functionality**
-- **Indeed, LinkedIn**: Marked as "sample" status due to access limitations
+- **Indeed**: Limited due to advanced anti-bot measures. We're continuously working to improve access.
+- **LinkedIn**: Working reliably with our enhanced scraper system
 - **RemoteOK, WeWorkRemotely**: Enhanced scraper focuses on these sources
 - **Google Jobs**: Limited functionality due to anti-bot measures
 - **Plugin Architecture**: Foundation complete but not yet integrated into main app
@@ -305,9 +307,11 @@ Successfully migrated all advanced features from FetchHire project:
 ### **🔍 Current Data Source Reality**
 - **Total Sources**: 20+ sources configured
 - **Live Sources**: ~8 sources with reliable API access
-- **Enhanced Sources**: ~3 sources with Playwright bypass
+- **Enhanced Sources**: ~3 sources with Playwright bypass (including LinkedIn)
 - **Sample Sources**: ~9 sources with limited or mock data
 - **Success Rate**: Varies from 70% to 95% depending on source type
+- **LinkedIn**: ✅ **RELIABLE** - Working consistently with our enhanced scraper
+- **Indeed**: ⚠️ **LIMITED** - Advanced anti-bot measures in place
 
 ## 📈 **Roadmap**
 

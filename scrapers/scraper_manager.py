@@ -12,7 +12,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 import time
 
-from base_scraper import BaseScraper, ScraperRegistry, ScraperType, ScraperError
+from .base_scraper import BaseScraper, ScraperRegistry, ScraperType, ScraperError
 
 
 class ScraperManager:

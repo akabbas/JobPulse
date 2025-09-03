@@ -280,15 +280,30 @@ def get_skills_network():
             all_jobs = get_sample_jobs()
             data_source = 'sample_data'
         
-        # Convert database objects to dictionary format
+        # Convert database objects to dictionary format and validate data
         jobs_data = []
+        valid_jobs_count = 0
+        
         for job in all_jobs:
             if hasattr(job, 'to_dict'):  # Database object
                 job_dict = job.to_dict()
             else:  # Already a dictionary (sample data)
                 job_dict = job
             
-            jobs_data.append(job_dict)
+            # Validate job data before adding to analysis
+            if _validate_job_data(job_dict):
+                jobs_data.append(job_dict)
+                valid_jobs_count += 1
+            else:
+                logger.warning(f"Skipping invalid job data: {job_dict.get('title', 'Unknown')}")
+        
+        logger.info(f"Validated {valid_jobs_count} jobs out of {len(all_jobs)} total jobs")
+        
+        # If no valid jobs found, use sample data
+        if not jobs_data:
+            logger.warning("No valid job data found, using sample data for skills network")
+            jobs_data = get_sample_jobs()
+            data_source = 'sample_data_fallback'
         
         # Extract skills and experience levels from job descriptions using AI
         all_jobs_with_skills = []
@@ -316,7 +331,7 @@ def get_skills_network():
                     # Use AI to extract skills and experience level from job description
                     ai_analysis = ai_analyzer.analyze_job_description(
                         job['description'], 
-                        {'title': job.get('title', '')}
+                        {'title': job.get('title', ''), 'company': job.get('company', '')}
                     )
                     
                     if ai_analysis.get('success'):
@@ -344,6 +359,10 @@ def get_skills_network():
                                     core_skills = level_skills.get('core_skills', [])
                                     if isinstance(core_skills, list):
                                         job_skills.extend([skill.strip() for skill in core_skills if skill.strip()])
+                        
+                        # Log fallback usage if applicable
+                        if ai_analysis.get('model_used') in ['fallback_analysis', 'ultimate_fallback']:
+                            logger.info(f"Used fallback analysis for job: {job.get('title', 'Unknown')}")
                     
                 except Exception as e:
                     logger.warning(f"AI skill extraction failed for job {job.get('title', 'Unknown')}: {e}")
@@ -1537,6 +1556,39 @@ def save_jobs_to_database(jobs_list):
         logger.error(f"Error saving jobs to database: {e}")
         db.session.rollback()
         return 0
+
+def _validate_job_data(job_dict):
+    """Validate job data before processing"""
+    try:
+        # Check if job has required fields
+        if not job_dict.get('title') or not isinstance(job_dict.get('title'), str):
+            return False
+        
+        # Check if description exists and is valid
+        description = job_dict.get('description', '')
+        if not description or not isinstance(description, str):
+            return False
+        
+        # Check if description is long enough to be meaningful
+        if len(description.strip()) < 20:
+            return False
+        
+        # Check for problematic characters that might cause parsing issues
+        problematic_chars = ['\x00', '\x01', '\x02', '\x03', '\x04', '\x05', '\x06', '\x07', 
+                           '\x08', '\x0b', '\x0c', '\x0e', '\x0f', '\x10', '\x11', '\x12', 
+                           '\x13', '\x14', '\x15', '\x16', '\x17', '\x18', '\x19', '\x1a', 
+                           '\x1b', '\x1c', '\x1d', '\x1e', '\x1f']
+        
+        for char in problematic_chars:
+            if char in description:
+                logger.warning(f"Job {job_dict.get('title', 'Unknown')} contains problematic character, skipping")
+                return False
+        
+        return True
+        
+    except Exception as e:
+        logger.error(f"Error validating job data: {e}")
+        return False
 
 def create_tables():
     """Create database tables if they don't exist"""

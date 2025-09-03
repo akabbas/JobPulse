@@ -1,508 +1,383 @@
 #!/usr/bin/env python3
 """
-JobPulse Scraper Diagnostic Script
-Systematically tests each scraper to identify why they might be failing
-and provides clear next steps for fixing them.
+Diagnostic Script for LinkedIn and Indeed Scrapers
+This script runs the scrapers in debug mode to identify why they're failing
 """
 
-import sys
-import os
 import asyncio
+import os
+import sys
 import time
-import requests
+import logging
 from datetime import datetime
 from pathlib import Path
+from playwright.async_api import async_playwright
+import requests
+from bs4 import BeautifulSoup
 
-# Add the project root to the Python path
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Add project root to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Import scrapers directly to avoid import chain issues
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'scrapers'))
 
 class ScraperDiagnostic:
-    """Diagnostic tool for JobPulse scrapers"""
+    """Diagnostic tool for LinkedIn and Indeed scrapers"""
     
     def __init__(self):
-        self.results = []
-        self.screenshot_dir = Path("diagnostic_screenshots")
-        self.screenshot_dir.mkdir(exist_ok=True)
+        self.setup_logging()
+        self.diagnostic_dir = Path("diagnostic_output")
+        self.diagnostic_dir.mkdir(exist_ok=True)
         
-    def print_header(self):
-        """Print diagnostic header"""
-        print("🔍 JobPulse Scraper Diagnostic Tool")
-        print("=" * 60)
-        print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-        print("This script will test each scraper systematically to identify issues.")
-        print()
+        # Test URLs for each platform
+        self.test_urls = {
+            'linkedin': 'https://www.linkedin.com/jobs/search?keywords=python%20developer&location=United%20States',
+            'indeed': 'https://www.indeed.com/jobs?q=python+developer&l=United+States'
+        }
+        
+        # Expected selectors for each platform
+        self.expected_selectors = {
+            'linkedin': {
+                'job_cards': 'div.base-card',
+                'job_title': 'h3.base-search-card__title',
+                'company_name': 'h4.base-search-card__subtitle',
+                'location': 'span.job-search-card__location',
+                'job_link': 'a.base-card__full-link',
+                'snippet': 'div.base-search-card__snippet'
+            },
+            'indeed': {
+                'job_cards': 'div.job_seen_beacon',
+                'job_title': 'h2.jobTitle',
+                'company_name': 'span.companyName',
+                'location': 'div.companyLocation',
+                'job_link': 'a.jcs-JobTitle',
+                'snippet': 'div.job-snippet'
+            }
+        }
     
-    def test_dice_scraper(self):
-        """Test Dice scraper connectivity and selectors"""
-        print("🧪 Testing Dice Scraper...")
+    def setup_logging(self):
+        """Setup logging for diagnostics"""
+        logging.basicConfig(
+            level=logging.INFO,
+            format='%(asctime)s - %(levelname)s - %(message)s',
+            handlers=[
+                logging.FileHandler('logs/scraper_diagnostic.log'),
+                logging.StreamHandler()
+            ]
+        )
+        self.logger = logging.getLogger(__name__)
+    
+    async def diagnose_linkedin_scraper(self):
+        """Diagnose LinkedIn scraper issues"""
+        print("\n🔍 Diagnosing LinkedIn Scraper...")
+        print("=" * 50)
         
         try:
-            # Test 1: Basic connectivity
-            print("  📡 Testing connectivity...")
-            response = requests.get("https://www.dice.com/jobs?q=python&location=United+States", 
-                                 timeout=10, 
-                                 headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'})
+            # Test with Playwright
+            await self._test_with_playwright('linkedin')
             
-            if response.status_code == 200:
-                print("    ✅ HTTP 200 - Site accessible")
-                connectivity_status = "✅ Working"
-            else:
-                print(f"    ⚠️ HTTP {response.status_code} - Site may have issues")
-                connectivity_status = "⚠️ Needs Fixing"
+            # Test with requests
+            await self._test_with_requests('linkedin')
             
-            # Test 2: Check if expected content exists
-            print("  🔍 Checking page content...")
-            if "card-body" in response.text:
-                print("    ✅ Expected 'card-body' class found in HTML")
-                content_status = "✅ Working"
-            else:
-                print("    ❌ Expected 'card-body' class NOT found in HTML")
-                content_status = "❌ Broken"
-            
-            # Test 3: Check for job listings
-            if "job" in response.text.lower() and "python" in response.text.lower():
-                print("    ✅ Job-related content detected")
-                job_content_status = "✅ Working"
-            else:
-                print("    ⚠️ Limited job content detected")
-                job_content_status = "⚠️ Needs Fixing"
-            
-            # Overall status
-            if all(status.startswith("✅") for status in [connectivity_status, content_status, job_content_status]):
-                overall_status = "✅ Working"
-                specific_issue = "No issues detected"
-                recommended_fix = "Scraper should work correctly"
-            elif any(status.startswith("❌") for status in [connectivity_status, content_status, job_content_status]):
-                overall_status = "❌ Broken"
-                specific_issue = "Page structure has changed or site is blocking access"
-                recommended_fix = "Update HTML selectors and check for anti-bot measures"
-            else:
-                overall_status = "⚠️ Needs Fixing"
-                specific_issue = "Site accessible but content structure may have changed"
-                recommended_fix = "Verify current HTML structure and update selectors"
-            
-            self.results.append({
-                'scraper': 'Dice',
-                'status': overall_status,
-                'specific_issue': specific_issue,
-                'recommended_fix': recommended_fix,
-                'details': {
-                    'connectivity': connectivity_status,
-                    'content': content_status,
-                    'job_content': job_content_status
-                }
-            })
+            # Test scraper class
+            await self._test_scraper_class('linkedin')
             
         except Exception as e:
-            print(f"    ❌ Error testing Dice: {e}")
-            self.results.append({
-                'scraper': 'Dice',
-                'status': '❌ Broken',
-                'specific_issue': f'Connection failed: {str(e)}',
-                'recommended_fix': 'Check network connectivity and site availability',
-                'details': {'error': str(e)}
-            })
-        
-        print()
+            print(f"❌ LinkedIn diagnosis failed: {e}")
+            self.logger.error(f"LinkedIn diagnosis error: {e}")
     
-    def test_stackoverflow_scraper(self):
-        """Test Stack Overflow scraper connectivity and selectors"""
-        print("🧪 Testing Stack Overflow Scraper...")
+    async def diagnose_indeed_scraper(self):
+        """Diagnose Indeed scraper issues"""
+        print("\n🔍 Diagnosing Indeed Scraper...")
+        print("=" * 50)
         
         try:
-            # Test 1: Basic connectivity
-            print("  📡 Testing connectivity...")
-            response = requests.get("https://stackoverflowjobs.com/jobs?q=python&l=United+States", 
-                                 timeout=10,
-                                 headers={'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'})
+            # Test with Playwright
+            await self._test_with_playwright('indeed')
             
-            if response.status_code == 200:
-                print("    ✅ HTTP 200 - Site accessible")
-                connectivity_status = "✅ Working"
-            else:
-                print(f"    ⚠️ HTTP {response.status_code} - Site may have issues")
-                connectivity_status = "⚠️ Needs Fixing"
+            # Test with requests
+            await self._test_with_requests('indeed')
             
-            # Test 2: Check if expected content exists
-            print("  🔍 Checking page content...")
-            if "job-result" in response.text:
-                print("    ✅ Expected 'job-result' class found in HTML")
-                content_status = "✅ Working"
-            else:
-                print("    ❌ Expected 'job-result' class NOT found in HTML")
-                content_status = "❌ Broken"
-            
-            # Test 3: Check for job listings
-            if "job" in response.text.lower() and "python" in response.text.lower():
-                print("    ✅ Job-related content detected")
-                job_content_status = "✅ Working"
-            else:
-                print("    ⚠️ Limited job content detected")
-                job_content_status = "⚠️ Needs Fixing"
-            
-            # Overall status
-            if all(status.startswith("✅") for status in [connectivity_status, content_status, job_content_status]):
-                overall_status = "✅ Working"
-                specific_issue = "No issues detected"
-                recommended_fix = "Scraper should work correctly"
-            elif any(status.startswith("❌") for status in [connectivity_status, content_status, job_content_status]):
-                overall_status = "❌ Broken"
-                specific_issue = "Page structure has changed or site is blocking access"
-                recommended_fix = "Update HTML selectors and check for anti-bot measures"
-            else:
-                overall_status = "⚠️ Needs Fixing"
-                specific_issue = "Site accessible but content structure may have changed"
-                recommended_fix = "Verify current HTML structure and update selectors"
-            
-            self.results.append({
-                'scraper': 'Stack Overflow',
-                'status': overall_status,
-                'specific_issue': specific_issue,
-                'recommended_fix': recommended_fix,
-                'details': {
-                    'connectivity': connectivity_status,
-                    'content': content_status,
-                    'job_content': job_content_status
-                }
-            })
+            # Test scraper class
+            await self._test_scraper_class('indeed')
             
         except Exception as e:
-            print(f"    ❌ Error testing Stack Overflow: {e}")
-            self.results.append({
-                'scraper': 'Stack Overflow',
-                'status': '❌ Broken',
-                'specific_issue': f'Connection failed: {str(e)}',
-                'recommended_fix': 'Check network connectivity and site availability',
-                'details': {'error': str(e)}
-            })
-        
-        print()
+            print(f"❌ Indeed diagnosis failed: {e}")
+            self.logger.error(f"Indeed diagnosis error: {e}")
     
-    def test_greenhouse_scraper(self):
-        """Test Greenhouse scraper API endpoints"""
-        print("🧪 Testing Greenhouse Scraper...")
-        
-        # Test companies from the scraper
-        test_companies = [
-            'airbnb', 'uber', 'lyft', 'pinterest', 'stripe', 'coinbase',
-            'robinhood', 'doordash', 'instacart', 'notion', 'figma',
-            'linear', 'vercel', 'netlify', 'supabase', 'planetscale',
-            'github', 'shopify', 'twilio', 'slack', 'discord', 'zoom'
-        ]
-        
-        working_companies = []
-        broken_companies = []
-        
-        print("  📡 Testing API endpoints for companies...")
-        
-        for company in test_companies:
-            try:
-                api_url = f"https://boards-api.greenhouse.io/v1/boards/{company}/jobs"
-                response = requests.get(api_url, timeout=10)
-                
-                if response.status_code == 200:
-                    jobs_data = response.json()
-                    job_count = len(jobs_data.get('jobs', []))
-                    print(f"    ✅ {company}: {job_count} jobs available")
-                    working_companies.append(company)
-                elif response.status_code == 404:
-                    print(f"    ❌ {company}: Company not found (404)")
-                    broken_companies.append(company)
-                else:
-                    print(f"    ⚠️ {company}: HTTP {response.status_code}")
-                    broken_companies.append(company)
-                
-                # Small delay to be respectful
-                time.sleep(0.1)
-                
-            except Exception as e:
-                print(f"    ❌ {company}: Error - {e}")
-                broken_companies.append(company)
-        
-        # Calculate success rate
-        total_companies = len(test_companies)
-        working_count = len(working_companies)
-        success_rate = (working_count / total_companies) * 100
-        
-        print(f"  📊 Results: {working_count}/{total_companies} companies working ({success_rate:.1f}%)")
-        
-        # Determine overall status
-        if success_rate >= 80:
-            overall_status = "✅ Working"
-            specific_issue = f"Most companies working ({success_rate:.1f}% success rate)"
-            recommended_fix = "Scraper should work well with current company list"
-        elif success_rate >= 50:
-            overall_status = "⚠️ Needs Fixing"
-            specific_issue = f"Moderate success rate ({success_rate:.1f}%) - some companies broken"
-            recommended_fix = "Update company list to remove broken companies"
-        else:
-            overall_status = "❌ Broken"
-            specific_issue = f"Low success rate ({success_rate:.1f}%) - most companies broken"
-            recommended_fix = "Research current working company identifiers and update list"
-        
-        self.results.append({
-            'scraper': 'Greenhouse',
-            'status': overall_status,
-            'specific_issue': specific_issue,
-            'recommended_fix': recommended_fix,
-            'details': {
-                'working_companies': working_companies,
-                'broken_companies': broken_companies,
-                'success_rate': success_rate
-            }
-        })
-        
-        print()
-    
-    def test_lever_scraper(self):
-        """Test Lever scraper API endpoints"""
-        print("🧪 Testing Lever Scraper...")
-        
-        # Test companies from the scraper
-        test_companies = [
-            'stripe', 'coinbase', 'robinhood', 'doordash', 'instacart',
-            'notion', 'figma', 'linear', 'vercel', 'netlify', 'supabase',
-            'planetscale', 'github', 'shopify', 'twilio', 'slack'
-        ]
-        
-        working_companies = []
-        broken_companies = []
-        
-        print("  📡 Testing API endpoints for companies...")
-        
-        for company in test_companies:
-            try:
-                api_url = f"https://api.lever.co/v0/postings/{company}"
-                response = requests.get(api_url, timeout=10)
-                
-                if response.status_code == 200:
-                    jobs_data = response.json()
-                    job_count = len(jobs_data)
-                    print(f"    ✅ {company}: {job_count} jobs available")
-                    working_companies.append(company)
-                elif response.status_code == 404:
-                    print(f"    ❌ {company}: Company not found (404)")
-                    broken_companies.append(company)
-                else:
-                    print(f"    ⚠️ {company}: HTTP {response.status_code}")
-                    broken_companies.append(company)
-                
-                # Small delay to be respectful
-                time.sleep(0.1)
-                
-            except Exception as e:
-                print(f"    ❌ {company}: Error - {e}")
-                broken_companies.append(company)
-        
-        # Calculate success rate
-        total_companies = len(test_companies)
-        working_count = len(working_companies)
-        success_rate = (working_count / total_companies) * 100
-        
-        print(f"  📊 Results: {working_count}/{total_companies} companies working ({success_rate:.1f}%)")
-        
-        # Determine overall status
-        if success_rate >= 80:
-            overall_status = "✅ Working"
-            specific_issue = f"Most companies working ({success_rate:.1f}% success rate)"
-            recommended_fix = "Scraper should work well with current company list"
-        elif success_rate >= 50:
-            overall_status = "⚠️ Needs Fixing"
-            specific_issue = f"Moderate success rate ({success_rate:.1f}%) - some companies broken"
-            recommended_fix = "Update company list to remove broken companies"
-        else:
-            overall_status = "❌ Broken"
-            specific_issue = f"Low success rate ({success_rate:.1f}%) - most companies broken"
-            recommended_fix = "Research current working company identifiers and update list"
-        
-        self.results.append({
-            'scraper': 'Lever',
-            'status': overall_status,
-            'specific_issue': specific_issue,
-            'recommended_fix': recommended_fix,
-            'details': {
-                'working_companies': working_companies,
-                'broken_companies': broken_companies,
-                'success_rate': success_rate
-            }
-        })
-        
-        print()
-    
-    async def test_playwright_selectors(self):
-        """Test Playwright selectors for Dice and Stack Overflow"""
-        print("🌐 Testing Playwright Selectors...")
+    async def _test_with_playwright(self, platform: str):
+        """Test scraping with Playwright for visual debugging"""
+        print(f"\n📱 Testing {platform.title()} with Playwright...")
         
         try:
-            from playwright.async_api import async_playwright
-            
             async with async_playwright() as p:
-                browser = await p.chromium.launch(headless=True)
+                browser = await p.chromium.launch(headless=False)  # Visible for debugging
+                context = await browser.new_context(
+                    user_agent='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                    viewport={'width': 1920, 'height': 1080}
+                )
                 
-                # Test Dice
-                print("  🎯 Testing Dice selectors...")
-                try:
-                    page = await browser.new_page()
-                    await page.goto("https://www.dice.com/jobs?q=python&location=United+States", timeout=30000)
-                    await page.wait_for_load_state('networkidle')
-                    
-                    # Take screenshot
-                    screenshot_path = self.screenshot_dir / "dice_jobs_page.png"
-                    await page.screenshot(path=str(screenshot_path))
-                    print(f"    📸 Screenshot saved: {screenshot_path}")
-                    
-                    # Test selectors
-                    selectors_to_test = [
-                        'div.card-body',
-                        'h5.card-title',
-                        'span.company',
-                        'span.location',
-                        'a.card-title-link'
-                    ]
-                    
-                    for selector in selectors_to_test:
-                        elements = await page.query_selector_all(selector)
-                        if elements:
-                            print(f"    ✅ Selector '{selector}': {len(elements)} elements found")
-                        else:
-                            print(f"    ❌ Selector '{selector}': No elements found")
-                    
-                    await page.close()
-                    
-                except Exception as e:
-                    print(f"    ❌ Error testing Dice: {e}")
+                page = await context.new_page()
                 
-                # Test Stack Overflow
-                print("  🎯 Testing Stack Overflow selectors...")
-                try:
-                    page = await browser.new_page()
-                    await page.goto("https://stackoverflowjobs.com/jobs?q=python&l=United+States", timeout=30000)
-                    await page.wait_for_load_state('networkidle')
-                    
-                    # Take screenshot
-                    screenshot_path = self.screenshot_dir / "stackoverflow_jobs_page.png"
-                    await page.screenshot(path=str(screenshot_path))
-                    print(f"    📸 Screenshot saved: {screenshot_path}")
-                    
-                    # Test selectors
-                    selectors_to_test = [
-                        'div.job-result',
-                        'h2.job-title',
-                        'h3.company-name',
-                        'span.location',
-                        'a.job-link'
-                    ]
-                    
-                    for selector in selectors_to_test:
-                        elements = await page.query_selector_all(selector)
-                        if elements:
-                            print(f"    ✅ Selector '{selector}': {len(elements)} elements found")
-                        else:
-                            print(f"    ❌ Selector '{selector}': No elements found")
-                    
-                    await page.close()
-                    
-                except Exception as e:
-                    print(f"    ❌ Error testing Stack Overflow: {e}")
+                # Navigate to the test URL
+                url = self.test_urls[platform]
+                print(f"   Navigating to: {url}")
+                
+                await page.goto(url, wait_until='networkidle', timeout=30000)
+                
+                # Wait for content to load
+                await page.wait_for_timeout(5000)
+                
+                # Take screenshot
+                screenshot_path = self.diagnostic_dir / f"{platform}_page_screenshot_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+                await page.screenshot(path=str(screenshot_path), full_page=True)
+                print(f"   📸 Screenshot saved: {screenshot_path}")
+                
+                # Save HTML content
+                html_content = await page.content()
+                html_path = self.diagnostic_dir / f"{platform}_page_html_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
+                with open(html_path, 'w', encoding='utf-8') as f:
+                    f.write(html_content)
+                print(f"   📄 HTML saved: {html_path}")
+                
+                # Test selectors
+                await self._test_selectors_on_page(page, platform)
                 
                 await browser.close()
                 
-        except ImportError:
-            print("  ⚠️ Playwright not installed. Install with: pip install playwright")
         except Exception as e:
-            print(f"  ❌ Error testing Playwright: {e}")
-        
-        print()
+            print(f"   ❌ Playwright test failed: {e}")
+            self.logger.error(f"Playwright test failed for {platform}: {e}")
     
-    def print_summary_table(self):
-        """Print a summary table of all results"""
-        print("📊 DIAGNOSTIC SUMMARY")
-        print("=" * 80)
-        print(f"{'Scraper':<20} {'Status':<15} {'Issue':<50}")
-        print("-" * 80)
+    async def _test_selectors_on_page(self, page, platform: str):
+        """Test if expected selectors exist on the page"""
+        print(f"   🔍 Testing selectors for {platform}...")
         
-        for result in self.results:
-            status_icon = result['status'].split()[0]  # Get the emoji
-            status_text = result['status'].split()[1]  # Get the text
-            issue = result['specific_issue'][:47] + "..." if len(result['specific_issue']) > 50 else result['specific_issue']
+        selectors = self.expected_selectors[platform]
+        
+        for selector_name, selector in selectors.items():
+            try:
+                elements = await page.query_selector_all(selector)
+                count = len(elements)
+                print(f"      {selector_name}: {selector} -> Found {count} elements")
+                
+                if count == 0:
+                    print(f"         ⚠️  WARNING: No elements found for {selector_name}")
+                    
+                    # Try to find similar elements
+                    await self._find_similar_elements(page, selector_name, selector)
+                
+            except Exception as e:
+                print(f"      {selector_name}: {selector} -> ERROR: {e}")
+    
+    async def _find_similar_elements(self, page, selector_name: str, original_selector: str):
+        """Find similar elements when the expected selector fails"""
+        try:
+            # Try common variations
+            variations = [
+                original_selector.replace('div.', ''),
+                original_selector.replace('h3.', ''),
+                original_selector.replace('h4.', ''),
+                original_selector.replace('span.', ''),
+                original_selector.replace('a.', ''),
+                original_selector.split('.')[-1] if '.' in original_selector else original_selector
+            ]
             
-            print(f"{result['scraper']:<20} {status_icon} {status_text:<12} {issue}")
-        
-        print("-" * 80)
-        print()
+            for variation in variations:
+                try:
+                    elements = await page.query_selector_all(f'[class*="{variation}"]')
+                    if elements:
+                        print(f"         💡 Found similar elements with: [class*=\"{variation}\"] -> {len(elements)} elements")
+                        break
+                except:
+                    continue
+                    
+        except Exception as e:
+            print(f"         ❌ Error finding similar elements: {e}")
     
-    def print_detailed_recommendations(self):
-        """Print detailed recommendations for each scraper"""
-        print("🔧 DETAILED RECOMMENDATIONS")
-        print("=" * 80)
+    async def _test_with_requests(self, platform: str):
+        """Test scraping with requests to check for blocking"""
+        print(f"\n🌐 Testing {platform.title()} with requests...")
         
-        for result in self.results:
-            print(f"\n📋 {result['scraper']} - {result['status']}")
-            print(f"   Issue: {result['specific_issue']}")
-            print(f"   Fix: {result['recommended_fix']}")
+        try:
+            url = self.test_urls[platform]
             
-            if 'details' in result:
-                if 'working_companies' in result['details']:
-                    print(f"   Working Companies: {', '.join(result['details']['working_companies'][:5])}{'...' if len(result['details']['working_companies']) > 5 else ''}")
-                    print(f"   Broken Companies: {', '.join(result['details']['broken_companies'][:5])}{'...' if len(result['details']['broken_companies']) > 5 else ''}")
-                    print(f"   Success Rate: {result['details']['success_rate']:.1f}%")
-                elif 'details' in result['details']:
-                    for key, value in result['details'].items():
-                        if key != 'error':
-                            print(f"   {key.title()}: {value}")
-        
-        print("\n" + "=" * 80)
+            headers = {
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'Connection': 'keep-alive',
+                'Upgrade-Insecure-Requests': '1',
+            }
+            
+            response = requests.get(url, headers=headers, timeout=30)
+            
+            print(f"   Status Code: {response.status_code}")
+            print(f"   Content Length: {len(response.content)} bytes")
+            
+            if response.status_code == 200:
+                # Parse with BeautifulSoup
+                soup = BeautifulSoup(response.content, 'html.parser')
+                    
+                    # Test selectors
+                selectors = self.expected_selectors[platform]
+                for selector_name, selector in selectors.items():
+                    elements = soup.select(selector)
+                    print(f"      {selector_name}: {selector} -> Found {len(elements)} elements")
+                    
+                    if len(elements) == 0:
+                        print(f"         ⚠️  WARNING: No elements found for {selector_name}")
+                        
+                        # Save problematic HTML section
+                        await self._save_problematic_html(soup, platform, selector_name)
+                
+                # Save the full HTML for inspection
+                html_path = self.diagnostic_dir / f"{platform}_requests_html_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
+                with open(html_path, 'w', encoding='utf-8') as f:
+                    f.write(str(soup.prettify()))
+                print(f"   📄 Full HTML saved: {html_path}")
+                
+            elif response.status_code == 403:
+                print("   ❌ BLOCKED: Received 403 Forbidden - Site is blocking requests")
+                print("   💡 Solution: Use Playwright with stealth mode")
+                
+            elif response.status_code == 429:
+                print("   ❌ RATE LIMITED: Received 429 Too Many Requests")
+                print("   💡 Solution: Add delays between requests")
+                
+                        else:
+                print(f"   ❌ Unexpected status code: {response.status_code}")
+                    
+                except Exception as e:
+            print(f"   ❌ Requests test failed: {e}")
+            self.logger.error(f"Requests test failed for {platform}: {e}")
     
-    def save_report(self):
-        """Save the diagnostic report to a file"""
-        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        report_file = f"diagnostic_report_{timestamp}.txt"
+    async def _save_problematic_html(self, soup, platform: str, selector_name: str):
+        """Save a section of HTML around where the selector should be"""
+        try:
+            # Try to find the main content area
+            main_content = soup.find('main') or soup.find('div', {'id': 'main'}) or soup.find('body')
+            
+            if main_content:
+                # Save a section of the HTML for debugging
+                html_section = str(main_content)[:10000]  # First 10KB
+                
+                section_path = self.diagnostic_dir / f"{platform}_{selector_name}_section_{datetime.now().strftime('%Y%m%d_%H%M%S')}.html"
+                with open(section_path, 'w', encoding='utf-8') as f:
+                    f.write(f"<!-- Section around {selector_name} for {platform} -->\n")
+                    f.write(html_section)
+                
+                print(f"         📄 Problematic HTML section saved: {section_path}")
+                
+        except Exception as e:
+            print(f"         ❌ Error saving HTML section: {e}")
+    
+    async def _test_scraper_class(self, platform: str):
+        """Test the actual scraper class"""
+        print(f"\n🧪 Testing {platform.title()} scraper class...")
         
-        with open(report_file, 'w') as f:
-            f.write("JobPulse Scraper Diagnostic Report\n")
-            f.write("=" * 50 + "\n")
+        try:
+            if platform == 'linkedin':
+                from linkedin_scraper import LinkedInScraper
+                scraper = LinkedInScraper()
+            else:
+                from indeed_scraper import IndeedScraper
+                scraper = IndeedScraper()
+            
+            # Test with a small limit
+            jobs = scraper.search_jobs('python developer', 'United States', limit=5)
+            
+            print(f"   Jobs found: {len(jobs)}")
+            
+            if jobs:
+                print("   ✅ Scraper is working!")
+                for i, job in enumerate(jobs[:3]):
+                    print(f"      Job {i+1}: {job.get('title', 'No title')} at {job.get('company', 'No company')}")
+            else:
+                print("   ❌ Scraper returned no jobs")
+                print("   💡 This confirms the selector issue identified above")
+                
+        except Exception as e:
+            print(f"   ❌ Scraper class test failed: {e}")
+            self.logger.error(f"Scraper class test failed for {platform}: {e}")
+    
+    def generate_diagnostic_report(self):
+        """Generate a comprehensive diagnostic report"""
+        print("\n📋 Generating Diagnostic Report...")
+        print("=" * 50)
+        
+        report_path = self.diagnostic_dir / f"scraper_diagnostic_report_{datetime.now().strftime('%Y%m%d_%H%M%S')}.md"
+        
+        with open(report_path, 'w') as f:
+            f.write("# Scraper Diagnostic Report\n\n")
             f.write(f"Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n\n")
             
-            for result in self.results:
-                f.write(f"Scraper: {result['scraper']}\n")
-                f.write(f"Status: {result['status']}\n")
-                f.write(f"Issue: {result['specific_issue']}\n")
-                f.write(f"Fix: {result['recommended_fix']}\n")
-                f.write("-" * 30 + "\n")
+            f.write("## Summary\n\n")
+            f.write("This report contains the results of diagnosing LinkedIn and Indeed scrapers.\n\n")
+            
+            f.write("## Files Generated\n\n")
+            f.write("- Screenshots: Visual evidence of what the scrapers see\n")
+            f.write("- HTML files: Full page content for inspection\n")
+            f.write("- Section files: Problematic HTML sections\n")
+            f.write("- Logs: Detailed error logs\n\n")
+            
+            f.write("## Common Issues and Solutions\n\n")
+            f.write("### 1. 403 Forbidden Errors\n")
+            f.write("- **Cause**: Site is blocking automated requests\n")
+            f.write("- **Solution**: Use Playwright with stealth mode\n\n")
+            
+            f.write("### 2. Changed CSS Selectors\n")
+            f.write("- **Cause**: Website updated their HTML structure\n")
+            f.write("- **Solution**: Update selectors in scraper files\n\n")
+            
+            f.write("### 3. Rate Limiting\n")
+            f.write("- **Cause**: Too many requests too quickly\n")
+            f.write("- **Solution**: Add delays between requests\n\n")
+            
+            f.write("## Next Steps\n\n")
+            f.write("1. Review the generated files to identify the specific issue\n")
+            f.write("2. Update the appropriate scraper file with new selectors\n")
+            f.write("3. Test the updated scraper\n")
+            f.write("4. Run this diagnostic again to confirm the fix\n")
         
-        print(f"📄 Detailed report saved to: {report_file}")
+        print(f"📄 Diagnostic report saved: {report_path}")
     
-    async def run_diagnostics(self):
-        """Run all diagnostic tests"""
-        self.print_header()
+    async def run_full_diagnosis(self):
+        """Run the complete diagnostic process"""
+        print("🚀 Starting Scraper Diagnostic Process")
+        print("=" * 60)
+        print(f"Output directory: {self.diagnostic_dir.absolute()}")
+        print(f"Timestamp: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
-        # Test each scraper
-        self.test_dice_scraper()
-        self.test_stackoverflow_scraper()
-        self.test_greenhouse_scraper()
-        self.test_lever_scraper()
+        # Ensure logs directory exists
+        os.makedirs('logs', exist_ok=True)
         
-        # Test Playwright selectors
-        await self.test_playwright_selectors()
-        
-        # Print results
-        self.print_summary_table()
-        self.print_detailed_recommendations()
-        self.save_report()
-        
-        print("🎯 NEXT STEPS:")
-        print("1. Review the diagnostic results above")
-        print("2. Check the screenshots in the 'diagnostic_screenshots' folder")
-        print("3. Update company lists for API-based scrapers")
-        print("4. Adjust Playwright selectors based on current page structure")
-        print("5. Test the updated scrapers individually")
-        print("6. Re-run this diagnostic to verify fixes")
+        try:
+            # Diagnose both scrapers
+            await self.diagnose_linkedin_scraper()
+            await self.diagnose_indeed_scraper()
+            
+            # Generate report
+            self.generate_diagnostic_report()
+            
+            print("\n🎉 Diagnostic process completed!")
+            print("\n📁 Check the following files:")
+            print(f"   - Screenshots: {self.diagnostic_dir}")
+            print(f"   - HTML files: {self.diagnostic_dir}")
+            print(f"   - Logs: logs/scraper_diagnostic.log")
+            print(f"   - Report: {self.diagnostic_dir}")
+            
+        except Exception as e:
+            print(f"\n❌ Diagnostic process failed: {e}")
+            self.logger.error(f"Diagnostic process failed: {e}")
 
 async def main():
-    """Main function"""
+    """Main function to run the diagnostic"""
     diagnostic = ScraperDiagnostic()
-    await diagnostic.run_diagnostics()
+    await diagnostic.run_full_diagnosis()
 
 if __name__ == "__main__":
     asyncio.run(main())
+
 

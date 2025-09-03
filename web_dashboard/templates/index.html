@@ -24,6 +24,135 @@
     
     <!-- Vis Network for Skills Network Visualization -->
     <script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+    
+    <!-- Skills Analysis Styles -->
+    <style>
+        .skills-table-container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .skills-table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .skills-table-header h4 {
+            color: #ffffff;
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .skills-count {
+            color: #00d4ff;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .skills-table {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .skill-row {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            transition: background-color 0.3s ease;
+        }
+        
+        .skill-row:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding-left: 8px;
+            padding-right: 8px;
+        }
+        
+        .skill-rank {
+            width: 40px;
+            text-align: center;
+            color: #00d4ff;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .skill-name {
+            flex: 1;
+            color: #ffffff;
+            font-weight: 500;
+            font-size: 14px;
+            margin-left: 15px;
+        }
+        
+        .skill-frequency {
+            display: flex;
+            align-items: center;
+            width: 200px;
+        }
+        
+        .frequency-bar {
+            flex: 1;
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-right: 10px;
+            overflow: hidden;
+        }
+        
+        .frequency-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #0099cc);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        
+        .frequency-count {
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 14px;
+            min-width: 30px;
+            text-align: right;
+        }
+        
+        #skillsChart {
+            max-height: 300px;
+            margin-top: 20px;
+        }
+        
+        .loading-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            color: #ffffff;
+        }
+        
+        .loading {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(255, 255, 255, 0.1);
+            border-top: 3px solid #00d4ff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <!-- 🎨 Hero Section -->
@@ -760,19 +889,22 @@
 
         // 🧠 Analyze Skills
         async function analyzeSkills() {
-            const skillsContainer = document.getElementById('skillsNetworkChart');
-            skillsContainer.innerHTML = '<div class="loading-container"><div class="loading"></div><p>Analyzing skills...</p></div>';
+            const skillsTable = document.getElementById('skillsTable');
+            const skillsChart = document.getElementById('skillsChart');
+            
+            // Show loading state
+            skillsTable.innerHTML = '<div class="loading-container"><div class="loading"></div><p>Analyzing skills...</p></div>';
             
             try {
                 const response = await fetch('/api/skills-network');
                 const data = await response.json();
                 
-                if (data.error) {
-                    skillsContainer.innerHTML = `
+                if (!data.success) {
+                    skillsTable.innerHTML = `
                         <div class="empty-state error">
                             <div class="empty-state-icon">📊</div>
                             <h3>Skills Analysis Error</h3>
-                            <p>We encountered an error while analyzing skills: <strong>${data.error}</strong></p>
+                            <p>We encountered an error while analyzing skills: <strong>${data.error || 'Unknown error'}</strong></p>
                             <div class="empty-state-subtitle">This might be due to data processing issues or API limitations</div>
                             <div class="empty-state-actions">
                                 <button class="empty-state-action" onclick="analyzeSkills()">Try Again</button>
@@ -792,18 +924,22 @@
                     return;
                 }
                 
-                // Create skills network visualization
-                createSkillsNetwork(data);
+                // Create skills visualization
+                createSkillsVisualization(data);
                 
-                // Update insights
-                if (data.skills && data.skills.length > 0) {
-                    const topSkills = data.skills.slice(0, 5).map(s => s.name).join(', ');
-                    document.getElementById('topSkills').textContent = topSkills;
-                    document.getElementById('skillDemand').textContent = `${data.skills.length} skills identified in job descriptions`;
+                // Update insights if elements exist
+                const topSkillsElement = document.getElementById('topSkills');
+                const skillDemandElement = document.getElementById('skillDemand');
+                
+                if (data.data && data.data.skills && topSkillsElement && skillDemandElement) {
+                    const skills = Object.entries(data.data.skills);
+                    const topSkills = skills.slice(0, 5).map(([name, count]) => name).join(', ');
+                    topSkillsElement.textContent = topSkills;
+                    skillDemandElement.textContent = `${skills.length} skills identified in job descriptions`;
                 }
             } catch (error) {
                 console.error('Skills analysis error:', error);
-                skillsContainer.innerHTML = `
+                skillsTable.innerHTML = `
                     <div class="empty-state error">
                         <div class="empty-state-icon">📊</div>
                         <h3>Skills Analysis Failed</h3>
@@ -827,71 +963,142 @@
             }
         }
 
-        // 📈 Create Skills Network Chart
-        function createSkillsNetwork(data) {
-            const ctx = document.getElementById('skillsNetworkChart').getContext('2d');
+        // 📈 Create Skills Visualization
+        function createSkillsVisualization(data) {
+            const skillsTable = document.getElementById('skillsTable');
+            const skillsChart = document.getElementById('skillsChart');
             
-            if (window.skillsChart) {
-                window.skillsChart.destroy();
+            if (!data.data || !data.data.skills) {
+                skillsTable.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">📊</div>
+                        <h3>No Skills Data Available</h3>
+                        <p>No skills data was found in the response.</p>
+                    </div>
+                `;
+                return;
             }
             
-            const chartData = {
-                labels: data.skills ? data.skills.map(s => s.name) : [],
-                datasets: [{
-                    label: 'Skill Frequency',
-                    data: data.skills ? data.skills.map(s => s.count) : [],
-                    backgroundColor: 'rgba(0, 212, 255, 0.2)',
-                    borderColor: 'rgba(0, 212, 255, 1)',
-                    borderWidth: 2,
-                    pointBackgroundColor: 'rgba(0, 212, 255, 1)',
-                    pointBorderColor: '#fff',
-                    pointBorderWidth: 2,
-                    pointRadius: 6,
-                    pointHoverRadius: 8
-                }]
-            };
+            const skills = Object.entries(data.data.skills);
             
-            window.skillsChart = new Chart(ctx, {
-                type: 'radar',
-                data: chartData,
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            labels: {
+            // Create skills table
+            skillsTable.innerHTML = `
+                <div class="skills-table-container">
+                    <div class="skills-table-header">
+                        <h4>Top Skills by Frequency</h4>
+                        <span class="skills-count">${skills.length} skills found</span>
+                    </div>
+                    <div class="skills-table">
+                        ${skills
+                            .sort(([,a], [,b]) => b - a)
+                            .slice(0, 20)
+                            .map(([skill, count], index) => `
+                                <div class="skill-row">
+                                    <div class="skill-rank">${index + 1}</div>
+                                    <div class="skill-name">${skill}</div>
+                                    <div class="skill-frequency">
+                                        <div class="frequency-bar">
+                                            <div class="frequency-fill" style="width: ${(count / Math.max(...skills.map(([,c]) => c))) * 100}%"></div>
+                                        </div>
+                                        <span class="frequency-count">${count}</span>
+                                    </div>
+                                </div>
+                            `).join('')}
+                    </div>
+                </div>
+            `;
+            
+            // Create skills chart
+            if (skillsChart) {
+                if (window.skillsChart) {
+                    window.skillsChart.destroy();
+                }
+                
+                const topSkills = skills
+                    .sort(([,a], [,b]) => b - a)
+                    .slice(0, 10);
+                
+                const chartData = {
+                    labels: topSkills.map(([skill]) => skill),
+                    datasets: [{
+                        label: 'Skill Frequency',
+                        data: topSkills.map(([, count]) => count),
+                        backgroundColor: [
+                            'rgba(0, 212, 255, 0.8)',
+                            'rgba(255, 99, 132, 0.8)',
+                            'rgba(54, 162, 235, 0.8)',
+                            'rgba(255, 205, 86, 0.8)',
+                            'rgba(75, 192, 192, 0.8)',
+                            'rgba(153, 102, 255, 0.8)',
+                            'rgba(255, 159, 64, 0.8)',
+                            'rgba(199, 199, 199, 0.8)',
+                            'rgba(83, 102, 255, 0.8)',
+                            'rgba(255, 99, 255, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(0, 212, 255, 1)',
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 205, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)',
+                            'rgba(199, 199, 199, 1)',
+                            'rgba(83, 102, 255, 1)',
+                            'rgba(255, 99, 255, 1)'
+                        ],
+                        borderWidth: 2
+                    }]
+                };
+                
+                window.skillsChart = new Chart(skillsChart, {
+                    type: 'bar',
+                    data: chartData,
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            title: {
+                                display: true,
+                                text: 'Top Skills by Frequency',
                                 color: '#ffffff',
                                 font: {
-                                    size: 14,
+                                    size: 16,
                                     weight: '600'
                                 }
                             }
-                        }
-                    },
-                    scales: {
-                        r: {
-                            beginAtZero: true,
-                            grid: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            angleLines: {
-                                color: 'rgba(255, 255, 255, 0.1)'
-                            },
-                            pointLabels: {
-                                color: '#ffffff',
-                                font: {
-                                    size: 12,
-                                    weight: '500'
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: '#ffffff',
+                                    font: {
+                                        size: 12
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
                                 }
                             },
-                            ticks: {
-                                color: '#ffffff',
-                                backdropColor: 'transparent'
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    color: '#ffffff',
+                                    font: {
+                                        size: 12
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
+            }
         }
 
         // 🎭 Initialize floating elements

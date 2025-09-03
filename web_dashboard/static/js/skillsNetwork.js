@@ -133,7 +133,20 @@ class SkillsNetworkVisualizer {
             
         } catch (error) {
             console.error('Error initializing skills network:', error);
-            this.showError(error.message);
+            
+            // Try to show fallback data instead of just showing error
+            try {
+                console.warn('Attempting to show fallback data due to initialization error');
+                this.skillsData = this.getFallbackSkillsData();
+                this.createNetwork();
+                this.addEventListeners();
+                this.hideLoading();
+                this.showFallbackDataMessage();
+                console.log('Fallback skills network visualization initialized successfully');
+            } catch (fallbackError) {
+                console.error('Fallback initialization also failed:', fallbackError);
+                this.showError(`Initialization failed: ${error.message}. Fallback also failed: ${fallbackError.message}`);
+            }
         }
     }
     
@@ -184,7 +197,10 @@ class SkillsNetworkVisualizer {
                 return;
             }
             
-            throw new Error(`Failed to fetch skills data: ${error.message}`);
+            // For any other error, show fallback data instead of failing completely
+            console.warn('API call failed, using fallback sample data');
+            this.skillsData = this.getFallbackSkillsData();
+            this.showFallbackDataMessage();
         }
     }
     
@@ -662,6 +678,174 @@ class SkillsNetworkVisualizer {
         
         // Insert banner at the top of the container
         this.container.insertBefore(banner, this.container.firstChild);
+    }
+    
+    /**
+     * Show fallback data message
+     */
+    showFallbackDataMessage() {
+        // Create a banner to show this is fallback data
+        const banner = document.createElement('div');
+        banner.className = 'fallback-data-banner';
+        banner.innerHTML = `
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <strong>🔄 Fallback Data:</strong> API temporarily unavailable. Showing sample skills data for demonstration.
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+        
+        // Insert banner at the top of the container
+        this.container.insertBefore(banner, this.container.firstChild);
+    }
+    
+    /**
+     * Get fallback skills data when API fails
+     */
+    getFallbackSkillsData() {
+        return {
+            success: true,
+            data: {
+                skills: {
+                    'Python': 15,
+                    'JavaScript': 12,
+                    'React': 10,
+                    'Node.js': 8,
+                    'AWS': 7,
+                    'Docker': 6,
+                    'SQL': 9,
+                    'Git': 11,
+                    'TypeScript': 5,
+                    'MongoDB': 4,
+                    'Express': 3,
+                    'Linux': 6,
+                    'Kubernetes': 3,
+                    'Terraform': 2,
+                    'Jenkins': 2
+                },
+                co_occurrences: {
+                    'Python|JavaScript': 8,
+                    'Python|AWS': 5,
+                    'JavaScript|React': 7,
+                    'JavaScript|Node.js': 6,
+                    'React|Node.js': 5,
+                    'AWS|Docker': 4,
+                    'Docker|Kubernetes': 3,
+                    'SQL|Python': 4,
+                    'Git|JavaScript': 6,
+                    'TypeScript|React': 4,
+                    'MongoDB|Node.js': 3,
+                    'Express|Node.js': 3,
+                    'Linux|Docker': 3,
+                    'Terraform|AWS': 2,
+                    'Jenkins|Docker': 2
+                },
+                experience_level_distribution: {
+                    'entry': 3,
+                    'mid': 8,
+                    'senior': 4,
+                    'executive': 1
+                },
+                skills_by_experience: {
+                    'entry': {
+                        'Python': 2,
+                        'JavaScript': 2,
+                        'Git': 2,
+                        'SQL': 1
+                    },
+                    'mid': {
+                        'Python': 8,
+                        'JavaScript': 7,
+                        'React': 6,
+                        'Node.js': 5,
+                        'AWS': 4,
+                        'Docker': 3,
+                        'SQL': 5,
+                        'Git': 6
+                    },
+                    'senior': {
+                        'Python': 4,
+                        'JavaScript': 3,
+                        'React': 3,
+                        'AWS': 3,
+                        'Docker': 2,
+                        'Kubernetes': 2,
+                        'Terraform': 2,
+                        'Jenkins': 2
+                    },
+                    'executive': {
+                        'Leadership': 1,
+                        'Strategy': 1,
+                        'Management': 1
+                    }
+                },
+                co_occurrences_by_experience: {
+                    'entry': {
+                        'Python|JavaScript': 1,
+                        'Git|JavaScript': 1
+                    },
+                    'mid': {
+                        'Python|JavaScript': 5,
+                        'JavaScript|React': 5,
+                        'JavaScript|Node.js': 4,
+                        'React|Node.js': 3,
+                        'AWS|Docker': 2,
+                        'SQL|Python': 3,
+                        'Git|JavaScript': 4
+                    },
+                    'senior': {
+                        'Python|AWS': 2,
+                        'AWS|Docker': 2,
+                        'Docker|Kubernetes': 2,
+                        'Terraform|AWS': 2,
+                        'Jenkins|Docker': 2
+                    }
+                },
+                total_jobs_analyzed: 16,
+                data_source: 'fallback_data',
+                ai_experience_analysis: null,
+                search_info: {
+                    keyword: 'fallback',
+                    location: 'fallback',
+                    search_id: 'fallback',
+                    time_range: 'fallback'
+                },
+                timestamp: new Date().toISOString()
+            },
+            nodes: [
+                {id: 'Python', label: 'Python', value: 15, group: 'programming'},
+                {id: 'JavaScript', label: 'JavaScript', value: 12, group: 'programming'},
+                {id: 'React', label: 'React', value: 10, group: 'frontend'},
+                {id: 'Node.js', label: 'Node.js', value: 8, group: 'backend'},
+                {id: 'AWS', label: 'AWS', value: 7, group: 'cloud'},
+                {id: 'Docker', label: 'Docker', value: 6, group: 'devops'},
+                {id: 'SQL', label: 'SQL', value: 9, group: 'database'},
+                {id: 'Git', label: 'Git', value: 11, group: 'tools'},
+                {id: 'TypeScript', label: 'TypeScript', value: 5, group: 'programming'},
+                {id: 'MongoDB', label: 'MongoDB', value: 4, group: 'database'},
+                {id: 'Express', label: 'Express', value: 3, group: 'backend'},
+                {id: 'Linux', label: 'Linux', value: 6, group: 'system'},
+                {id: 'Kubernetes', label: 'Kubernetes', value: 3, group: 'devops'},
+                {id: 'Terraform', label: 'Terraform', value: 2, group: 'devops'},
+                {id: 'Jenkins', label: 'Jenkins', value: 2, group: 'devops'}
+            ],
+            edges: [
+                {from: 'Python', to: 'JavaScript', value: 8},
+                {from: 'Python', to: 'AWS', value: 5},
+                {from: 'JavaScript', to: 'React', value: 7},
+                {from: 'JavaScript', to: 'Node.js', value: 6},
+                {from: 'React', to: 'Node.js', value: 5},
+                {from: 'AWS', to: 'Docker', value: 4},
+                {from: 'Docker', to: 'Kubernetes', value: 3},
+                {from: 'SQL', to: 'Python', value: 4},
+                {from: 'Git', to: 'JavaScript', value: 6},
+                {from: 'TypeScript', to: 'React', value: 4},
+                {from: 'MongoDB', to: 'Node.js', value: 3},
+                {from: 'Express', to: 'Node.js', value: 3},
+                {from: 'Linux', to: 'Docker', value: 3},
+                {from: 'Terraform', to: 'AWS', value: 2},
+                {from: 'Jenkins', to: 'Docker', value: 2}
+            ]
+        };
     }
     
     /**

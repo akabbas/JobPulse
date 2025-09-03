@@ -1,0 +1,45 @@
+# Proxy Service Configuration
+# Copy these variables to your .env file and fill in your actual credentials
+
+# ScraperAPI Configuration
+SCRAPERAPI_ENABLED=false
+SCRAPERAPI_KEY=your_scraperapi_key_here
+
+# Bright Data Configuration
+BRIGHTDATA_ENABLED=false
+BRIGHTDATA_USERNAME=your_brightdata_username
+BRIGHTDATA_PASSWORD=your_brightdata_password
+
+# Oxylabs Configuration
+OXYLABS_ENABLED=false
+OXYLABS_USERNAME=your_oxylabs_username
+OXYLABS_PASSWORD=your_oxylabs_password
+
+# Free Proxy Configuration (enabled by default)
+FREE_PROXIES_ENABLED=true
+
+# Proxy Rotation Settings
+PROXY_ROTATION_STRATEGY=failover  # round_robin, random, failover, geographic
+PROXY_MAX_FAILURES=3
+PROXY_TIMEOUT=30
+PROXY_HEALTH_CHECK_INTERVAL=300
+
+# Geographic Targeting
+GEOGRAPHIC_TARGETING_ENABLED=true
+DEFAULT_TARGET_COUNTRY=us
+
+# Rate Limiting
+RATE_LIMITING_ENABLED=true
+GLOBAL_REQUESTS_PER_MINUTE=100
+GLOBAL_REQUESTS_PER_HOUR=1000
+
+# Stealth Settings
+STEALTH_HEADLESS=false
+STEALTH_SLOW_MO=100
+STEALTH_VIEWPORT_RANDOMIZATION=true
+STEALTH_USER_AGENT_ROTATION=true
+
+# Logging
+LOG_LEVEL=INFO
+LOG_PROXY_USAGE=true
+LOG_PROXY_PERFORMANCE=true

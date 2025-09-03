@@ -1,0 +1,26 @@
+Simple Scraper Diagnostic Report
+==================================================
+Generated: 2025-09-03 16:27:00
+
+This report contains basic diagnostic information about the scrapers.
+
+Common Issues Found:
+1. 403 Forbidden: Site blocking automated requests
+2. Changed CSS Selectors: Website updated HTML structure
+3. Rate Limiting: Too many requests too quickly
+4. Missing Dependencies: Required packages not installed
+
+Recommended Solutions:
+1. For 403 errors: Use Playwright with stealth mode
+2. For selector issues: Update CSS selectors in scraper files
+3. For rate limiting: Add delays between requests
+4. For missing dependencies: Install required packages
+
+Next Steps:
+1. Review this report for specific issues
+2. Run the repair script if selectors are broken:
+   python scripts/repair_scrapers.py
+3. For full diagnosis with screenshots, install Playwright:
+   pip install playwright
+   playwright install
+   python scripts/diagnose_scrapers.py
