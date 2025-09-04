@@ -61,3 +61,4 @@ echo ""
 echo "✨ JobPulse is ready to impress recruiters!"
 
 
+
