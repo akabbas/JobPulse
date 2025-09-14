@@ -389,8 +389,13 @@
                 <!-- Skills Analysis Tab -->
                 <div class="tab-pane" id="skills-analysis-tab">
                     <div class="skills-analysis-container glass-card">
-                        <div class="skills-chart-section">
+                        <div class="skills-analysis-header">
                             <h3>Skills Distribution</h3>
+                            <button class="help-button" onclick="showSkillsAnalysisHelp()" title="How to use Skills Analysis">
+                                ❓ Help
+                            </button>
+                        </div>
+                        <div class="skills-chart-section">
                             <canvas id="skillsChart"></canvas>
                         </div>
                         
@@ -427,22 +432,28 @@
                 <!-- Skills Network Tab -->
                 <div class="tab-pane" id="skills-network-tab">
                     <div class="skills-network-container glass-card">
+                        <div class="skills-network-header">
+                            <h3>Skills Network Visualization</h3>
+                            <button class="help-button" onclick="showSkillsNetworkHelp()" title="How to use Skills Network">
+                                ❓ Help
+                            </button>
+                        </div>
                         <div class="network-controls">
                             <div class="control-group">
-                                <label for="min-frequency">Min Skill Frequency</label>
-                                <input type="number" class="form-control glass" id="min-frequency" value="2" min="1" max="100">
+                                <label for="min-frequency" title="Show only skills mentioned this many times or more">Min Skill Frequency</label>
+                                <input type="number" class="form-control glass" id="min-frequency" value="2" min="1" max="100" title="Show only skills mentioned this many times or more">
                             </div>
                             <div class="control-group">
-                                <label for="co-occurrence-threshold">Min Co-occurrence</label>
-                                <input type="number" class="form-control glass" id="co-occurrence-threshold" value="1" min="1" max="20">
+                                <label for="co-occurrence-threshold" title="Show only connections that appear this many times or more">Min Co-occurrence</label>
+                                <input type="number" class="form-control glass" id="co-occurrence-threshold" value="1" min="1" max="20" title="Show only connections that appear this many times or more">
                             </div>
                             <div class="control-group">
-                                <label for="network-keyword">Keyword Filter</label>
-                                <input type="text" class="form-control glass" id="network-keyword" placeholder="Optional">
+                                <label for="network-keyword" title="Filter skills by specific keywords">Keyword Filter</label>
+                                <input type="text" class="form-control glass" id="network-keyword" placeholder="Optional" title="Filter skills by specific keywords">
                             </div>
                             <div class="control-group">
-                                <label for="experience-level-filter">Experience Level</label>
-                                <select class="form-control glass" id="experience-level-filter">
+                                <label for="experience-level-filter" title="Filter skills by job experience level">Experience Level</label>
+                                <select class="form-control glass" id="experience-level-filter" title="Filter skills by job experience level">
                                     <option value="all">All Levels</option>
                                     <option value="entry">Entry Level</option>
                                     <option value="mid">Mid Level</option>
@@ -451,13 +462,13 @@
                                 </select>
                             </div>
                             <div class="control-actions">
-                                <button class="glass-button primary" onclick="updateSkillsNetwork()">
+                                <button class="glass-button primary" onclick="updateSkillsNetwork()" title="Apply current filters and refresh the network">
                                     🔄 Update Network
                                 </button>
-                                <button class="glass-button secondary" onclick="resetSkillsNetwork()">
+                                <button class="glass-button secondary" onclick="resetSkillsNetwork()" title="Reset all filters to default values">
                                     🔄 Reset
                                 </button>
-                                <button class="glass-button secondary" onclick="showExperienceLevelDistribution()">
+                                <button class="glass-button secondary" onclick="showExperienceLevelDistribution()" title="Show a chart of experience level distribution">
                                     📊 Show Experience Distribution
                                 </button>
                             </div>
@@ -466,6 +477,9 @@
                         <div class="network-visualization">
                             <div class="experience-level-title" style="text-align: center; margin-bottom: 20px; font-size: 1.5rem; color: var(--accent-primary);">
                                 Skills Network - All Levels
+                                <div style="font-size: 0.8rem; color: #888; margin-top: 5px;">
+                                    💡 Click nodes to explore connections • Hover for details • Drag to rearrange
+                                </div>
                             </div>
                             <div id="skills-network-container">
                                 <div class="empty-state skills-no-data">
@@ -1830,6 +1844,308 @@
                 grid-template-columns: 1fr 1fr;
             }
         }
+        
+        /* Help Button Styles */
+        .help-button {
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid rgba(0, 212, 255, 0.3);
+            color: #00d4ff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .help-button:hover {
+            background: rgba(0, 212, 255, 0.2);
+            border-color: rgba(0, 212, 255, 0.5);
+            transform: translateY(-1px);
+        }
+        
+        /* Header Styles */
+        .skills-analysis-header, .skills-network-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .skills-analysis-header h3, .skills-network-header h3 {
+            margin: 0;
+            color: #ffffff;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        /* Help Modal Styles */
+        .help-modal {
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .help-modal-content {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease-out;
+        }
+        
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .help-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 25px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 212, 255, 0.1);
+            border-radius: 15px 15px 0 0;
+        }
+        
+        .help-modal-header h2 {
+            margin: 0;
+            color: #00d4ff;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .help-close {
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 28px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .help-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ff6b6b;
+        }
+        
+        .help-modal-body {
+            padding: 25px;
+            color: #ffffff;
+            line-height: 1.6;
+        }
+        
+        .help-modal-body h3 {
+            color: #00d4ff;
+            margin: 20px 0 10px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .help-modal-body h3:first-child {
+            margin-top: 0;
+        }
+        
+        .help-modal-body p {
+            margin: 0 0 15px 0;
+            color: #e1e1e1;
+        }
+        
+        .help-modal-body ol, .help-modal-body ul {
+            margin: 10px 0 15px 0;
+            padding-left: 20px;
+        }
+        
+        .help-modal-body li {
+            margin: 8px 0;
+            color: #e1e1e1;
+        }
+        
+        .help-modal-body strong {
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .help-modal {
+                padding: 10px;
+            }
+            
+            .help-modal-content {
+                max-height: 90vh;
+            }
+            
+            .help-modal-header {
+                padding: 15px 20px;
+            }
+            
+            .help-modal-header h2 {
+                font-size: 1.3rem;
+            }
+            
+            .help-modal-body {
+                padding: 20px;
+            }
+            
+            .skills-analysis-header, .skills-network-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .help-button {
+                align-self: flex-end;
+            }
+        }
     </style>
+
+    <!-- Help Modals -->
+    <div id="skillsAnalysisHelpModal" class="help-modal" style="display: none;">
+        <div class="help-modal-content">
+            <div class="help-modal-header">
+                <h2>📊 Skills Analysis Help</h2>
+                <button class="help-close" onclick="closeHelpModal('skillsAnalysisHelpModal')">&times;</button>
+            </div>
+            <div class="help-modal-body">
+                <h3>What is Skills Analysis?</h3>
+                <p>Skills Analysis provides statistical insights into job market skills through charts and tables showing skill frequency and demand patterns.</p>
+                
+                <h3>How to Use:</h3>
+                <ol>
+                    <li><strong>Perform a Job Search:</strong> Enter keywords, location, and select sources above</li>
+                    <li><strong>View Analysis:</strong> Click the "📊 Skills Analysis" tab after your search</li>
+                    <li><strong>Interpret Results:</strong> Higher bars = more in-demand skills</li>
+                </ol>
+                
+                <h3>What You'll See:</h3>
+                <ul>
+                    <li><strong>Bar Chart:</strong> Top 10 skills by frequency with color coding</li>
+                    <li><strong>Skills Table:</strong> All skills ranked with frequency counts and progress bars</li>
+                    <li><strong>Debug Info:</strong> Technical details for troubleshooting</li>
+                </ul>
+                
+                <h3>Tips:</h3>
+                <ul>
+                    <li>Use specific skills or technologies in your search</li>
+                    <li>Try different keywords for comprehensive analysis</li>
+                    <li>Use Enhanced Search for better data quality</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="skillsNetworkHelpModal" class="help-modal" style="display: none;">
+        <div class="help-modal-content">
+            <div class="help-modal-header">
+                <h2>🌐 Skills Network Help</h2>
+                <button class="help-close" onclick="closeHelpModal('skillsNetworkHelpModal')">&times;</button>
+            </div>
+            <div class="help-modal-body">
+                <h3>What is Skills Network?</h3>
+                <p>Skills Network is an interactive visualization showing relationships between skills. Skills appear as nodes (circles) and connections show which skills commonly appear together in job postings.</p>
+                
+                <h3>How to Use:</h3>
+                <ol>
+                    <li><strong>Access Network:</strong> Click the "🌐 Skills Network" tab</li>
+                    <li><strong>Explore:</strong> Click nodes to highlight connections, hover for details</li>
+                    <li><strong>Filter:</strong> Use controls to focus on specific skills or experience levels</li>
+                    <li><strong>Interact:</strong> Drag nodes, zoom in/out, double-click to reset view</li>
+                </ol>
+                
+                <h3>Visual Elements:</h3>
+                <ul>
+                    <li><strong>Node Size:</strong> Larger = more frequent skills</li>
+                    <li><strong>Node Colors:</strong> 🔴 High demand → 🟢 Lower demand</li>
+                    <li><strong>Connections:</strong> Lines show skill co-occurrences</li>
+                    <li><strong>Line Thickness:</strong> Thicker = stronger connections</li>
+                </ul>
+                
+                <h3>Controls:</h3>
+                <ul>
+                    <li><strong>Min Skill Frequency:</strong> Show only skills mentioned X+ times</li>
+                    <li><strong>Min Co-occurrence:</strong> Show only connections that appear X+ times</li>
+                    <li><strong>Keyword Filter:</strong> Filter by specific keywords</li>
+                    <li><strong>Experience Level:</strong> Filter by job experience level</li>
+                    <li><strong>🔄 Update Network:</strong> Apply current filters</li>
+                    <li><strong>🔄 Reset:</strong> Clear all filters</li>
+                    <li><strong>📊 Show Experience Distribution:</strong> View level breakdown chart</li>
+                </ul>
+                
+                <h3>Interactions:</h3>
+                <ul>
+                    <li><strong>Click Node:</strong> Highlight its connections</li>
+                    <li><strong>Hover Node:</strong> Show skill details in tooltip</li>
+                    <li><strong>Drag Node:</strong> Rearrange the layout</li>
+                    <li><strong>Zoom:</strong> Mouse wheel or pinch gestures</li>
+                    <li><strong>Double-click empty space:</strong> Reset view</li>
+                </ul>
+                
+                <h3>Pro Tips:</h3>
+                <ul>
+                    <li>Start with low filters to see the full picture</li>
+                    <li>Look for skill clusters to identify career paths</li>
+                    <li>Compare different experience levels</li>
+                    <li>Use strong connections to plan learning paths</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Help Modal Functions
+        function showSkillsAnalysisHelp() {
+            document.getElementById('skillsAnalysisHelpModal').style.display = 'block';
+        }
+        
+        function showSkillsNetworkHelp() {
+            document.getElementById('skillsNetworkHelpModal').style.display = 'block';
+        }
+        
+        function closeHelpModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+        
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.help-modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html> 
