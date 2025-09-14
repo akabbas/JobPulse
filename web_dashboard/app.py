@@ -717,11 +717,19 @@ def search_jobs():
         limit = data.get('limit', 50)  # Increased from 25 to 50
         
         # STEP 1: Check Database First (Smart Caching)
-        logger.info(f"Checking database for recent jobs matching '{keyword}' in '{location}' with experience level '{experience_level}' and sources: {sources}")
+        logger.info(f"Search request received - Keyword: '{keyword}', Location: '{location}', Experience Level: '{experience_level}', Sources: {sources} (count: {len(sources)})")
         cached_jobs = get_cached_jobs(keyword, location, hours=24, sources=sources, experience_level=experience_level)
         
         if cached_jobs and len(cached_jobs) >= limit * 0.5:  # If we have at least 50% of requested jobs cached
             logger.info(f"Found {len(cached_jobs)} cached jobs, returning from database")
+            
+            # Count unique sources in cached jobs
+            unique_sources = set()
+            for job in cached_jobs:
+                if 'source' in job and job['source']:
+                    unique_sources.add(job['source'])
+            
+            successful_sources_count = len(unique_sources) if unique_sources else 1
             
             # Log the search
             search_record = Search(
@@ -736,20 +744,23 @@ def search_jobs():
                 'success': True,
                 'jobs': cached_jobs,
                 'total_jobs': len(cached_jobs),
-                'successful_sources': 1,
+                'successful_sources': successful_sources_count,
                 'search_id': f"{keyword}_{location}_{experience_level}_{datetime.now().strftime('%Y%m%d_%H%M%S')}",
                 'source': 'database_cache',
                 'cached': True,
-                'experience_level': experience_level
+                'experience_level': experience_level,
+                'sources_used': list(unique_sources) if unique_sources else ['database_cache']
             })
         
         # STEP 2: Scrape if Needed
         logger.info("Insufficient cached jobs found, proceeding with scraping")
+        logger.info(f"Will attempt to scrape from sources: {sources}")
         all_jobs = []
         successful_sources = 0
         
         # PRIORITY 1: Enhanced Playwright scraper (bypasses 403 errors, most reliable)
         if 'enhanced' in sources:
+            logger.info("Processing enhanced scraper...")
             try:
                 enhanced_results = enhanced_scraper.scrape_all_sources(keyword, limit)
                 enhanced_jobs = enhanced_results.get('all_sources', [])
@@ -761,6 +772,7 @@ def search_jobs():
         
         # PRIORITY 2: API sources (most reliable, no 403 errors)
         if 'api_sources' in sources:
+            logger.info("Processing API sources...")
             try:
                 api_jobs = api_scraper.search_jobs(keyword, location, limit)
                 all_jobs.extend(api_jobs)
@@ -771,6 +783,7 @@ def search_jobs():
         
         # PRIORITY 2: Reddit sources (reliable, real job postings)
         if 'reddit' in sources:
+            logger.info("Processing Reddit sources...")
             try:
                 reddit_jobs = reddit_scraper.search_jobs(keyword, location, limit)
                 all_jobs.extend(reddit_jobs)
@@ -983,6 +996,9 @@ def search_jobs():
             'sources': sources
         })
         
+        # Log final summary
+        logger.info(f"Search completed - Total jobs: {len(all_jobs)}, Successful sources: {successful_sources}, Sources requested: {sources}")
+        
         return jsonify({
             'success': True,
             'jobs': all_jobs,
@@ -992,7 +1008,8 @@ def search_jobs():
             'source': 'scraped',
             'cached': False,
             'saved_to_db': saved_count,
-            'experience_level': experience_level
+            'experience_level': experience_level,
+            'sources_used': sources
         })
         
     except Exception as e:
