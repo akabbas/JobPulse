@@ -527,14 +527,14 @@ class StealthIndeedScraper:
                     try:
                         # Create page
                         page = await context.new_page()
-        
-        while len(jobs) < limit:
-            try:
-                # Construct search URL
-                search_url = f"{self.base_url}/jobs"
-                params = {
-                    'q': keyword,
-                    'l': location,
+                        
+                        while len(jobs) < limit:
+                            try:
+                                # Construct search URL
+                                search_url = f"{self.base_url}/jobs"
+                                params = {
+                                    'q': keyword,
+                                    'l': location,
                                     'start': page_num * 10
                                 }
                                 
@@ -559,12 +559,12 @@ class StealthIndeedScraper:
                                 
                                 if not page_jobs:
                                     self.logger.warning("No jobs found on this page")
-                    break
-                
+                                    break
+                                
                                 # Add jobs to results
                                 for job in page_jobs:
-                    if len(jobs) >= limit:
-                        break
+                                    if len(jobs) >= limit:
+                                        break
                                     jobs.append(job)
                                 
                                 self.logger.info(f"Found {len(page_jobs)} jobs on page {page_num + 1}")
@@ -623,7 +623,7 @@ class StealthIndeedScraper:
                     self.logger.debug(f"Failed to extract job data: {e}")
                     continue
                 
-            except Exception as e:
+        except Exception as e:
             self.logger.error(f"Failed to extract jobs from page: {e}")
         
         return jobs

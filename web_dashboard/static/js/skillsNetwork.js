@@ -942,8 +942,8 @@ function refreshSkillsNetwork() {
 // Auto-initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     // Check if the container exists
-    if (document.getElementById('skills-network')) {
-        initializeSkillsNetwork();
+    if (document.getElementById('skills-network-container')) {
+        initializeSkillsNetwork('skills-network-container');
     }
 });
 

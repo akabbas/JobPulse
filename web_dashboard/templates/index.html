@@ -467,7 +467,7 @@
                             <div class="experience-level-title" style="text-align: center; margin-bottom: 20px; font-size: 1.5rem; color: var(--accent-primary);">
                                 Skills Network - All Levels
                             </div>
-                            <div id="skillsNetworkChart">
+                            <div id="skills-network-container">
                                 <div class="empty-state skills-no-data">
                                     <div class="empty-state-icon skills">🌐</div>
                                     <h3>Skills Network Visualization</h3>
@@ -1159,7 +1159,7 @@
                 // Initialize skills network when tab is shown
                 setTimeout(() => {
                     if (typeof initializeSkillsNetwork === 'function') {
-                        initializeSkillsNetwork();
+                        initializeSkillsNetwork('skills-network-container');
                     }
                 }, 100);
             }
@@ -1386,12 +1386,12 @@
         let skillsNetworkInstance = null;
         let currentSearchId = null;
         
-        function initializeSkillsNetwork() {
+        function initializeSkillsNetwork(containerId = 'skills-network-container') {
             console.log('Initializing skills network...');
             
             if (!skillsNetworkInstance) {
                 // Clear loading state
-                const container = document.getElementById('skills-network-container');
+                const container = document.getElementById(containerId);
                 if (container) {
                     container.innerHTML = '<div style="text-align: center; padding: 50px; color: #666;">Initializing skills network...</div>';
                 }
@@ -1399,7 +1399,7 @@
                 try {
                     // Initialize the skills network with current search context
                     skillsNetworkInstance = new SkillsNetworkVisualizer(
-                        'skills-network-container', 
+                        containerId, 
                         '/api/skills-network',
                         true,  // useCurrentSearch = true
                         currentSearchId  // Use current search ID if available
