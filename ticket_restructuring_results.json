@@ -1,0 +1,307 @@
+{
+  "total_issues": 50,
+  "updated_tickets": 50,
+  "restructuring_results": [
+    {
+      "issue_key": "JB-11",
+      "summary": "\"Salary Negotiation Guide\" PDF",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-1",
+      "summary": "Recruiter API Access",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-2",
+      "summary": "VC Firm Reports",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-5",
+      "summary": "Scrape Interview Questions",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-6",
+      "summary": "Add Equity Data",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-7",
+      "summary": "\"Layoff Risk\" Scores",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-8",
+      "summary": "Switch to BrightData Proxies",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-10",
+      "summary": "Cache Data in Snowflake",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-9",
+      "summary": "Add GraphQL API",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-14",
+      "summary": "Integrate Snowflake",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-13",
+      "summary": "Set up Prometheus to monitor site reliability",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-15",
+      "summary": "Fix missing os import causing Heroku crash",
+      "work_type": "bug",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-16",
+      "summary": "Add Search Methods Explained section to README",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-17",
+      "summary": "Create Lightweight version on Heroku for PROD env",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-12",
+      "summary": "Add New UI for Sources to Production from Dev env",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-4",
+      "summary": "Record and Deploy Demo for Clients and users",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-18",
+      "summary": "Finish Technical Documentation for Application and post on LinkedIn",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-3",
+      "summary": "Recruiter API Access",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-19",
+      "summary": "Snowflake Enterprise Integration",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-20",
+      "summary": "Plugin Architecture Migration",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-21",
+      "summary": "Production Stability & Monitoring",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-22",
+      "summary": "Database & Infrastructure",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-23",
+      "summary": "Testing & Quality Assurance",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-24",
+      "summary": "Documentation & Developer Experience",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-25",
+      "summary": "Integrate Snowflake Manager into Web Dashboard",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-26",
+      "summary": "Create Snowflake Native App Manifest",
+      "work_type": "task",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-27",
+      "summary": "Implement Snowflake Cortex AI Integration",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-28",
+      "summary": "Add Streamlit Dashboard Integration",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-29",
+      "summary": "Configure Snowflake Data Sharing",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-30",
+      "summary": "Fix Dice Scraper Selectors",
+      "work_type": "bug",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-31",
+      "summary": "Fix Stack Overflow Scraper",
+      "work_type": "bug",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-32",
+      "summary": "Fix Greenhouse Scraper Issues",
+      "work_type": "bug",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-33",
+      "summary": "Fix Lever Scraper (0% Success Rate)",
+      "work_type": "bug",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-34",
+      "summary": "Implement Redis Caching",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-35",
+      "summary": "Add Rate Limiting Middleware",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-36",
+      "summary": "Implement Health Check System",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-37",
+      "summary": "Migrate Core Scrapers to BaseScraper",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-38",
+      "summary": "Update Web Dashboard to Use ScraperManager",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-39",
+      "summary": "Migrate All Remaining Scrapers",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-40",
+      "summary": "Unify Database Managers",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-41",
+      "summary": "Add Database Migration System",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-42",
+      "summary": "Add Unit Tests for All Scrapers",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-43",
+      "summary": "Create Integration Test Suite",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-44",
+      "summary": "Create API Documentation",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-45",
+      "summary": "Create Architecture Decision Records",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-46",
+      "summary": "Snowflake Enterprise Integration",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-47",
+      "summary": "Plugin Architecture Migration",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-48",
+      "summary": "Production Stability & Monitoring",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-49",
+      "summary": "Database & Infrastructure",
+      "work_type": "user_story",
+      "updated": true
+    },
+    {
+      "issue_key": "JB-50",
+      "summary": "Testing & Quality Assurance",
+      "work_type": "user_story",
+      "updated": true
+    }
+  ],
+  "restructuring_timestamp": "2025-10-16T15:32:09.961314"
+}

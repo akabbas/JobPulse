@@ -1,0 +1,210 @@
+{
+  "total_tickets": 100,
+  "categorized_tickets": 100,
+  "category_counts": {
+    "General Backlog": 7,
+    "\ud83d\udcb0 Monetization Tasks": 2,
+    "To Do": 14,
+    "\ud83d\ude80 Data Upgrades": 38,
+    "This Week": 31,
+    "\ud83d\udd27 Technical Upgrades": 8
+  },
+  "target_categories": {
+    "General Backlog": {
+      "target_count": 2,
+      "keywords": [
+        "authentication",
+        "user",
+        "alerts",
+        "notifications",
+        "foundation",
+        "core"
+      ],
+      "tickets": [
+        "JB-131",
+        "JB-130",
+        "JB-126",
+        "JB-119",
+        "JB-92",
+        "JB-64",
+        "JB-37"
+      ]
+    },
+    "\ud83d\udcb0 Monetization Tasks": {
+      "target_count": 2,
+      "keywords": [
+        "monetization",
+        "premium",
+        "revenue",
+        "subscription",
+        "billing",
+        "business"
+      ],
+      "tickets": [
+        "JB-129",
+        "JB-128"
+      ]
+    },
+    "This Week": {
+      "target_count": 1,
+      "keywords": [
+        "broken",
+        "critical",
+        "urgent",
+        "fix",
+        "scraper",
+        "dice",
+        "stack-overflow",
+        "emergency"
+      ],
+      "tickets": [
+        "JB-124",
+        "JB-121",
+        "JB-120",
+        "JB-115",
+        "JB-114",
+        "JB-113",
+        "JB-103",
+        "JB-102",
+        "JB-97",
+        "JB-94",
+        "JB-93",
+        "JB-88",
+        "JB-87",
+        "JB-86",
+        "JB-85",
+        "JB-76",
+        "JB-75",
+        "JB-69",
+        "JB-66",
+        "JB-65",
+        "JB-60",
+        "JB-59",
+        "JB-58",
+        "JB-57",
+        "JB-48",
+        "JB-47",
+        "JB-42",
+        "JB-39",
+        "JB-38",
+        "JB-33",
+        "JB-32"
+      ]
+    },
+    "\ud83d\udd27 Technical Upgrades": {
+      "target_count": 4,
+      "keywords": [
+        "redis",
+        "caching",
+        "rate-limiting",
+        "health-check",
+        "monitoring",
+        "migration",
+        "infrastructure",
+        "performance"
+      ],
+      "tickets": [
+        "JB-117",
+        "JB-116",
+        "JB-91",
+        "JB-89",
+        "JB-63",
+        "JB-61",
+        "JB-36",
+        "JB-34"
+      ]
+    },
+    "\ud83d\ude80 Data Upgrades": {
+      "target_count": 3,
+      "keywords": [
+        "snowflake",
+        "data",
+        "analytics",
+        "cortex",
+        "streamlit",
+        "native-app",
+        "ai",
+        "machine-learning"
+      ],
+      "tickets": [
+        "JB-125",
+        "JB-123",
+        "JB-122",
+        "JB-118",
+        "JB-112",
+        "JB-111",
+        "JB-110",
+        "JB-109",
+        "JB-108",
+        "JB-107",
+        "JB-104",
+        "JB-101",
+        "JB-98",
+        "JB-96",
+        "JB-95",
+        "JB-90",
+        "JB-84",
+        "JB-83",
+        "JB-82",
+        "JB-81",
+        "JB-80",
+        "JB-77",
+        "JB-74",
+        "JB-70",
+        "JB-68",
+        "JB-67",
+        "JB-62",
+        "JB-56",
+        "JB-55",
+        "JB-54",
+        "JB-53",
+        "JB-52",
+        "JB-49",
+        "JB-46",
+        "JB-43",
+        "JB-41",
+        "JB-40",
+        "JB-35"
+      ]
+    },
+    "In Progress": {
+      "target_count": 1,
+      "keywords": [
+        "active",
+        "current",
+        "working",
+        "progress",
+        "ongoing"
+      ],
+      "tickets": []
+    },
+    "To Do": {
+      "target_count": 113,
+      "keywords": [
+        "migration",
+        "testing",
+        "documentation",
+        "refactoring",
+        "architecture",
+        "plugin",
+        "scraper"
+      ],
+      "tickets": [
+        "JB-127",
+        "JB-106",
+        "JB-105",
+        "JB-100",
+        "JB-99",
+        "JB-79",
+        "JB-78",
+        "JB-73",
+        "JB-72",
+        "JB-71",
+        "JB-51",
+        "JB-50",
+        "JB-45",
+        "JB-44"
+      ]
+    }
+  }
+}

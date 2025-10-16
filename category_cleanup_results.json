@@ -1,0 +1,407 @@
+{
+  "total_issues": 100,
+  "cleaned_issues": 100,
+  "cleanup_results": [
+    {
+      "issue_key": "JB-131",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-130",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-129",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-128",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-127",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-126",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-125",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-124",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-123",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-122",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-121",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-120",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-119",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-118",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-117",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-116",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-115",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-114",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-113",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-112",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-111",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-110",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-109",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-108",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-107",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-106",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-105",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-104",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-103",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-102",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-101",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-100",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-99",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-98",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-97",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-96",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-95",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-94",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-93",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-92",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-91",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-90",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-89",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-88",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-87",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-86",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-85",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-84",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-83",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-82",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-81",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-80",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-79",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-78",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-77",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-76",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-75",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-74",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-73",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-72",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-71",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-70",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-69",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-68",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-67",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-66",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-65",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-64",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-63",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-62",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-61",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-60",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-59",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-58",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-57",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-56",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-55",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-54",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-53",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-52",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-51",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-50",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-49",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-48",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-47",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-46",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-45",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-44",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-43",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-42",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-41",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-40",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-39",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-38",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-37",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-36",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-35",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-34",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-33",
+      "cleaned": true
+    },
+    {
+      "issue_key": "JB-32",
+      "cleaned": true
+    }
+  ],
+  "cleanup_timestamp": "2025-10-16T15:00:00Z"
+}

@@ -1,0 +1,107 @@
+{
+  "total_duplicate_groups": 7,
+  "total_duplicates_marked": 20,
+  "removal_results": [
+    {
+      "duplicate_key": "JB-3",
+      "original_key": "JB-1",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-19",
+      "original_key": "JB-14",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-25",
+      "original_key": "JB-14",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-29",
+      "original_key": "JB-14",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-46",
+      "original_key": "JB-14",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-21",
+      "original_key": "JB-13",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-36",
+      "original_key": "JB-13",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-48",
+      "original_key": "JB-13",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-24",
+      "original_key": "JB-18",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-44",
+      "original_key": "JB-18",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-45",
+      "original_key": "JB-18",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-37",
+      "original_key": "JB-20",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-38",
+      "original_key": "JB-20",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-47",
+      "original_key": "JB-20",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-40",
+      "original_key": "JB-22",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-41",
+      "original_key": "JB-22",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-49",
+      "original_key": "JB-22",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-42",
+      "original_key": "JB-23",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-43",
+      "original_key": "JB-23",
+      "status": "marked_duplicate"
+    },
+    {
+      "duplicate_key": "JB-50",
+      "original_key": "JB-23",
+      "status": "marked_duplicate"
+    }
+  ],
+  "removal_timestamp": "2025-10-16T16:03:50.601115"
+}

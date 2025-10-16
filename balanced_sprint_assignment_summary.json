@@ -1,0 +1,220 @@
+{
+  "total_tickets": 100,
+  "rebalanced_tickets": 100,
+  "sprint_counts": {
+    "Sprint 7: Quality Assurance & Testing": 8,
+    "Sprint 4: Plugin Architecture Migration": 50,
+    "Sprint 10: Monetization & Business Model": 1,
+    "Sprint 5: Advanced Data Analytics": 8,
+    "Sprint 1: Critical Foundation": 14,
+    "Sprint 6: Enterprise Integration": 8,
+    "Sprint 2: Infrastructure Hardening": 6,
+    "Sprint 8: User Experience & Authentication": 5
+  },
+  "balanced_sprint_structure": {
+    "Sprint 1: Critical Foundation": {
+      "story_points": 40,
+      "team_size": 3,
+      "risk_level": "Low",
+      "focus": "Emergency fixes and system stability",
+      "max_tickets": 8,
+      "tickets": [
+        "JB-115",
+        "JB-114",
+        "JB-113",
+        "JB-112",
+        "JB-88",
+        "JB-87",
+        "JB-86",
+        "JB-85",
+        "JB-60",
+        "JB-59",
+        "JB-58",
+        "JB-57",
+        "JB-33",
+        "JB-32"
+      ]
+    },
+    "Sprint 2: Infrastructure Hardening": {
+      "story_points": 42,
+      "team_size": 4,
+      "risk_level": "Low",
+      "focus": "System reliability and performance",
+      "max_tickets": 8,
+      "tickets": [
+        "JB-104",
+        "JB-103",
+        "JB-77",
+        "JB-76",
+        "JB-49",
+        "JB-48"
+      ]
+    },
+    "Sprint 3: Data Foundation": {
+      "story_points": 38,
+      "team_size": 4,
+      "risk_level": "Medium",
+      "focus": "Core data infrastructure",
+      "max_tickets": 8,
+      "tickets": []
+    },
+    "Sprint 4: Plugin Architecture Migration": {
+      "story_points": 45,
+      "team_size": 5,
+      "risk_level": "High",
+      "focus": "System architecture modernization",
+      "max_tickets": 8,
+      "tickets": [
+        "JB-130",
+        "JB-127",
+        "JB-124",
+        "JB-123",
+        "JB-122",
+        "JB-121",
+        "JB-120",
+        "JB-119",
+        "JB-93",
+        "JB-92",
+        "JB-91",
+        "JB-90",
+        "JB-89",
+        "JB-84",
+        "JB-82",
+        "JB-81",
+        "JB-80",
+        "JB-79",
+        "JB-78",
+        "JB-75",
+        "JB-74",
+        "JB-73",
+        "JB-72",
+        "JB-69",
+        "JB-68",
+        "JB-67",
+        "JB-66",
+        "JB-65",
+        "JB-64",
+        "JB-63",
+        "JB-62",
+        "JB-61",
+        "JB-56",
+        "JB-54",
+        "JB-53",
+        "JB-52",
+        "JB-51",
+        "JB-50",
+        "JB-47",
+        "JB-46",
+        "JB-45",
+        "JB-42",
+        "JB-41",
+        "JB-40",
+        "JB-39",
+        "JB-38",
+        "JB-37",
+        "JB-36",
+        "JB-35",
+        "JB-34"
+      ]
+    },
+    "Sprint 5: Advanced Data Analytics": {
+      "story_points": 40,
+      "team_size": 4,
+      "risk_level": "Medium",
+      "focus": "AI and analytics capabilities",
+      "max_tickets": 8,
+      "tickets": [
+        "JB-118",
+        "JB-117",
+        "JB-116",
+        "JB-111",
+        "JB-109",
+        "JB-108",
+        "JB-107",
+        "JB-106"
+      ]
+    },
+    "Sprint 6: Enterprise Integration": {
+      "story_points": 43,
+      "team_size": 5,
+      "risk_level": "High",
+      "focus": "Enterprise-grade features",
+      "max_tickets": 8,
+      "tickets": [
+        "JB-105",
+        "JB-102",
+        "JB-101",
+        "JB-100",
+        "JB-97",
+        "JB-96",
+        "JB-95",
+        "JB-94"
+      ]
+    },
+    "Sprint 7: Quality Assurance & Testing": {
+      "story_points": 35,
+      "team_size": 3,
+      "risk_level": "Low",
+      "focus": "Quality and reliability",
+      "max_tickets": 8,
+      "tickets": [
+        "JB-131",
+        "JB-129",
+        "JB-126",
+        "JB-125",
+        "JB-110",
+        "JB-99",
+        "JB-98",
+        "JB-83"
+      ]
+    },
+    "Sprint 8: User Experience & Authentication": {
+      "story_points": 38,
+      "team_size": 4,
+      "risk_level": "Medium",
+      "focus": "User-facing features",
+      "max_tickets": 8,
+      "tickets": [
+        "JB-71",
+        "JB-70",
+        "JB-55",
+        "JB-44",
+        "JB-43"
+      ]
+    },
+    "Sprint 9: API & Integration Platform": {
+      "story_points": 42,
+      "team_size": 4,
+      "risk_level": "Medium",
+      "focus": "API development and integrations",
+      "max_tickets": 8,
+      "tickets": []
+    },
+    "Sprint 10: Monetization & Business Model": {
+      "story_points": 36,
+      "team_size": 3,
+      "risk_level": "Medium",
+      "focus": "Revenue generation",
+      "max_tickets": 8,
+      "tickets": [
+        "JB-128"
+      ]
+    },
+    "Sprint 11: Advanced Analytics & AI": {
+      "story_points": 44,
+      "team_size": 5,
+      "risk_level": "High",
+      "focus": "Cutting-edge AI features",
+      "max_tickets": 8,
+      "tickets": []
+    },
+    "Sprint 12: Market Expansion & Scale": {
+      "story_points": 40,
+      "team_size": 4,
+      "risk_level": "High",
+      "focus": "Business growth and scaling",
+      "max_tickets": 8,
+      "tickets": []
+    }
+  }
+}

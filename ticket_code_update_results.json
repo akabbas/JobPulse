@@ -1,0 +1,398 @@
+{
+  "total_mappings": 100,
+  "high_confidence_mappings": 78,
+  "updated_tickets": 78,
+  "update_results": [
+    {
+      "ticket_key": "JB-16",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-19",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-20",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-21",
+      "updated": true,
+      "confidence": 0.8999999999999999
+    },
+    {
+      "ticket_key": "JB-24",
+      "updated": true,
+      "confidence": 0.8
+    },
+    {
+      "ticket_key": "JB-25",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-27",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-28",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-29",
+      "updated": true,
+      "confidence": 0.8999999999999999
+    },
+    {
+      "ticket_key": "JB-32",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-33",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-34",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-35",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-36",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-37",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-38",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-39",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-40",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-41",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-42",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-43",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-44",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-45",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-46",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-47",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-48",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-49",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-50",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-51",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-52",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-53",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-54",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-55",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-56",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-57",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-58",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-59",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-60",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-61",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-62",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-63",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-64",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-65",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-66",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-67",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-68",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-69",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-70",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-71",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-72",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-73",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-74",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-75",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-76",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-77",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-78",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-79",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-80",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-81",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-82",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-83",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-84",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-85",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-86",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-87",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-88",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-89",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-90",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-91",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-92",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-93",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-94",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-95",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-96",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-97",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-98",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-99",
+      "updated": true,
+      "confidence": 1.0
+    },
+    {
+      "ticket_key": "JB-100",
+      "updated": true,
+      "confidence": 1.0
+    }
+  ],
+  "update_timestamp": "2025-10-16T15:30:00Z"
+}

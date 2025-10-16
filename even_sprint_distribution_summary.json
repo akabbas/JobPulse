@@ -1,0 +1,132 @@
+{
+  "total_tickets": 100,
+  "distributed_tickets": 100,
+  "tickets_per_sprint": 8,
+  "extra_tickets": 4,
+  "sprint_assignments": {
+    "Sprint 1: Critical Foundation": [
+      "JB-131",
+      "JB-130",
+      "JB-129",
+      "JB-128",
+      "JB-127",
+      "JB-126",
+      "JB-125",
+      "JB-124",
+      "JB-123"
+    ],
+    "Sprint 2: Infrastructure Hardening": [
+      "JB-122",
+      "JB-121",
+      "JB-120",
+      "JB-119",
+      "JB-118",
+      "JB-117",
+      "JB-116",
+      "JB-115",
+      "JB-114"
+    ],
+    "Sprint 3: Data Foundation": [
+      "JB-113",
+      "JB-112",
+      "JB-111",
+      "JB-110",
+      "JB-109",
+      "JB-108",
+      "JB-107",
+      "JB-106",
+      "JB-105"
+    ],
+    "Sprint 4: Plugin Architecture Migration": [
+      "JB-104",
+      "JB-103",
+      "JB-102",
+      "JB-101",
+      "JB-100",
+      "JB-99",
+      "JB-98",
+      "JB-97",
+      "JB-96"
+    ],
+    "Sprint 5: Advanced Data Analytics": [
+      "JB-95",
+      "JB-94",
+      "JB-93",
+      "JB-92",
+      "JB-91",
+      "JB-90",
+      "JB-89",
+      "JB-88"
+    ],
+    "Sprint 6: Enterprise Integration": [
+      "JB-87",
+      "JB-86",
+      "JB-85",
+      "JB-84",
+      "JB-83",
+      "JB-82",
+      "JB-81",
+      "JB-80"
+    ],
+    "Sprint 7: Quality Assurance & Testing": [
+      "JB-79",
+      "JB-78",
+      "JB-77",
+      "JB-76",
+      "JB-75",
+      "JB-74",
+      "JB-73",
+      "JB-72"
+    ],
+    "Sprint 8: User Experience & Authentication": [
+      "JB-71",
+      "JB-70",
+      "JB-69",
+      "JB-68",
+      "JB-67",
+      "JB-66",
+      "JB-65",
+      "JB-64"
+    ],
+    "Sprint 9: API & Integration Platform": [
+      "JB-63",
+      "JB-62",
+      "JB-61",
+      "JB-60",
+      "JB-59",
+      "JB-58",
+      "JB-57",
+      "JB-56"
+    ],
+    "Sprint 10: Monetization & Business Model": [
+      "JB-55",
+      "JB-54",
+      "JB-53",
+      "JB-52",
+      "JB-51",
+      "JB-50",
+      "JB-49",
+      "JB-48"
+    ],
+    "Sprint 11: Advanced Analytics & AI": [
+      "JB-47",
+      "JB-46",
+      "JB-45",
+      "JB-44",
+      "JB-43",
+      "JB-42",
+      "JB-41",
+      "JB-40"
+    ],
+    "Sprint 12: Market Expansion & Scale": [
+      "JB-39",
+      "JB-38",
+      "JB-37",
+      "JB-36",
+      "JB-35",
+      "JB-34",
+      "JB-33",
+      "JB-32"
+    ]
+  }
+}
