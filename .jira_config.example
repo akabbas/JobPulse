@@ -1,0 +1,92 @@
+# Jira Configuration Template
+# Copy this file to .jira_config and update with your actual values
+
+# Jira Site Configuration
+JIRA_SITE=ammrabbasher.atlassian.net
+JIRA_PROJECT_KEY=JB
+JIRA_BOARD_URL=https://ammrabbasher.atlassian.net/jira/software/projects/JB/boards/2
+
+# API Authentication
+JIRA_API_TOKEN=ATATT3xFfGF0Pc_M1QZXaqFsaaejUR2AaklDv8HqzvGNCkgaeaiDBcpviaz2y9NhCdURAddMhRpfdVPXA-EaaOcBAW9OuvXh9Loupccm5pW-YeoUeD98aRuYgC4wRacC2NsRmEAFEVK2BLVP1kUmbhFlMTIQmulkyEcmxtETt2z_LvFBR55Nbi8=B64110A2
+
+# Import Configuration
+TICKETS_FILE=JIRA_TICKETS.json
+IMPORT_SUMMARY_FILE=jira_import_summary.json
+LOG_FILE=logs/jira_import.log
+
+# Jira Custom Fields (update if your instance has different field IDs)
+EPIC_NAME_FIELD=customfield_10014
+STORY_POINTS_FIELD=customfield_10016
+
+# Import Options
+CREATE_EPICS=true
+CREATE_STORIES=true
+CREATE_SPRINTS=true
+CREATE_COMPONENTS=true
+CREATE_LABELS=true
+
+# Sprint Configuration
+SPRINT_DURATION_DAYS=14
+SPRINT_GOAL_TEMPLATE="Sprint {name} - {story_points} story points"
+
+# Component Configuration
+COMPONENTS=Backend,Frontend,Infrastructure,Database,Documentation,Testing,Security,AI,Monitoring,Performance,Configuration,DevOps,Analytics,Snowflake
+
+# Label Configuration
+LABELS=snowflake,enterprise,analytics,plugin-architecture,refactoring,technical-debt,stability,monitoring,production,database,infrastructure,performance,testing,quality,ci-cd,documentation,developer-experience,api,integration,native-app,marketplace,ai,cortex,streamlit,dashboard,data-sharing,security,vector-search,streaming,real-time,distribution,views,optimization,governance,alerting,backup,recovery,migration,hot-reload,devops,cleanup,configuration,bug,scraper,dice,stackoverflow,greenhouse,lever,caching,redis,rate-limiting,prometheus,metrics,health-check,reliability,error-tracking,debugging,anti-detection,automation,unification,alembic,connection-pooling,encryption,unit-tests,integration-tests,pipeline,coverage,load-testing,vulnerability,data-management,fixtures,swagger,architecture,decisions,deployment,runbook,troubleshooting,support,onboarding
+
+# Priority Mapping
+PRIORITY_MAPPING=Highest:1,High:2,Medium:3,Low:4,Lowest:5
+
+# Issue Type Mapping
+ISSUE_TYPE_MAPPING=Epic:Epic,Story:Story,Bug:Bug,Task:Task
+
+# API Configuration
+API_TIMEOUT=30
+API_RETRY_COUNT=3
+API_RETRY_DELAY=1
+
+# Logging Configuration
+LOG_LEVEL=INFO
+LOG_FORMAT=%(asctime)s - %(levelname)s - %(message)s
+LOG_FILE_MAX_SIZE=10MB
+LOG_FILE_BACKUP_COUNT=5
+
+# Import Validation
+VALIDATE_TICKETS=true
+VALIDATE_EPICS=true
+VALIDATE_SPRINTS=true
+VALIDATE_COMPONENTS=true
+VALIDATE_LABELS=true
+
+# Error Handling
+CONTINUE_ON_ERROR=true
+RETRY_FAILED_IMPORTS=true
+MAX_RETRY_ATTEMPTS=3
+
+# Output Configuration
+EXPORT_SUMMARY=true
+EXPORT_LOGS=true
+EXPORT_ERRORS=true
+EXPORT_STATISTICS=true
+
+# Statistics Configuration
+TRACK_IMPORT_TIME=true
+TRACK_SUCCESS_RATE=true
+TRACK_ERROR_COUNT=true
+TRACK_TICKET_COUNT=true
+
+# Notification Configuration (optional)
+SEND_NOTIFICATIONS=false
+NOTIFICATION_EMAIL=
+NOTIFICATION_WEBHOOK=
+
+# Backup Configuration
+BACKUP_BEFORE_IMPORT=false
+BACKUP_FILE_PREFIX=jira_backup_
+BACKUP_RETENTION_DAYS=30
+
+# Development Configuration
+DEBUG_MODE=false
+DRY_RUN=false
+VERBOSE_OUTPUT=false

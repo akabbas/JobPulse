@@ -1,0 +1,523 @@
+{
+  "project": {
+    "key": "JB",
+    "name": "JobPulse Backlog"
+  },
+  "categories": {
+    "General Backlog": {
+      "description": "General backlog items and foundational work",
+      "items": []
+    },
+    "💰 Monetization Tasks": {
+      "description": "Tasks focused on revenue generation and business value",
+      "items": []
+    },
+    "This Week": {
+      "description": "High priority items to be completed this week",
+      "items": []
+    },
+    "🔧 Technical Upgrades": {
+      "description": "Technical improvements and system upgrades",
+      "items": []
+    },
+    "To Do": {
+      "description": "Standard backlog items ready for development",
+      "items": []
+    },
+    "🚀 Data Upgrades": {
+      "description": "Data infrastructure and analytics improvements",
+      "items": []
+    },
+    "In Progress": {
+      "description": "Items currently being worked on",
+      "items": []
+    },
+    "🐛 Bug Fixes": {
+      "description": "Critical bug fixes and stability improvements",
+      "items": []
+    },
+    "📊 Analytics & AI": {
+      "description": "Analytics, AI, and data intelligence features",
+      "items": []
+    },
+    "🏗️ Architecture": {
+      "description": "System architecture and infrastructure work",
+      "items": []
+    },
+    "🧪 Testing & Quality": {
+      "description": "Testing, quality assurance, and documentation",
+      "items": []
+    }
+  },
+  "epics": [
+    {
+      "summary": "Snowflake Enterprise Integration",
+      "description": "Integrate JobPulse with Snowflake ecosystem for enterprise-grade data analytics, AI capabilities, and cloud data warehouse features.",
+      "labels": ["snowflake", "enterprise", "analytics"],
+      "priority": "High",
+      "storyPoints": 89,
+      "category": "🚀 Data Upgrades"
+    },
+    {
+      "summary": "Plugin Architecture Migration",
+      "description": "Migrate all scrapers to the new plugin architecture for better maintainability and extensibility.",
+      "labels": ["plugin-architecture", "refactoring", "scrapers"],
+      "priority": "High",
+      "storyPoints": 55,
+      "category": "🏗️ Architecture"
+    },
+    {
+      "summary": "Production Stability & Monitoring",
+      "description": "Fix broken scrapers and implement comprehensive monitoring and error tracking.",
+      "labels": ["stability", "monitoring", "scrapers"],
+      "priority": "Critical",
+      "storyPoints": 76,
+      "category": "🐛 Bug Fixes"
+    },
+    {
+      "summary": "Database & Infrastructure",
+      "description": "Unify database systems and implement proper infrastructure management.",
+      "labels": ["database", "infrastructure", "postgresql"],
+      "priority": "Medium",
+      "storyPoints": 34,
+      "category": "🏗️ Architecture"
+    },
+    {
+      "summary": "Testing & Quality Assurance",
+      "description": "Implement comprehensive testing suite and quality assurance processes.",
+      "labels": ["testing", "quality", "ci-cd"],
+      "priority": "Medium",
+      "storyPoints": 42,
+      "category": "🧪 Testing & Quality"
+    },
+    {
+      "summary": "Documentation & Developer Experience",
+      "description": "Create comprehensive documentation and improve developer experience.",
+      "labels": ["documentation", "developer-experience", "api"],
+      "priority": "Low",
+      "storyPoints": 21,
+      "category": "🧪 Testing & Quality"
+    }
+  ],
+  "tasks": [
+    {
+      "summary": "Integrate Snowflake Manager into Web Dashboard",
+      "description": "Connect the existing Snowflake manager to the main Flask web dashboard (app.py) to enable Snowflake data storage in production.",
+      "epic": "Snowflake Enterprise Integration",
+      "labels": ["snowflake", "integration", "web-dashboard"],
+      "priority": "High",
+      "storyPoints": 8,
+      "category": "This Week",
+      "acceptanceCriteria": [
+        "Snowflake manager is initialized in app.py",
+        "Jobs are saved to both SQLite and Snowflake",
+        "Error handling for Snowflake connection failures",
+        "Configuration for Snowflake credentials"
+      ]
+    },
+    {
+      "summary": "Create Snowflake Native App Manifest",
+      "description": "Develop a Snowflake Native App manifest to package JobPulse as a Snowflake application.",
+      "epic": "Snowflake Enterprise Integration",
+      "labels": ["snowflake", "native-app", "packaging"],
+      "priority": "Medium",
+      "storyPoints": 13,
+      "category": "🚀 Data Upgrades",
+      "acceptanceCriteria": [
+        "Native app manifest file created",
+        "App metadata and permissions defined",
+        "Installation and configuration scripts",
+        "App marketplace listing prepared"
+      ]
+    },
+    {
+      "summary": "Implement Snowflake Cortex AI Integration",
+      "description": "Integrate Snowflake Cortex AI services for advanced job analysis and matching capabilities.",
+      "epic": "Snowflake Enterprise Integration",
+      "labels": ["snowflake", "ai", "cortex"],
+      "priority": "Medium",
+      "storyPoints": 21,
+      "category": "📊 Analytics & AI",
+      "acceptanceCriteria": [
+        "Cortex AI functions integrated",
+        "Job analysis using Snowflake AI",
+        "Skill matching with AI assistance",
+        "Performance optimization for AI queries"
+      ]
+    },
+    {
+      "summary": "Add Streamlit Dashboard Integration",
+      "description": "Create a Streamlit dashboard that connects to Snowflake for advanced analytics and visualization.",
+      "epic": "Snowflake Enterprise Integration",
+      "labels": ["snowflake", "streamlit", "dashboard"],
+      "priority": "Medium",
+      "storyPoints": 13,
+      "category": "📊 Analytics & AI",
+      "acceptanceCriteria": [
+        "Streamlit app created",
+        "Snowflake connection established",
+        "Interactive analytics dashboard",
+        "Real-time data visualization"
+      ]
+    },
+    {
+      "summary": "Configure Snowflake Data Sharing",
+      "description": "Set up secure data sharing capabilities in Snowflake for external data access.",
+      "epic": "Snowflake Enterprise Integration",
+      "labels": ["snowflake", "data-sharing", "security"],
+      "priority": "Low",
+      "storyPoints": 8,
+      "category": "🚀 Data Upgrades",
+      "acceptanceCriteria": [
+        "Data sharing policies configured",
+        "Secure access controls implemented",
+        "External data sharing enabled",
+        "Documentation for data sharing setup"
+      ]
+    },
+    {
+      "summary": "Fix Dice Scraper Selectors",
+      "description": "Update Dice scraper selectors to work with current website structure.",
+      "epic": "Production Stability & Monitoring",
+      "labels": ["scraper", "dice", "selectors"],
+      "priority": "Critical",
+      "storyPoints": 5,
+      "category": "This Week",
+      "acceptanceCriteria": [
+        "Dice scraper selectors updated",
+        "Scraper successfully extracts job data",
+        "Error handling for selector failures",
+        "Test coverage for Dice scraper"
+      ]
+    },
+    {
+      "summary": "Fix Stack Overflow Scraper",
+      "description": "Resolve 403 errors and update selectors for Stack Overflow scraper.",
+      "epic": "Production Stability & Monitoring",
+      "labels": ["scraper", "stack-overflow", "403-error"],
+      "priority": "Critical",
+      "storyPoints": 8,
+      "category": "This Week",
+      "acceptanceCriteria": [
+        "403 errors resolved",
+        "Updated selectors for current site",
+        "Anti-bot measures implemented",
+        "Scraper reliability improved"
+      ]
+    },
+    {
+      "summary": "Fix Greenhouse Scraper Issues",
+      "description": "Address the 9 broken companies in Greenhouse scraper to improve 59% success rate.",
+      "epic": "Production Stability & Monitoring",
+      "labels": ["scraper", "greenhouse", "reliability"],
+      "priority": "High",
+      "storyPoints": 13,
+      "category": "🐛 Bug Fixes",
+      "acceptanceCriteria": [
+        "All 9 broken companies fixed",
+        "Success rate improved to >90%",
+        "Error logging for failed companies",
+        "Automated retry mechanism"
+      ]
+    },
+    {
+      "summary": "Fix Lever Scraper (0% Success Rate)",
+      "description": "Completely rebuild Lever scraper to achieve functional success rate.",
+      "epic": "Production Stability & Monitoring",
+      "labels": ["scraper", "lever", "rebuild"],
+      "priority": "Critical",
+      "storyPoints": 21,
+      "category": "🐛 Bug Fixes",
+      "acceptanceCriteria": [
+        "Lever scraper completely rebuilt",
+        "Success rate >80% achieved",
+        "Proper error handling implemented",
+        "Comprehensive testing added"
+      ]
+    },
+    {
+      "summary": "Implement Redis Caching",
+      "description": "Replace in-memory storage with Redis for better performance and scalability.",
+      "epic": "Production Stability & Monitoring",
+      "labels": ["redis", "caching", "performance"],
+      "priority": "High",
+      "storyPoints": 8,
+      "category": "🔧 Technical Upgrades",
+      "acceptanceCriteria": [
+        "Redis integration implemented",
+        "Cache invalidation strategies",
+        "Performance monitoring",
+        "Configuration management"
+      ]
+    },
+    {
+      "summary": "Add Rate Limiting Middleware",
+      "description": "Implement rate limiting to prevent API abuse and ensure fair usage.",
+      "epic": "Production Stability & Monitoring",
+      "labels": ["rate-limiting", "middleware", "security"],
+      "priority": "Medium",
+      "storyPoints": 5,
+      "category": "🔧 Technical Upgrades",
+      "acceptanceCriteria": [
+        "Rate limiting middleware added",
+        "Configurable rate limits",
+        "User-specific rate limiting",
+        "Monitoring and alerting"
+      ]
+    },
+    {
+      "summary": "Implement Health Check System",
+      "description": "Create comprehensive health check endpoints for monitoring system status.",
+      "epic": "Production Stability & Monitoring",
+      "labels": ["health-checks", "monitoring", "endpoints"],
+      "priority": "High",
+      "storyPoints": 8,
+      "category": "🔧 Technical Upgrades",
+      "acceptanceCriteria": [
+        "Health check endpoints created",
+        "Database connectivity checks",
+        "External service monitoring",
+        "Automated alerting system"
+      ]
+    },
+    {
+      "summary": "Migrate Core Scrapers to BaseScraper",
+      "description": "Refactor priority scrapers (Indeed, LinkedIn, Glassdoor) to use the new BaseScraper architecture.",
+      "epic": "Plugin Architecture Migration",
+      "labels": ["plugin-architecture", "scrapers", "refactoring"],
+      "priority": "High",
+      "storyPoints": 13,
+      "category": "🏗️ Architecture",
+      "acceptanceCriteria": [
+        "Indeed scraper migrated",
+        "LinkedIn scraper migrated",
+        "Glassdoor scraper migrated",
+        "BaseScraper functionality verified"
+      ]
+    },
+    {
+      "summary": "Update Web Dashboard to Use ScraperManager",
+      "description": "Modify web dashboard to use the new ScraperManager instead of individual scraper initialization.",
+      "epic": "Plugin Architecture Migration",
+      "labels": ["plugin-architecture", "web-dashboard", "scraper-manager"],
+      "priority": "High",
+      "storyPoints": 8,
+      "category": "🏗️ Architecture",
+      "acceptanceCriteria": [
+        "ScraperManager integrated in app.py",
+        "Dynamic scraper loading",
+        "Plugin hot-reloading support",
+        "Error handling for plugin failures"
+      ]
+    },
+    {
+      "summary": "Migrate All Remaining Scrapers",
+      "description": "Migrate all 20+ scrapers to the new plugin architecture.",
+      "epic": "Plugin Architecture Migration",
+      "labels": ["plugin-architecture", "scrapers", "migration"],
+      "priority": "Medium",
+      "storyPoints": 21,
+      "category": "To Do",
+      "acceptanceCriteria": [
+        "All scrapers migrated to BaseScraper",
+        "Legacy scraper code removed",
+        "Plugin configuration system",
+        "Migration testing completed"
+      ]
+    },
+    {
+      "summary": "Unify Database Managers",
+      "description": "Create a unified database interface that works with both PostgreSQL and Snowflake.",
+      "epic": "Database & Infrastructure",
+      "labels": ["database", "postgresql", "snowflake"],
+      "priority": "Medium",
+      "storyPoints": 13,
+      "category": "🏗️ Architecture",
+      "acceptanceCriteria": [
+        "Unified database interface created",
+        "PostgreSQL and Snowflake support",
+        "Connection pooling implemented",
+        "Database abstraction layer"
+      ]
+    },
+    {
+      "summary": "Add Database Migration System",
+      "description": "Implement Alembic/Flask-Migrate for database schema management.",
+      "epic": "Database & Infrastructure",
+      "labels": ["database", "migrations", "alembic"],
+      "priority": "Medium",
+      "storyPoints": 8,
+      "category": "🔧 Technical Upgrades",
+      "acceptanceCriteria": [
+        "Alembic migration system setup",
+        "Initial migration created",
+        "Migration rollback support",
+        "Automated migration deployment"
+      ]
+    },
+    {
+      "summary": "Add Unit Tests for All Scrapers",
+      "description": "Create comprehensive unit test suite for all scrapers.",
+      "epic": "Testing & Quality Assurance",
+      "labels": ["testing", "unit-tests", "scrapers"],
+      "priority": "Medium",
+      "storyPoints": 13,
+      "category": "🧪 Testing & Quality",
+      "acceptanceCriteria": [
+        "Unit tests for all scrapers",
+        "Mock external dependencies",
+        "Test coverage >80%",
+        "Automated test execution"
+      ]
+    },
+    {
+      "summary": "Create Integration Test Suite",
+      "description": "Develop integration tests for API endpoints and database operations.",
+      "epic": "Testing & Quality Assurance",
+      "labels": ["testing", "integration-tests", "api"],
+      "priority": "Medium",
+      "storyPoints": 8,
+      "category": "🧪 Testing & Quality",
+      "acceptanceCriteria": [
+        "API endpoint tests",
+        "Database integration tests",
+        "End-to-end test scenarios",
+        "Test data management"
+      ]
+    },
+    {
+      "summary": "Create API Documentation",
+      "description": "Generate comprehensive API documentation using Swagger/OpenAPI.",
+      "epic": "Documentation & Developer Experience",
+      "labels": ["documentation", "api", "swagger"],
+      "priority": "Low",
+      "storyPoints": 8,
+      "category": "To Do",
+      "acceptanceCriteria": [
+        "Swagger/OpenAPI documentation",
+        "Interactive API explorer",
+        "Request/response examples",
+        "Authentication documentation"
+      ]
+    },
+    {
+      "summary": "Create Architecture Decision Records",
+      "description": "Document key architectural decisions and their rationale.",
+      "epic": "Documentation & Developer Experience",
+      "labels": ["documentation", "architecture", "decisions"],
+      "priority": "Low",
+      "storyPoints": 5,
+      "category": "To Do",
+      "acceptanceCriteria": [
+        "ADR template created",
+        "Key decisions documented",
+        "Decision rationale included",
+        "Review and approval process"
+      ]
+    },
+    {
+      "summary": "Implement Premium Job Matching Features",
+      "description": "Add advanced job matching algorithms and premium features for monetization.",
+      "epic": "Monetization Features",
+      "labels": ["monetization", "premium", "matching"],
+      "priority": "Medium",
+      "storyPoints": 13,
+      "category": "💰 Monetization Tasks",
+      "acceptanceCriteria": [
+        "Advanced matching algorithms implemented",
+        "Premium feature flag system",
+        "User subscription management",
+        "Revenue tracking dashboard"
+      ]
+    },
+    {
+      "summary": "Add API Rate Limiting for Premium Users",
+      "description": "Implement tiered API access with higher limits for premium users.",
+      "epic": "Monetization Features",
+      "labels": ["monetization", "api", "rate-limiting"],
+      "priority": "Medium",
+      "storyPoints": 8,
+      "category": "💰 Monetization Tasks",
+      "acceptanceCriteria": [
+        "Tiered rate limiting implemented",
+        "Premium user identification",
+        "Usage tracking and billing",
+        "API key management system"
+      ]
+    },
+    {
+      "summary": "Implement Real-time Job Alerts",
+      "description": "Add real-time notifications for new job postings matching user criteria.",
+      "epic": "User Experience",
+      "labels": ["notifications", "real-time", "alerts"],
+      "priority": "Medium",
+      "storyPoints": 13,
+      "category": "General Backlog",
+      "acceptanceCriteria": [
+        "Real-time notification system",
+        "User preference management",
+        "Email and push notifications",
+        "Alert frequency controls"
+      ]
+    },
+    {
+      "summary": "Add User Authentication System",
+      "description": "Implement user registration, login, and profile management.",
+      "epic": "User Experience",
+      "labels": ["authentication", "users", "security"],
+      "priority": "High",
+      "storyPoints": 21,
+      "category": "General Backlog",
+      "acceptanceCriteria": [
+        "User registration and login",
+        "Password reset functionality",
+        "Profile management",
+        "Session management"
+      ]
+    }
+  ],
+  "sprints": [
+    {
+      "name": "Sprint 1: Critical Fixes & Foundation",
+      "storyPoints": 40,
+      "startDate": "2025-10-20",
+      "endDate": "2025-11-03",
+      "focus": "This Week items and critical bug fixes"
+    },
+    {
+      "name": "Sprint 2: Architecture & Technical Upgrades",
+      "storyPoints": 42,
+      "startDate": "2025-11-04",
+      "endDate": "2025-11-18",
+      "focus": "Plugin architecture and technical improvements"
+    },
+    {
+      "name": "Sprint 3: Data & Analytics Features",
+      "storyPoints": 38,
+      "startDate": "2025-11-19",
+      "endDate": "2025-12-03",
+      "focus": "Snowflake integration and AI features"
+    },
+    {
+      "name": "Sprint 4: Production Hardening",
+      "storyPoints": 45,
+      "startDate": "2025-12-04",
+      "endDate": "2025-12-18",
+      "focus": "Production stability and monitoring"
+    },
+    {
+      "name": "Sprint 5: Quality & Documentation",
+      "storyPoints": 40,
+      "startDate": "2025-12-19",
+      "endDate": "2026-01-02",
+      "focus": "Testing, quality assurance, and documentation"
+    },
+    {
+      "name": "Sprint 6: Monetization & Polish",
+      "storyPoints": 35,
+      "startDate": "2026-01-03",
+      "endDate": "2026-01-17",
+      "focus": "Monetization features and final polish"
+    }
+  ]
+}

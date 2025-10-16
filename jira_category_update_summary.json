@@ -1,0 +1,42 @@
+{
+  "project": "JB",
+  "epics_updated": 6,
+  "tasks_updated": 21,
+  "category_mapping": {
+    "\ud83d\ude80 Data Upgrades": [
+      "snowflake",
+      "data",
+      "analytics"
+    ],
+    "\ud83d\udd27 Technical Upgrades": [
+      "technical",
+      "upgrade",
+      "infrastructure"
+    ],
+    "\ud83d\udcb0 Monetization Tasks": [
+      "monetization",
+      "premium",
+      "revenue"
+    ],
+    "This Week": [
+      "urgent",
+      "critical",
+      "priority"
+    ],
+    "To Do": [
+      "backlog",
+      "standard",
+      "development"
+    ],
+    "General Backlog": [
+      "general",
+      "foundation",
+      "core"
+    ],
+    "In Progress": [
+      "active",
+      "current",
+      "working"
+    ]
+  }
+}

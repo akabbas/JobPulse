@@ -1,0 +1,787 @@
+{
+  "jira_site": "ammrabbasher.atlassian.net",
+  "project_key": "JB",
+  "api_version": "3",
+  "tickets": [
+    {
+      "issueType": "Epic",
+      "summary": "Snowflake Enterprise Integration",
+      "description": "Transform JobPulse into a Snowflake Native App with advanced analytics, AI integration, and marketplace distribution capabilities.",
+      "priority": "High",
+      "labels": ["snowflake", "enterprise", "analytics"],
+      "components": ["Backend", "Database", "AI"],
+      "customFields": {
+        "Epic Name": "Snowflake Enterprise Integration",
+        "Epic Color": "blue"
+      }
+    },
+    {
+      "issueType": "Epic",
+      "summary": "Plugin Architecture Migration",
+      "description": "Migrate all scrapers from legacy system to modern plugin architecture for better maintainability and extensibility.",
+      "priority": "High",
+      "labels": ["plugin-architecture", "refactoring", "technical-debt"],
+      "components": ["Backend"],
+      "customFields": {
+        "Epic Name": "Plugin Architecture Migration",
+        "Epic Color": "green"
+      }
+    },
+    {
+      "issueType": "Epic",
+      "summary": "Production Stability & Monitoring",
+      "description": "Fix broken scrapers, add comprehensive monitoring, and implement production-ready features for reliability and scalability.",
+      "priority": "Highest",
+      "labels": ["stability", "monitoring", "production"],
+      "components": ["Backend", "Infrastructure", "Monitoring"],
+      "customFields": {
+        "Epic Name": "Production Stability & Monitoring",
+        "Epic Color": "red"
+      }
+    },
+    {
+      "issueType": "Epic",
+      "summary": "Database & Infrastructure",
+      "description": "Unify database systems, add migration capabilities, and optimize database performance for production use.",
+      "priority": "High",
+      "labels": ["database", "infrastructure", "performance"],
+      "components": ["Backend", "Database"],
+      "customFields": {
+        "Epic Name": "Database & Infrastructure",
+        "Epic Color": "yellow"
+      }
+    },
+    {
+      "issueType": "Epic",
+      "summary": "Testing & Quality",
+      "description": "Implement comprehensive testing, CI/CD pipeline, and quality assurance processes for reliable software delivery.",
+      "priority": "High",
+      "labels": ["testing", "quality", "ci-cd"],
+      "components": ["Backend", "Testing", "DevOps"],
+      "customFields": {
+        "Epic Name": "Testing & Quality",
+        "Epic Color": "purple"
+      }
+    },
+    {
+      "issueType": "Epic",
+      "summary": "Documentation & DevEx",
+      "description": "Create comprehensive documentation, API specifications, and developer experience improvements for better maintainability and onboarding.",
+      "priority": "Medium",
+      "labels": ["documentation", "developer-experience", "api"],
+      "components": ["Documentation"],
+      "customFields": {
+        "Epic Name": "Documentation & DevEx",
+        "Epic Color": "orange"
+      }
+    },
+    {
+      "issueType": "Story",
+      "summary": "Integrate Snowflake Manager into Web Dashboard",
+      "description": "h3. Background\n\nThe Snowflake manager exists in `database/snowflake_manager.py` with full functionality but is only used in `main_enhanced.py`. The production web dashboard (`web_dashboard/app.py`) still uses SQLite/PostgreSQL only.\n\nh3. Requirements\n\nAs a developer, I want to integrate the existing Snowflake manager into the main web dashboard so that job data is automatically stored in Snowflake for advanced analytics.\n\nh3. Acceptance Criteria\n\n* Import JobPulseSnowflakeManager in web_dashboard/app.py\n* Add Snowflake environment variables to app configuration\n* Modify save_jobs_to_database() to also save to Snowflake\n* Add error handling for Snowflake connection failures\n* Update job search endpoints to query Snowflake when available\n* Add Snowflake status indicator to dashboard\n\nh3. Technical Notes\n\n* File: `web_dashboard/app.py` lines 1532-1575\n* Add import: `from database.snowflake_manager import JobPulseSnowflakeManager`\n* Environment variables: SNOWFLAKE_ACCOUNT, SNOWFLAKE_USER, SNOWFLAKE_PASSWORD, SNOWFLAKE_WAREHOUSE, SNOWFLAKE_DATABASE, SNOWFLAKE_SCHEMA",
+      "priority": "Highest",
+      "storyPoints": 8,
+      "labels": ["snowflake", "integration", "technical-debt"],
+      "components": ["Backend", "Database"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 1: Foundation & Quick Wins"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Snowflake Native App Manifest",
+      "description": "h3. Background\n\nJobPulse needs to be packaged as a Snowflake Native App for distribution through the Snowflake Marketplace.\n\nh3. Requirements\n\nAs a product manager, I want to create a Snowflake Native App so that JobPulse can be distributed through the Snowflake Marketplace.\n\nh3. Acceptance Criteria\n\n* Create app manifest file with proper metadata\n* Define app permissions and capabilities\n* Create setup script for Snowflake environment\n* Add app versioning and update mechanism\n* Configure app marketplace listing\n* Test app installation in Snowflake environment\n\nh3. Technical Notes\n\n* Create `snowflake_native_app/manifest.yml`\n* Define app permissions: CREATE TABLE, INSERT, SELECT, CREATE VIEW\n* Add setup script for database schema creation",
+      "priority": "High",
+      "storyPoints": 13,
+      "labels": ["snowflake", "native-app", "marketplace"],
+      "components": ["Backend", "Infrastructure"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 3: Snowflake Advanced Features"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Implement Snowflake Cortex AI Integration",
+      "description": "h3. Background\n\nSnowflake Cortex provides built-in AI functions that can be leveraged for job matching and analysis.\n\nh3. Requirements\n\nAs a data analyst, I want to use Snowflake Cortex AI functions for job matching and analysis so that we can leverage Snowflake's built-in AI capabilities.\n\nh3. Acceptance Criteria\n\n* Implement semantic job matching using SNOWFLAKE.CORTEX.SIMILARITY\n* Add sentiment analysis for job descriptions using SNOWFLAKE.CORTEX.SENTIMENT\n* Extract entities from job postings using SNOWFLAKE.CORTEX.EXTRACT_ENTITIES\n* Create AI-powered job recommendation system\n* Add Cortex AI results to job search API responses\n* Create analytics dashboard for AI insights\n\nh3. Technical Notes\n\n* Extend `database/snowflake_manager.py` with Cortex functions\n* Add new methods: `get_ai_job_matches()`, `analyze_job_sentiment()`, `extract_job_entities()`\n* Update job search endpoints to include AI analysis",
+      "priority": "High",
+      "storyPoints": 13,
+      "labels": ["snowflake", "ai", "cortex"],
+      "components": ["Backend", "AI"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 3: Snowflake Advanced Features"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Streamlit Dashboard for Snowflake",
+      "description": "h3. Background\n\nA Streamlit dashboard running natively in Snowflake would provide business users with interactive analytics capabilities.\n\nh3. Requirements\n\nAs a business user, I want a Streamlit dashboard that runs natively in Snowflake so that I can analyze job market data without leaving the Snowflake environment.\n\nh3. Acceptance Criteria\n\n* Create Streamlit app with job market analytics\n* Add interactive charts and visualizations\n* Implement real-time data filtering\n* Add skill trend analysis dashboard\n* Create company insights visualization\n* Deploy Streamlit app to Snowflake\n\nh3. Technical Notes\n\n* Create `snowflake_native_app/streamlit_app.py`\n* Use Snowflake session for data access\n* Implement caching for performance",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["snowflake", "streamlit", "dashboard"],
+      "components": ["Frontend", "Snowflake"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 3: Snowflake Advanced Features"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Configure Data Sharing Capabilities",
+      "description": "h3. Background\n\nSnowflake's data sharing capabilities allow secure sharing of job market insights with partners and customers.\n\nh3. Requirements\n\nAs a data owner, I want to configure secure data sharing so that I can share job market insights with partners and customers.\n\nh3. Acceptance Criteria\n\n* Create secure data shares for job market data\n* Implement row-level security policies\n* Add data sharing API endpoints\n* Create partner onboarding workflow\n* Add data usage analytics\n* Implement data sharing audit logs\n\nh3. Technical Notes\n\n* Extend `database/snowflake_manager.py` with sharing methods\n* Add methods: `create_data_share()`, `grant_share_access()`, `revoke_share_access()`",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["snowflake", "data-sharing", "security"],
+      "components": ["Database", "Infrastructure"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 3: Snowflake Advanced Features"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Implement Vector Search for Job Matching",
+      "description": "h3. Background\n\nVector search using embeddings enables semantic job matching even with different keywords.\n\nh3. Requirements\n\nAs a job seeker, I want semantic job matching using vector embeddings so that I can find relevant jobs even with different keywords.\n\nh3. Acceptance Criteria\n\n* Generate vector embeddings for job descriptions\n* Create vector search index in Snowflake\n* Implement semantic similarity search\n* Add vector search to job matching API\n* Create embedding update pipeline\n* Add vector search analytics\n\nh3. Technical Notes\n\n* Use Snowflake's VECTOR data type\n* Implement embedding generation using Snowflake Cortex\n* Create vector search functions in Snowflake",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["snowflake", "vector-search", "ai"],
+      "components": ["Backend", "AI"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 3: Snowflake Advanced Features"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Real-time Data Streaming",
+      "description": "h3. Background\n\nReal-time data streaming to Snowflake ensures job data is available immediately for analysis.\n\nh3. Requirements\n\nAs a data engineer, I want real-time data streaming to Snowflake so that job data is available immediately for analysis.\n\nh3. Acceptance Criteria\n\n* Implement Snowflake streams for job data\n* Create real-time data pipeline\n* Add stream change detection\n* Implement automatic data refresh\n* Add streaming analytics\n* Create real-time dashboard updates\n\nh3. Technical Notes\n\n* Use Snowflake streams and tasks\n* Implement change data capture\n* Add real-time processing with Snowpark",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["snowflake", "streaming", "real-time"],
+      "components": ["Backend", "Infrastructure"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 3: Snowflake Advanced Features"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Snowflake Marketplace Listing",
+      "description": "h3. Background\n\nListing JobPulse on the Snowflake Marketplace enables reaching a broader audience and monetization.\n\nh3. Requirements\n\nAs a product manager, I want to list JobPulse on the Snowflake Marketplace so that we can reach a broader audience and monetize the application.\n\nh3. Acceptance Criteria\n\n* Create marketplace listing with description\n* Add app screenshots and demos\n* Define pricing model\n* Create installation documentation\n* Add customer support information\n* Submit for marketplace review\n\nh3. Technical Notes\n\n* Create marketplace listing metadata\n* Add app documentation and guides\n* Implement app installation validation",
+      "priority": "Low",
+      "storyPoints": 5,
+      "labels": ["snowflake", "marketplace", "distribution"],
+      "components": ["Infrastructure", "Documentation"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 6: Documentation & Polish"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Implement Advanced Analytics Views",
+      "description": "h3. Background\n\nPre-built analytics views enable quick analysis of job market trends without complex queries.\n\nh3. Requirements\n\nAs a data analyst, I want pre-built analytics views so that I can quickly analyze job market trends without writing complex queries.\n\nh3. Acceptance Criteria\n\n* Create materialized views for skill trends\n* Add company analytics views\n* Implement salary analysis views\n* Create geographic distribution views\n* Add time-series analytics views\n* Create automated view refresh\n\nh3. Technical Notes\n\n* Create SQL views in Snowflake\n* Implement materialized view refresh\n* Add view documentation",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["snowflake", "analytics", "views"],
+      "components": ["Database", "Analytics"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 3: Snowflake Advanced Features"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Snowflake Performance Optimization",
+      "description": "h3. Background\n\nSnowflake performance optimization ensures queries run efficiently and costs are minimized.\n\nh3. Requirements\n\nAs a database administrator, I want to optimize Snowflake performance so that queries run efficiently and costs are minimized.\n\nh3. Acceptance Criteria\n\n* Implement query optimization\n* Add warehouse auto-scaling\n* Create query performance monitoring\n* Implement data clustering\n* Add cost optimization features\n* Create performance dashboards\n\nh3. Technical Notes\n\n* Optimize SQL queries in Snowflake\n* Implement warehouse sizing recommendations\n* Add query performance metrics",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["snowflake", "performance", "optimization"],
+      "components": ["Database", "Performance"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Snowflake Data Governance",
+      "description": "h3. Background\n\nData governance policies ensure job data is properly secured and compliant.\n\nh3. Requirements\n\nAs a data governance officer, I want to implement data governance policies so that job data is properly secured and compliant.\n\nh3. Acceptance Criteria\n\n* Implement data classification\n* Add data masking for sensitive fields\n* Create access control policies\n* Add data lineage tracking\n* Implement data retention policies\n* Create compliance reporting\n\nh3. Technical Notes\n\n* Implement Snowflake data governance features\n* Add data classification tags\n* Create access control policies",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["snowflake", "governance", "security"],
+      "components": ["Database", "Security"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Snowflake Monitoring and Alerting",
+      "description": "h3. Background\n\nComprehensive monitoring and alerting for Snowflake ensures system reliability and performance.\n\nh3. Requirements\n\nAs a system administrator, I want comprehensive monitoring and alerting for Snowflake so that I can ensure system reliability and performance.\n\nh3. Acceptance Criteria\n\n* Implement Snowflake usage monitoring\n* Add query performance alerts\n* Create cost monitoring dashboards\n* Add data freshness alerts\n* Implement error rate monitoring\n* Create automated alerting system\n\nh3. Technical Notes\n\n* Use Snowflake's monitoring features\n* Implement custom monitoring queries\n* Add alerting integration",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["snowflake", "monitoring", "alerting"],
+      "components": ["Infrastructure", "Monitoring"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Snowflake Backup and Recovery",
+      "description": "h3. Background\n\nAutomated backup and recovery for Snowflake protects data against loss.\n\nh3. Requirements\n\nAs a database administrator, I want automated backup and recovery for Snowflake so that data is protected against loss.\n\nh3. Acceptance Criteria\n\n* Implement automated backups\n* Create point-in-time recovery\n* Add cross-region replication\n* Implement disaster recovery procedures\n* Add backup monitoring\n* Create recovery testing\n\nh3. Technical Notes\n\n* Use Snowflake's backup features\n* Implement automated backup scripts\n* Add recovery testing procedures",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["snowflake", "backup", "recovery"],
+      "components": ["Database", "Infrastructure"],
+      "epicLink": "Snowflake Enterprise Integration",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Refactor Core Scrapers to BaseScraper",
+      "description": "h3. Background\n\nThe plugin architecture foundation is complete in `scrapers/base_scraper.py` but no scrapers have been migrated yet. The web dashboard still initializes scrapers individually.\n\nh3. Requirements\n\nAs a developer, I want to refactor the core scrapers (Enhanced, API Sources, Reddit) to implement BaseScraper so that they can use the new plugin architecture.\n\nh3. Acceptance Criteria\n\n* Refactor EnhancedPlaywrightScraper to implement BaseScraper\n* Refactor APISourcesScraper to implement BaseScraper\n* Refactor RedditScraper to implement BaseScraper\n* Update constructor signatures to match BaseScraper\n* Add proper error handling and status tracking\n* Test refactored scrapers individually\n\nh3. Technical Notes\n\n* Files: `scrapers/enhanced_playwright_scraper.py`, `scrapers/api_sources_scraper.py`, `scrapers/reddit_scraper.py`\n* Must implement: `search_jobs()`, `get_status()`, `cleanup()`\n* Add proper logging and error handling",
+      "priority": "Highest",
+      "storyPoints": 13,
+      "labels": ["plugin-architecture", "refactoring", "technical-debt"],
+      "components": ["Backend"],
+      "epicLink": "Plugin Architecture Migration",
+      "sprint": "Sprint 2: Plugin Architecture Core"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Update Web Dashboard to Use ScraperManager",
+      "description": "h3. Background\n\nThe web dashboard currently initializes 20+ scrapers individually (lines 53-70 in app.py). This needs to be replaced with ScraperManager usage.\n\nh3. Requirements\n\nAs a developer, I want to update the web dashboard to use ScraperManager instead of individual scraper initialization so that we can leverage the new plugin architecture.\n\nh3. Acceptance Criteria\n\n* Replace individual scraper initialization with ScraperManager\n* Update job search endpoints to use ScraperManager\n* Add scraper status monitoring to dashboard\n* Implement parallel scraper execution\n* Add scraper configuration management\n* Update error handling for ScraperManager\n\nh3. Technical Notes\n\n* File: `web_dashboard/app.py` lines 53-70\n* Import: `from scrapers.scraper_manager import ScraperManager`\n* Replace individual scrapers with: `scraper_manager = ScraperManager()`",
+      "priority": "Highest",
+      "storyPoints": 8,
+      "labels": ["plugin-architecture", "refactoring", "technical-debt"],
+      "components": ["Backend", "Frontend"],
+      "epicLink": "Plugin Architecture Migration",
+      "sprint": "Sprint 2: Plugin Architecture Core"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Migrate Priority Scrapers to Plugin Architecture",
+      "description": "h3. Background\n\nPriority scrapers (Greenhouse, Lever, Google Jobs) need to be migrated to the plugin architecture for improved error handling and parallel execution.\n\nh3. Requirements\n\nAs a developer, I want to migrate the priority scrapers to the plugin architecture so that they can benefit from improved error handling and parallel execution.\n\nh3. Acceptance Criteria\n\n* Refactor GreenhouseScraper to implement BaseScraper\n* Refactor LeverScraper to implement BaseScraper\n* Refactor GoogleJobsScraper to implement BaseScraper\n* Add proper status tracking and error handling\n* Test migrated scrapers with ScraperManager\n* Update scraper configuration\n\nh3. Technical Notes\n\n* Files: `scrapers/greenhouse_scraper.py`, `scrapers/lever_scraper.py`, `scrapers/google_jobs_scraper.py`\n* Ensure compatibility with existing API interfaces\n* Add comprehensive error handling",
+      "priority": "High",
+      "storyPoints": 13,
+      "labels": ["plugin-architecture", "migration"],
+      "components": ["Backend"],
+      "epicLink": "Plugin Architecture Migration",
+      "sprint": "Sprint 2: Plugin Architecture Core"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Migrate Web Scrapers to Plugin Architecture",
+      "description": "h3. Background\n\nWeb scrapers (Indeed, LinkedIn, Stack Overflow, Dice) need to be migrated to the plugin architecture for improved error handling and resource management.\n\nh3. Requirements\n\nAs a developer, I want to migrate the web scrapers to the plugin architecture so that they can benefit from improved error handling and resource management.\n\nh3. Acceptance Criteria\n\n* Refactor IndeedScraper to implement BaseScraper\n* Refactor LinkedInScraper to implement BaseScraper\n* Refactor StackOverflowScraper to implement BaseScraper\n* Refactor DiceScraper to implement BaseScraper\n* Add proper resource cleanup\n* Test migrated scrapers\n\nh3. Technical Notes\n\n* Files: `scrapers/indeed_scraper.py`, `scrapers/linkedin_scraper.py`, `scrapers/stackoverflow_scraper.py`, `scrapers/dice_scraper.py`\n* Ensure proper browser cleanup for Playwright scrapers\n* Add timeout and retry logic",
+      "priority": "Medium",
+      "storyPoints": 13,
+      "labels": ["plugin-architecture", "migration"],
+      "components": ["Backend"],
+      "epicLink": "Plugin Architecture Migration",
+      "sprint": "Sprint 2: Plugin Architecture Core"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Migrate Remaining Scrapers to Plugin Architecture",
+      "description": "h3. Background\n\nAll remaining scrapers need to be migrated to the plugin architecture for unified management.\n\nh3. Requirements\n\nAs a developer, I want to migrate the remaining scrapers to the plugin architecture so that all scrapers use the unified system.\n\nh3. Acceptance Criteria\n\n* Refactor all remaining scrapers to implement BaseScraper\n* Add proper error handling and status tracking\n* Test all migrated scrapers\n* Update scraper registry\n* Remove legacy scraper code\n\nh3. Technical Notes\n\n* Migrate: OttaScraper, HackerNewsScraper, YCJobsScraper, AuthenticJobsScraper, JobspressoScraper, HimalayasScraper, RemoteOKScraper, WeWorkRemotelyScraper, SimpleJobsScraper\n* Ensure consistent interface across all scrapers",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["plugin-architecture", "migration"],
+      "components": ["Backend"],
+      "epicLink": "Plugin Architecture Migration",
+      "sprint": "Sprint 2: Plugin Architecture Core"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Plugin Hot-Reloading",
+      "description": "h3. Background\n\nPlugin hot-reloading enables updating scrapers without restarting the application.\n\nh3. Requirements\n\nAs a developer, I want plugin hot-reloading so that I can update scrapers without restarting the application.\n\nh3. Acceptance Criteria\n\n* Implement plugin file watching\n* Add dynamic plugin loading\n* Create plugin reload API\n* Add plugin version management\n* Implement safe plugin updates\n* Add plugin reload monitoring\n\nh3. Technical Notes\n\n* Use file system watching (watchdog library)\n* Implement safe plugin reloading\n* Add plugin version tracking",
+      "priority": "Low",
+      "storyPoints": 8,
+      "labels": ["plugin-architecture", "hot-reload", "devops"],
+      "components": ["Backend", "Infrastructure"],
+      "epicLink": "Plugin Architecture Migration",
+      "sprint": "Sprint 6: Documentation & Polish"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Remove Legacy Scraper Code",
+      "description": "h3. Background\n\nLegacy scraper code needs to be removed after migration to plugin architecture.\n\nh3. Requirements\n\nAs a developer, I want to remove legacy scraper code so that the codebase is cleaner and easier to maintain.\n\nh3. Acceptance Criteria\n\n* Remove legacy scraper initialization code\n* Clean up unused imports\n* Remove deprecated scraper methods\n* Update documentation\n* Add migration notes\n* Test application without legacy code\n\nh3. Technical Notes\n\n* Remove legacy code from `web_dashboard/app.py`\n* Clean up unused scraper files\n* Update documentation",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["plugin-architecture", "cleanup", "technical-debt"],
+      "components": ["Backend"],
+      "epicLink": "Plugin Architecture Migration",
+      "sprint": "Sprint 2: Plugin Architecture Core"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Plugin Configuration Management",
+      "description": "h3. Background\n\nCentralized plugin configuration management enables easy configuration and management of all scrapers.\n\nh3. Requirements\n\nAs a developer, I want centralized plugin configuration management so that I can easily configure and manage all scrapers.\n\nh3. Acceptance Criteria\n\n* Create plugin configuration system\n* Add environment-based configuration\n* Implement configuration validation\n* Add configuration hot-reloading\n* Create configuration API\n* Add configuration documentation\n\nh3. Technical Notes\n\n* Extend `scrapers/plugin_config.py`\n* Add configuration validation\n* Implement configuration management API",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["plugin-architecture", "configuration"],
+      "components": ["Backend", "Configuration"],
+      "epicLink": "Plugin Architecture Migration",
+      "sprint": "Sprint 2: Plugin Architecture Core"
+    },
+    {
+      "issueType": "Bug",
+      "summary": "Fix Broken Dice Scraper",
+      "description": "h3. Background\n\nThe Dice scraper is completely broken due to outdated HTML selectors. All Playwright selectors are failing (0/5 working).\n\nh3. Requirements\n\nAs a user, I want the Dice scraper to work properly so that I can get job data from Dice.\n\nh3. Acceptance Criteria\n\n* Update HTML selectors for current Dice page structure\n* Fix Playwright selectors for job cards\n* Test scraper with real Dice searches\n* Add fallback selectors\n* Implement error handling for selector failures\n* Add Dice scraper monitoring\n\nh3. Technical Notes\n\n* File: `scrapers/dice_scraper.py`\n* Current issue: 'card-body' class not found\n* Need to inspect current Dice HTML structure",
+      "priority": "Highest",
+      "storyPoints": 8,
+      "labels": ["bug", "scraper", "dice"],
+      "components": ["Backend"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 1: Foundation & Quick Wins"
+    },
+    {
+      "issueType": "Bug",
+      "summary": "Fix Broken Stack Overflow Scraper",
+      "description": "h3. Background\n\nThe Stack Overflow scraper is broken due to 403 errors and outdated HTML selectors. All Playwright selectors are failing.\n\nh3. Requirements\n\nAs a user, I want the Stack Overflow scraper to work properly so that I can get job data from Stack Overflow.\n\nh3. Acceptance Criteria\n\n* Fix 403 error by updating headers and request handling\n* Update HTML selectors for current page structure\n* Add anti-detection measures\n* Test scraper with real Stack Overflow searches\n* Add fallback mechanisms\n* Implement rate limiting\n\nh3. Technical Notes\n\n* File: `scrapers/stackoverflow_scraper.py`\n* Current issue: HTTP 403 + 'job-result' class not found\n* Need to investigate anti-bot measures",
+      "priority": "Highest",
+      "storyPoints": 8,
+      "labels": ["bug", "scraper", "stackoverflow"],
+      "components": ["Backend"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 1: Foundation & Quick Wins"
+    },
+    {
+      "issueType": "Bug",
+      "summary": "Fix Greenhouse Scraper Company Issues",
+      "description": "h3. Background\n\nGreenhouse scraper has 59% success rate. 9 companies are broken: uber, doordash, notion, linear, supabase, github, shopify, slack, zoom.\n\nh3. Requirements\n\nAs a user, I want the Greenhouse scraper to work with all companies so that I can get comprehensive job data.\n\nh3. Acceptance Criteria\n\n* Update broken company identifiers\n* Remove non-existent companies\n* Add company validation\n* Test all working companies\n* Add company status monitoring\n* Implement company fallback logic\n\nh3. Technical Notes\n\n* File: `scrapers/greenhouse_scraper.py`\n* Update company list in `greenhouse_updated_companies.txt`\n* Remove broken companies or find correct identifiers",
+      "priority": "High",
+      "storyPoints": 5,
+      "labels": ["bug", "scraper", "greenhouse"],
+      "components": ["Backend"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 1: Foundation & Quick Wins"
+    },
+    {
+      "issueType": "Bug",
+      "summary": "Fix Lever Scraper",
+      "description": "h3. Background\n\nLever scraper has 0% success rate. All companies are broken.\n\nh3. Requirements\n\nAs a user, I want the Lever scraper to work properly so that I can get job data from Lever.\n\nh3. Acceptance Criteria\n\n* Investigate Lever API changes\n* Update company identifiers\n* Fix API endpoint issues\n* Test with working companies\n* Add proper error handling\n* Implement company validation\n\nh3. Technical Notes\n\n* File: `scrapers/lever_scraper.py`\n* Check Lever API documentation for changes\n* Update company list and endpoints",
+      "priority": "High",
+      "storyPoints": 8,
+      "labels": ["bug", "scraper", "lever"],
+      "components": ["Backend"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 1: Foundation & Quick Wins"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Redis Caching",
+      "description": "h3. Background\n\nThe application currently uses in-memory storage (line 85 in app.py) which doesn't scale and loses data on restart.\n\nh3. Requirements\n\nAs a developer, I want Redis caching so that the application can handle more users and provide faster responses.\n\nh3. Acceptance Criteria\n\n* Install and configure Redis\n* Replace in-memory storage with Redis\n* Add Redis connection pooling\n* Implement cache expiration policies\n* Add Redis monitoring\n* Create cache management API\n\nh3. Technical Notes\n\n* File: `web_dashboard/app.py` line 85\n* Replace: `recent_job_searches = {}` with Redis\n* Add Redis configuration to environment variables",
+      "priority": "High",
+      "storyPoints": 8,
+      "labels": ["caching", "redis", "performance"],
+      "components": ["Backend", "Infrastructure"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Implement Rate Limiting",
+      "description": "h3. Background\n\nRate limiting protects the API from abuse and ensures fair usage.\n\nh3. Requirements\n\nAs a system administrator, I want rate limiting so that the API is protected from abuse and ensures fair usage.\n\nh3. Acceptance Criteria\n\n* Implement rate limiting middleware\n* Add per-user rate limits\n* Add per-IP rate limits\n* Create rate limit configuration\n* Add rate limit monitoring\n* Implement rate limit bypass for internal requests\n\nh3. Technical Notes\n\n* Use Flask-Limiter library\n* Add rate limiting to all API endpoints\n* Configure rate limits in production config",
+      "priority": "High",
+      "storyPoints": 5,
+      "labels": ["rate-limiting", "security", "performance"],
+      "components": ["Backend", "Security"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Prometheus Metrics",
+      "description": "h3. Background\n\nPrometheus is configured but not integrated into the main application.\n\nh3. Requirements\n\nAs a system administrator, I want Prometheus metrics so that I can monitor application performance and health.\n\nh3. Acceptance Criteria\n\n* Add Prometheus metrics to Flask app\n* Implement scraper performance metrics\n* Add database performance metrics\n* Create custom business metrics\n* Add metrics dashboard\n* Implement alerting rules\n\nh3. Technical Notes\n\n* Use prometheus-flask-exporter\n* Add metrics to all major operations\n* Configure Grafana dashboards",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["monitoring", "prometheus", "metrics"],
+      "components": ["Backend", "Monitoring"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Health Check System",
+      "description": "h3. Background\n\nComprehensive health checks enable monitoring system health and detecting issues early.\n\nh3. Requirements\n\nAs a system administrator, I want comprehensive health checks so that I can monitor system health and detect issues early.\n\nh3. Acceptance Criteria\n\n* Add health check endpoints\n* Implement database health checks\n* Add scraper health checks\n* Create external service health checks\n* Add health check monitoring\n* Implement health check alerting\n\nh3. Technical Notes\n\n* Create `/health` endpoint\n* Add health checks for all external dependencies\n* Implement health check aggregation",
+      "priority": "High",
+      "storyPoints": 5,
+      "labels": ["health-check", "monitoring", "reliability"],
+      "components": ["Backend", "Infrastructure"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 1: Foundation & Quick Wins"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Error Tracking Integration",
+      "description": "h3. Background\n\nError tracking enables quick identification and fixing of issues in production.\n\nh3. Requirements\n\nAs a developer, I want error tracking so that I can quickly identify and fix issues in production.\n\nh3. Acceptance Criteria\n\n* Integrate Sentry or similar error tracking\n* Add error context and metadata\n* Implement error grouping\n* Add performance monitoring\n* Create error alerting\n* Add error analytics\n\nh3. Technical Notes\n\n* Use Sentry for error tracking\n* Add error context to all exceptions\n* Configure error alerting",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["error-tracking", "monitoring", "debugging"],
+      "components": ["Backend", "Monitoring"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Implement Scraper Reliability Improvements",
+      "description": "h3. Background\n\nImproved scraper reliability ensures scrapers work consistently and avoid detection.\n\nh3. Requirements\n\nAs a developer, I want improved scraper reliability so that scrapers work consistently and avoid detection.\n\nh3. Acceptance Criteria\n\n* Add advanced anti-detection measures\n* Implement proxy rotation\n* Add user agent rotation\n* Create scraper retry logic\n* Add scraper status monitoring\n* Implement scraper fallback strategies\n\nh3. Technical Notes\n\n* Extend stealth configuration\n* Add proxy support\n* Implement intelligent retry logic",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["scraper", "reliability", "anti-detection"],
+      "components": ["Backend"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Performance Monitoring",
+      "description": "h3. Background\n\nPerformance monitoring enables identification of bottlenecks and optimization of the application.\n\nh3. Requirements\n\nAs a system administrator, I want performance monitoring so that I can identify bottlenecks and optimize the application.\n\nh3. Acceptance Criteria\n\n* Add response time monitoring\n* Implement database query monitoring\n* Add scraper performance tracking\n* Create performance dashboards\n* Add performance alerting\n* Implement performance optimization recommendations\n\nh3. Technical Notes\n\n* Add performance metrics to all operations\n* Create performance dashboards\n* Implement performance alerting",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["performance", "monitoring", "optimization"],
+      "components": ["Backend", "Monitoring"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 4: Production Hardening"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Automated Testing for Scrapers",
+      "description": "h3. Background\n\nAutomated testing for scrapers ensures they work correctly and catch issues early.\n\nh3. Requirements\n\nAs a developer, I want automated testing for scrapers so that I can ensure they work correctly and catch issues early.\n\nh3. Acceptance Criteria\n\n* Create scraper test suite\n* Add integration tests for scrapers\n* Implement scraper health checks\n* Add performance tests\n* Create test data management\n* Add automated test reporting\n\nh3. Technical Notes\n\n* Create comprehensive test suite for all scrapers\n* Add test data fixtures\n* Implement test automation",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["testing", "scrapers", "automation"],
+      "components": ["Backend", "Testing"],
+      "epicLink": "Production Stability & Monitoring",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Unify Database Managers",
+      "description": "h3. Background\n\nThe application has multiple database managers (PostgreSQL, Snowflake, SQLite) that are not unified. The web dashboard uses SQLite while main_enhanced uses PostgreSQL/Snowflake.\n\nh3. Requirements\n\nAs a developer, I want a unified database interface so that the application can work with multiple databases consistently.\n\nh3. Acceptance Criteria\n\n* Create unified database interface\n* Implement database abstraction layer\n* Add database configuration management\n* Create database migration system\n* Add database health checks\n* Implement database failover\n\nh3. Technical Notes\n\n* Create `database/unified_manager.py`\n* Abstract common database operations\n* Add database configuration",
+      "priority": "High",
+      "storyPoints": 8,
+      "labels": ["database", "unification", "technical-debt"],
+      "components": ["Backend", "Database"],
+      "epicLink": "Database & Infrastructure",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Database Migration System",
+      "description": "h3. Background\n\nDatabase migrations enable safe updating of database schema across environments.\n\nh3. Requirements\n\nAs a developer, I want database migrations so that I can safely update database schema across environments.\n\nh3. Acceptance Criteria\n\n* Implement Flask-Migrate or Alembic\n* Create initial migration\n* Add migration scripts for all tables\n* Implement migration rollback\n* Add migration testing\n* Create migration documentation\n\nh3. Technical Notes\n\n* Use Flask-Migrate for SQLAlchemy migrations\n* Create migration scripts for all database changes\n* Add migration testing",
+      "priority": "High",
+      "storyPoints": 8,
+      "labels": ["database", "migration", "alembic"],
+      "components": ["Backend", "Database"],
+      "epicLink": "Database & Infrastructure",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Configure Connection Pooling",
+      "description": "h3. Background\n\nConnection pooling enables the database to handle more concurrent connections efficiently.\n\nh3. Requirements\n\nAs a system administrator, I want connection pooling so that the database can handle more concurrent connections efficiently.\n\nh3. Acceptance Criteria\n\n* Configure SQLAlchemy connection pooling\n* Add connection pool monitoring\n* Implement connection pool configuration\n* Add connection pool health checks\n* Create connection pool metrics\n* Add connection pool optimization\n\nh3. Technical Notes\n\n* Configure SQLAlchemy pool settings\n* Add connection pool monitoring\n* Optimize pool parameters",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["database", "performance", "connection-pooling"],
+      "components": ["Backend", "Database"],
+      "epicLink": "Database & Infrastructure",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Database Performance Optimization",
+      "description": "h3. Background\n\nDatabase performance optimization ensures queries run efficiently and costs are minimized.\n\nh3. Requirements\n\nAs a database administrator, I want database performance optimization so that queries run efficiently and costs are minimized.\n\nh3. Acceptance Criteria\n\n* Add database indexes\n* Optimize slow queries\n* Implement query caching\n* Add database monitoring\n* Create performance dashboards\n* Implement query optimization recommendations\n\nh3. Technical Notes\n\n* Add indexes to frequently queried columns\n* Optimize SQL queries\n* Implement query caching",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["database", "performance", "optimization"],
+      "components": ["Backend", "Database"],
+      "epicLink": "Database & Infrastructure",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Implement Database Backup and Recovery",
+      "description": "h3. Background\n\nAutomated backup and recovery protects data against loss.\n\nh3. Requirements\n\nAs a database administrator, I want automated backup and recovery so that data is protected against loss.\n\nh3. Acceptance Criteria\n\n* Implement automated database backups\n* Add point-in-time recovery\n* Create backup monitoring\n* Add recovery testing\n* Implement backup validation\n* Create backup documentation\n\nh3. Technical Notes\n\n* Implement automated backup scripts\n* Add backup monitoring\n* Create recovery procedures",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["database", "backup", "recovery"],
+      "components": ["Backend", "Database"],
+      "epicLink": "Database & Infrastructure",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Database Security",
+      "description": "h3. Background\n\nDatabase security ensures sensitive data is protected and access is controlled.\n\nh3. Requirements\n\nAs a security officer, I want database security so that sensitive data is protected and access is controlled.\n\nh3. Acceptance Criteria\n\n* Implement database encryption\n* Add access control policies\n* Create audit logging\n* Add data masking\n* Implement secure connections\n* Add security monitoring\n\nh3. Technical Notes\n\n* Implement database encryption\n* Add access control\n* Create audit logging",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["database", "security", "encryption"],
+      "components": ["Backend", "Database", "Security"],
+      "epicLink": "Database & Infrastructure",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Unit Tests for All Scrapers",
+      "description": "h3. Background\n\nNo unit tests exist for scrapers. Test files exist but are not integrated into the workflow.\n\nh3. Requirements\n\nAs a developer, I want unit tests for all scrapers so that I can ensure they work correctly and catch issues early.\n\nh3. Acceptance Criteria\n\n* Create unit tests for all scrapers\n* Add test fixtures and mock data\n* Implement scraper testing framework\n* Add test coverage reporting\n* Create test documentation\n* Add automated test execution\n\nh3. Technical Notes\n\n* Create comprehensive test suite\n* Add test fixtures for all scrapers\n* Implement test coverage reporting",
+      "priority": "High",
+      "storyPoints": 13,
+      "labels": ["testing", "unit-tests", "scrapers"],
+      "components": ["Backend", "Testing"],
+      "epicLink": "Testing & Quality",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Integration Test Suite",
+      "description": "h3. Background\n\nIntegration tests ensure all components work together correctly.\n\nh3. Requirements\n\nAs a developer, I want integration tests so that I can ensure all components work together correctly.\n\nh3. Acceptance Criteria\n\n* Create API integration tests\n* Add database integration tests\n* Implement end-to-end tests\n* Add test data management\n* Create test environment setup\n* Add integration test reporting\n\nh3. Technical Notes\n\n* Create comprehensive integration test suite\n* Add test data management\n* Implement test environment setup",
+      "priority": "High",
+      "storyPoints": 8,
+      "labels": ["testing", "integration-tests", "api"],
+      "components": ["Backend", "Testing"],
+      "epicLink": "Testing & Quality",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Implement CI/CD Pipeline",
+      "description": "h3. Background\n\nNo CI/CD pipeline exists. Test files exist but are not integrated into the workflow.\n\nh3. Requirements\n\nAs a developer, I want a CI/CD pipeline so that code changes are automatically tested and deployed.\n\nh3. Acceptance Criteria\n\n* Create GitHub Actions workflow\n* Add automated testing\n* Implement automated deployment\n* Add code quality checks\n* Create deployment pipeline\n* Add pipeline monitoring\n\nh3. Technical Notes\n\n* Create `.github/workflows/ci.yml`\n* Add automated testing and deployment\n* Implement code quality checks",
+      "priority": "High",
+      "storyPoints": 8,
+      "labels": ["ci-cd", "pipeline", "automation"],
+      "components": ["Infrastructure", "DevOps"],
+      "epicLink": "Testing & Quality",
+      "sprint": "Sprint 6: Documentation & Polish"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Code Coverage Reporting",
+      "description": "h3. Background\n\nCode coverage reporting ensures all code is tested.\n\nh3. Requirements\n\nAs a developer, I want code coverage reporting so that I can ensure all code is tested.\n\nh3. Acceptance Criteria\n\n* Implement code coverage collection\n* Add coverage reporting\n* Create coverage thresholds\n* Add coverage monitoring\n* Implement coverage alerts\n* Create coverage documentation\n\nh3. Technical Notes\n\n* Use pytest-cov for coverage\n* Add coverage reporting to CI/CD\n* Set coverage thresholds",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["testing", "coverage", "quality"],
+      "components": ["Backend", "Testing"],
+      "epicLink": "Testing & Quality",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Performance Test Suite",
+      "description": "h3. Background\n\nPerformance tests ensure the application can handle expected load.\n\nh3. Requirements\n\nAs a developer, I want performance tests so that I can ensure the application can handle expected load.\n\nh3. Acceptance Criteria\n\n* Create load testing suite\n* Add performance benchmarks\n* Implement stress testing\n* Add performance monitoring\n* Create performance reports\n* Add performance alerting\n\nh3. Technical Notes\n\n* Use locust or similar for load testing\n* Add performance benchmarks\n* Implement performance monitoring",
+      "priority": "Medium",
+      "storyPoints": 8,
+      "labels": ["testing", "performance", "load-testing"],
+      "components": ["Backend", "Testing"],
+      "epicLink": "Testing & Quality",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Add Security Testing",
+      "description": "h3. Background\n\nSecurity testing identifies vulnerabilities and ensures they are fixed.\n\nh3. Requirements\n\nAs a security officer, I want security testing so that vulnerabilities are identified and fixed.\n\nh3. Acceptance Criteria\n\n* Add security scanning\n* Implement vulnerability testing\n* Add penetration testing\n* Create security reports\n* Add security monitoring\n* Implement security alerts\n\nh3. Technical Notes\n\n* Use security scanning tools\n* Add vulnerability testing\n* Implement security monitoring",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["security", "testing", "vulnerability"],
+      "components": ["Backend", "Security", "Testing"],
+      "epicLink": "Testing & Quality",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Test Data Management",
+      "description": "h3. Background\n\nTest data management ensures tests have consistent and reliable data.\n\nh3. Requirements\n\nAs a developer, I want test data management so that tests have consistent and reliable data.\n\nh3. Acceptance Criteria\n\n* Create test data fixtures\n* Add test data generation\n* Implement test data cleanup\n* Add test data validation\n* Create test data documentation\n* Add test data monitoring\n\nh3. Technical Notes\n\n* Create comprehensive test data fixtures\n* Add test data generation\n* Implement test data cleanup",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["testing", "data-management", "fixtures"],
+      "components": ["Backend", "Testing"],
+      "epicLink": "Testing & Quality",
+      "sprint": "Sprint 5: Database & Testing"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create API Documentation",
+      "description": "h3. Background\n\nNo API documentation exists. No Swagger/OpenAPI specification.\n\nh3. Requirements\n\nAs a developer, I want API documentation so that I can understand and use the API effectively.\n\nh3. Acceptance Criteria\n\n* Create Swagger/OpenAPI specification\n* Add API endpoint documentation\n* Create API examples\n* Add API testing interface\n* Create API versioning\n* Add API documentation hosting\n\nh3. Technical Notes\n\n* Use Flask-RESTX for Swagger\n* Create comprehensive API documentation\n* Add API testing interface",
+      "priority": "High",
+      "storyPoints": 8,
+      "labels": ["documentation", "api", "swagger"],
+      "components": ["Backend", "Documentation"],
+      "epicLink": "Documentation & DevEx",
+      "sprint": "Sprint 6: Documentation & Polish"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Architecture Decision Records",
+      "description": "h3. Background\n\nArchitecture decision records enable understanding of why certain decisions were made.\n\nh3. Requirements\n\nAs a developer, I want architecture decision records so that I can understand why certain decisions were made.\n\nh3. Acceptance Criteria\n\n* Create ADR template\n* Document key architectural decisions\n* Add decision rationale\n* Create decision timeline\n* Add decision impact analysis\n* Create decision documentation\n\nh3. Technical Notes\n\n* Create ADR template\n* Document key decisions\n* Add decision rationale",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["documentation", "architecture", "decisions"],
+      "components": ["Documentation"],
+      "epicLink": "Documentation & DevEx",
+      "sprint": "Sprint 6: Documentation & Polish"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Deployment Runbook",
+      "description": "h3. Background\n\nA deployment runbook enables reliable deployment of the application.\n\nh3. Requirements\n\nAs a system administrator, I want a deployment runbook so that I can deploy the application reliably.\n\nh3. Acceptance Criteria\n\n* Create deployment procedures\n* Add environment setup guides\n* Create troubleshooting guides\n* Add rollback procedures\n* Create monitoring setup\n* Add deployment validation\n\nh3. Technical Notes\n\n* Create comprehensive deployment guide\n* Add troubleshooting procedures\n* Create rollback procedures",
+      "priority": "High",
+      "storyPoints": 5,
+      "labels": ["documentation", "deployment", "runbook"],
+      "components": ["Documentation", "DevOps"],
+      "epicLink": "Documentation & DevEx",
+      "sprint": "Sprint 6: Documentation & Polish"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Troubleshooting Guide",
+      "description": "h3. Background\n\nA troubleshooting guide enables quick resolution of issues.\n\nh3. Requirements\n\nAs a developer, I want a troubleshooting guide so that I can quickly resolve issues.\n\nh3. Acceptance Criteria\n\n* Create common issues guide\n* Add error resolution procedures\n* Create debugging guides\n* Add monitoring guides\n* Create escalation procedures\n* Add troubleshooting tools\n\nh3. Technical Notes\n\n* Create comprehensive troubleshooting guide\n* Add debugging procedures\n* Create escalation procedures",
+      "priority": "Medium",
+      "storyPoints": 5,
+      "labels": ["documentation", "troubleshooting", "support"],
+      "components": ["Documentation"],
+      "epicLink": "Documentation & DevEx",
+      "sprint": "Sprint 6: Documentation & Polish"
+    },
+    {
+      "issueType": "Story",
+      "summary": "Create Developer Onboarding Guide",
+      "description": "h3. Background\n\nA developer onboarding guide enables new developers to quickly understand and contribute to the project.\n\nh3. Requirements\n\nAs a new developer, I want an onboarding guide so that I can quickly understand and contribute to the project.\n\nh3. Acceptance Criteria\n\n* Create project overview\n* Add development setup guide\n* Create code contribution guide\n* Add testing procedures\n* Create deployment guide\n* Add troubleshooting resources\n\nh3. Technical Notes\n\n* Create comprehensive onboarding guide\n* Add development setup\n* Create contribution guidelines",
+      "priority": "Medium",
+      "storyPoints": 3,
+      "labels": ["documentation", "onboarding", "developer-experience"],
+      "components": ["Documentation"],
+      "epicLink": "Documentation & DevEx",
+      "sprint": "Sprint 6: Documentation & Polish"
+    }
+  ],
+  "sprints": [
+    {
+      "name": "Sprint 1: Foundation & Quick Wins",
+      "duration": "2 weeks",
+      "storyPoints": 40,
+      "stories": [
+        "JB-1", "JB-22", "JB-23", "JB-24", "JB-25", "JB-29"
+      ]
+    },
+    {
+      "name": "Sprint 2: Plugin Architecture Core",
+      "duration": "2 weeks",
+      "storyPoints": 42,
+      "stories": [
+        "JB-14", "JB-15", "JB-16", "JB-17", "JB-20", "JB-21"
+      ]
+    },
+    {
+      "name": "Sprint 3: Snowflake Advanced Features",
+      "duration": "2 weeks",
+      "storyPoints": 38,
+      "stories": [
+        "JB-2", "JB-3", "JB-4", "JB-5", "JB-6", "JB-7", "JB-9"
+      ]
+    },
+    {
+      "name": "Sprint 4: Production Hardening",
+      "duration": "2 weeks",
+      "storyPoints": 45,
+      "stories": [
+        "JB-8", "JB-10", "JB-11", "JB-12", "JB-13", "JB-26", "JB-27", "JB-28", "JB-30", "JB-31", "JB-32"
+      ]
+    },
+    {
+      "name": "Sprint 5: Database & Testing",
+      "duration": "2 weeks",
+      "storyPoints": 40,
+      "stories": [
+        "JB-33", "JB-34", "JB-35", "JB-36", "JB-37", "JB-38", "JB-39", "JB-40", "JB-41", "JB-44", "JB-45", "JB-46"
+      ]
+    },
+    {
+      "name": "Sprint 6: Documentation & Polish",
+      "duration": "2 weeks",
+      "storyPoints": 35,
+      "stories": [
+        "JB-18", "JB-19", "JB-42", "JB-43", "JB-47", "JB-48", "JB-49", "JB-50", "JB-51"
+      ]
+    }
+  ],
+  "components": [
+    "Backend",
+    "Frontend",
+    "Infrastructure",
+    "Database",
+    "Documentation",
+    "Testing",
+    "Security",
+    "AI",
+    "Monitoring",
+    "Performance",
+    "Configuration",
+    "DevOps",
+    "Analytics",
+    "Snowflake"
+  ],
+  "labels": [
+    "snowflake",
+    "enterprise",
+    "analytics",
+    "plugin-architecture",
+    "refactoring",
+    "technical-debt",
+    "stability",
+    "monitoring",
+    "production",
+    "database",
+    "infrastructure",
+    "performance",
+    "testing",
+    "quality",
+    "ci-cd",
+    "documentation",
+    "developer-experience",
+    "api",
+    "integration",
+    "native-app",
+    "marketplace",
+    "ai",
+    "cortex",
+    "streamlit",
+    "dashboard",
+    "data-sharing",
+    "security",
+    "vector-search",
+    "streaming",
+    "real-time",
+    "distribution",
+    "views",
+    "optimization",
+    "governance",
+    "alerting",
+    "backup",
+    "recovery",
+    "migration",
+    "hot-reload",
+    "devops",
+    "cleanup",
+    "configuration",
+    "bug",
+    "scraper",
+    "dice",
+    "stackoverflow",
+    "greenhouse",
+    "lever",
+    "caching",
+    "redis",
+    "rate-limiting",
+    "prometheus",
+    "metrics",
+    "health-check",
+    "reliability",
+    "error-tracking",
+    "debugging",
+    "anti-detection",
+    "automation",
+    "unification",
+    "alembic",
+    "connection-pooling",
+    "encryption",
+    "unit-tests",
+    "integration-tests",
+    "pipeline",
+    "coverage",
+    "load-testing",
+    "vulnerability",
+    "data-management",
+    "fixtures",
+    "swagger",
+    "architecture",
+    "decisions",
+    "deployment",
+    "runbook",
+    "troubleshooting",
+    "support",
+    "onboarding"
+  ]
+}

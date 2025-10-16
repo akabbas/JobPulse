@@ -1,0 +1,237 @@
+{
+  "total_tickets": 100,
+  "categorized_tickets": 100,
+  "category_counts": {
+    "general-backlog": 2,
+    "monetization-tasks": 2,
+    "to-do": 22,
+    "data-upgrades": 34,
+    "this-week": 32,
+    "technical-upgrades": 8
+  },
+  "category_mapping": {
+    "data-upgrades": {
+      "display_name": "\ud83d\ude80 Data Upgrades",
+      "problems": [
+        "snowflake integration",
+        "data infrastructure",
+        "analytics",
+        "data sharing"
+      ],
+      "keywords": [
+        "snowflake",
+        "data",
+        "analytics",
+        "cortex",
+        "streamlit",
+        "native-app"
+      ],
+      "tickets": [
+        "JB-125",
+        "JB-123",
+        "JB-122",
+        "JB-118",
+        "JB-111",
+        "JB-110",
+        "JB-109",
+        "JB-108",
+        "JB-107",
+        "JB-104",
+        "JB-101",
+        "JB-98",
+        "JB-96",
+        "JB-95",
+        "JB-84",
+        "JB-83",
+        "JB-82",
+        "JB-81",
+        "JB-80",
+        "JB-77",
+        "JB-74",
+        "JB-70",
+        "JB-68",
+        "JB-67",
+        "JB-56",
+        "JB-55",
+        "JB-54",
+        "JB-53",
+        "JB-52",
+        "JB-49",
+        "JB-46",
+        "JB-43",
+        "JB-41",
+        "JB-40"
+      ]
+    },
+    "technical-upgrades": {
+      "display_name": "\ud83d\udd27 Technical Upgrades",
+      "problems": [
+        "infrastructure",
+        "performance",
+        "monitoring",
+        "security",
+        "reliability"
+      ],
+      "keywords": [
+        "redis",
+        "caching",
+        "rate-limiting",
+        "health-check",
+        "monitoring",
+        "migration"
+      ],
+      "tickets": [
+        "JB-117",
+        "JB-116",
+        "JB-91",
+        "JB-89",
+        "JB-63",
+        "JB-61",
+        "JB-36",
+        "JB-34"
+      ]
+    },
+    "monetization-tasks": {
+      "display_name": "\ud83d\udcb0 Monetization Tasks",
+      "problems": [
+        "revenue generation",
+        "premium features",
+        "business value"
+      ],
+      "keywords": [
+        "monetization",
+        "premium",
+        "revenue",
+        "subscription",
+        "billing"
+      ],
+      "tickets": [
+        "JB-129",
+        "JB-128"
+      ]
+    },
+    "this-week": {
+      "display_name": "This Week",
+      "problems": [
+        "critical production issues",
+        "broken functionality",
+        "urgent fixes"
+      ],
+      "keywords": [
+        "broken",
+        "critical",
+        "urgent",
+        "fix",
+        "scraper",
+        "dice",
+        "stack-overflow"
+      ],
+      "tickets": [
+        "JB-124",
+        "JB-120",
+        "JB-119",
+        "JB-115",
+        "JB-114",
+        "JB-113",
+        "JB-112",
+        "JB-103",
+        "JB-97",
+        "JB-94",
+        "JB-93",
+        "JB-92",
+        "JB-88",
+        "JB-87",
+        "JB-86",
+        "JB-85",
+        "JB-76",
+        "JB-69",
+        "JB-66",
+        "JB-65",
+        "JB-64",
+        "JB-60",
+        "JB-59",
+        "JB-58",
+        "JB-57",
+        "JB-48",
+        "JB-42",
+        "JB-39",
+        "JB-38",
+        "JB-37",
+        "JB-33",
+        "JB-32"
+      ]
+    },
+    "to-do": {
+      "display_name": "To Do",
+      "problems": [
+        "technical debt",
+        "quality improvements",
+        "standard development"
+      ],
+      "keywords": [
+        "migration",
+        "testing",
+        "documentation",
+        "refactoring",
+        "architecture"
+      ],
+      "tickets": [
+        "JB-127",
+        "JB-126",
+        "JB-121",
+        "JB-106",
+        "JB-105",
+        "JB-102",
+        "JB-100",
+        "JB-99",
+        "JB-90",
+        "JB-79",
+        "JB-78",
+        "JB-75",
+        "JB-73",
+        "JB-72",
+        "JB-71",
+        "JB-62",
+        "JB-51",
+        "JB-50",
+        "JB-47",
+        "JB-45",
+        "JB-44",
+        "JB-35"
+      ]
+    },
+    "general-backlog": {
+      "display_name": "General Backlog",
+      "problems": [
+        "foundational features",
+        "user experience",
+        "core functionality"
+      ],
+      "keywords": [
+        "authentication",
+        "user",
+        "alerts",
+        "notifications",
+        "foundation"
+      ],
+      "tickets": [
+        "JB-131",
+        "JB-130"
+      ]
+    },
+    "in-progress": {
+      "display_name": "In Progress",
+      "problems": [
+        "currently active issues",
+        "ongoing critical work"
+      ],
+      "keywords": [
+        "active",
+        "current",
+        "working",
+        "progress"
+      ],
+      "tickets": []
+    }
+  }
+}
